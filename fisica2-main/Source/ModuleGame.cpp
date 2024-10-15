@@ -86,7 +86,59 @@ private:
 	Texture2D texture;
 
 };
+class Flipper : public PhysicEntity
+{
+public:
+	Flipper(ModulePhysics* physics, int _x, int _y, bool isLeft, Module* _listener, Texture2D _texture)
+		: PhysicEntity(physics->CreateRectangle(_x, _y, _texture.width, _texture.height), _listener)
+		, texture(_texture)
+		, isLeft(isLeft) 
+	{
+		b2Body* ground = physics->ground;
 
+		b2RevoluteJointDef jointDef;
+		jointDef.bodyA = ground;
+		jointDef.bodyB = body->body;
+		jointDef.localAnchorA.Set(_x, _y);
+		jointDef.localAnchorB.Set(0, 0);
+		jointDef.enableMotor = true;
+		jointDef.enableLimit = true;
+
+		jointDef.lowerAngle = -0.25f * b2_pi;
+		jointDef.upperAngle = 0.0f;
+
+		jointDef.maxMotorTorque = 2000.0f;
+		jointDef.motorSpeed = isLeft ? -5.0f : 5.0f;
+
+		flipperJoint = (b2RevoluteJoint*)physics->world->CreateJoint(&jointDef);
+	}
+
+	void Update() override
+	{
+		int x, y;
+		body->GetPhysicPosition(x, y);
+		DrawTexturePro(texture, Rectangle{ 0, 0, (float)texture.width, (float)texture.height },
+			Rectangle{ (float)x, (float)y, (float)texture.width, (float)texture.height },
+			Vector2{ (float)texture.width / 2.0f, (float)texture.height / 2.0f }, body->GetRotation() * RAD2DEG, WHITE);
+	}
+
+	void ControlFlipper(bool pressed)
+	{
+		if (pressed)
+		{
+			flipperJoint->SetMotorSpeed(isLeft ? 10.0f : -10.0f);
+		}
+		else
+		{
+			flipperJoint->SetMotorSpeed(isLeft ? -5.0f : 5.0f); 
+		}
+	}
+
+private:
+	b2RevoluteJoint* flipperJoint;
+	Texture2D texture;
+	bool isLeft; 
+};
 class Rick : public PhysicEntity
 {
 public:
@@ -135,7 +187,7 @@ public:
 	};
 
 	Rick(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateChain(GetMouseX() - 50, GetMouseY() - 100, table, 80), _listener)
+		: PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(), table, 80), _listener)
 		, texture(_texture)
 	{
 
@@ -180,6 +232,11 @@ bool ModuleGame::Start()
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	entities.emplace_back(new Rick(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, rick));
 
+	Texture2D flipperTexture = LoadTexture("Assets/MapComponents/Flipper.png");
+	entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(210), PIXEL_TO_METERS(765), true, this, flipperTexture));
+	entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(315), PIXEL_TO_METERS(765), false, this, flipperTexture));
+
+	 
 	return ret;
 }
 
@@ -257,7 +314,16 @@ update_status ModuleGame::Update()
 			DrawLine((int)(ray.x + destination.x), (int)(ray.y + destination.y), (int)(ray.x + destination.x + normal.x * 25.0f), (int)(ray.y + destination.y + normal.y * 25.0f), Color{ 100, 255, 100, 255 });
 		}
 	}
+	for (PhysicEntity* entity : entities)
+	{
+		Flipper* flipper = dynamic_cast<Flipper*>(entity);
+		if (flipper)
+		{
+			flipper->ControlFlipper(IsKeyDown(KEY_SPACE));
+		}
 
+		entity->Update();
+	}
 	return UPDATE_CONTINUE;
 }
 
