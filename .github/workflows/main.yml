@@ -5,7 +5,7 @@ on:
     - main
 
 jobs:
-  Nuild:
+  Build:
     runs-on: windows-latest
 
     steps:
@@ -17,3 +17,17 @@ jobs:
 
     - name: Build solution
       run: msbuild ./fisica2-main/PhysicsGame.sln
+
+    - name: Create artifact directory
+      run: 
+        mkdir ./artifact
+        mkdir ./artifact/fisica2-main
+
+    - name: Copy the executable to the artifact directory
+      run: copy ./Build/fisica2-main/Build/PhysicsGame/Release/Win32/PhysicsGame.exe ./artifact/fisica2-main
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with: 
+        name: Windows-Binary
+        path: ./artifact
