@@ -1,0 +1,50 @@
+name: BuildNoaEngine
+
+on: 
+  push:
+    branches:
+    - main
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build!!!
+        run: msbuild ./fisica2-main/PhysicsGame.sln
+
+      - name: Create artifact directory
+        run: |
+          mkdir ./artifact
+          mkdir ./artifact/fisica2-main
+        
+      - name: Copy files
+        run: copy ./Build/fisica2-main/Build/PhysicsGame/Release/Win32/PhysicsGame.exe ./artifact/fisica2-main
+     
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with: 
+          name: Windows-Binary
+          path: ./artifact/
+          
+  release: 
+    needs: build
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+  
+      - name: Create Release
+        uses: elgohr/Github-Release-Action@v5
+  
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+  
+      - name: Github Release
+        uses: fnkr/github-action-ghr@v1.3
