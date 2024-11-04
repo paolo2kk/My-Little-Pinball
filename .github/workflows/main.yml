@@ -19,7 +19,7 @@ jobs:
       run: msbuild ./fisica2-main/PhysicsGame.sln
 
     - name: Create artifact directory
-      run: 
+      run: | 
         mkdir ./artifact
         mkdir ./fisica2-main
 
