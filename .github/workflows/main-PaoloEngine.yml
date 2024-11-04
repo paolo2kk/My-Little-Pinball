@@ -32,7 +32,7 @@ jobs:
           name: Windows-Binary
           path: ./artifact/
 
-release: 
+run-name: 
   needs: build
   runs-on: ubuntu-latest
 
