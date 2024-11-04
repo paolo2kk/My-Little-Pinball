@@ -19,13 +19,15 @@ jobs:
         run: msbuild ./fisica2-main/PhysicsGame.sln
 
       - name: Create artifact directory
-        run: mkdir -p artifact/PhysicsGame/
-
+        run: |
+          mkdir ./artifact
+          mkdir ./artifact/PhysicsGame
+        
       - name: Copy files
-        run: cp ./Build/Game.exe artifact/PhysicsGame/
+        run: copy ./Build/PhysicsGame/Release/win32/PhysicsGame.exe ./artifact/PhysicsGame
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with: 
-          name: PhysicsGame
-          path: artifact/PhysicsGame/
+          name: Windows-Binary
+          path: ./artifact/
