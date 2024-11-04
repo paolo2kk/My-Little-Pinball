@@ -24,7 +24,7 @@ jobs:
         mkdir ./artifact/fisica2-main
 
     - name: Copy the executable to the artifact directory
-      run: copy ./Build/fisica2-main/Build/PhysicsGame/Release/Win32/PhysicsGame.exe ./artifact/fisica2-main
+      run: copy ./fisica2-main/Build/PhysicsGame/Release/Win32/PhysicsGame.exe ./artifact/fisica2-main
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
