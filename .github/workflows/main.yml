@@ -21,7 +21,7 @@ jobs:
     - name: Create artifact directory
       run: | 
         mkdir ./artifact
-        mkdir ./fisica2-main
+        mkdir ./artifact/fisica2-main
 
     - name: Copy the executable to the artifact directory
       run: copy ./Build/fisica2-main/Build/PhysicsGame/Release/Win32/PhysicsGame.exe ./artifact/fisica2-main
