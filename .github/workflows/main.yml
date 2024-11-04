@@ -31,3 +31,33 @@ jobs:
       with: 
         name: Windows-Binary
         path: ./artifact
+
+  release:
+      needs: Build
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v3
+        - name: Create a Release
+          uses: algohr/Github-Release-Action@v5
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            title: MyRelease
+          
+        - name: Download a build Artifact
+          uses: actions/download-artifact@v4
+          with:
+           name: Release Artifact
+           path: ./artifact
+        -  name: Display structure of downloaded files
+           run: ls -R ./artifact
+
+        - name: GitHub Releases
+          uses: fnkr/github-action-ghr@v1.3
+          if: startsWith(github.ref, 'refs/tags/')
+          env:
+            GHR_COMPRESS: xz
+            GHR_PATH: build/
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
