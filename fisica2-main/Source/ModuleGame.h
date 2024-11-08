@@ -19,6 +19,7 @@ enum class GameState
 	PLAYING,
 	RESTART,
 	GAME_OVER,
+	PAUSED,
 	START_MENU
 
 };

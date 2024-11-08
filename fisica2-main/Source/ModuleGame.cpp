@@ -276,6 +276,29 @@ bool ModuleGame::CleanUp()
 // Update: draw background
 update_status ModuleGame::Update()
 {
+
+
+	if (game_state == GameState::START_MENU)
+	{
+		//Draw start menu
+		DrawText("Press Enter to start", 10, 10, 20, WHITE);
+	}
+
+	if (game_state == GameState::PAUSED)
+	{
+		//Draw pause menu
+		DrawText("Press Enter to resume", 10, 10, 20, WHITE);
+		DrawText("Press Escape to go to start menu", 10, 30, 20, WHITE);
+	}
+
+	if (game_state == GameState::GAME_OVER)
+	{
+		//Draw game over menu
+		DrawText("Game Over", 10, 10, 20, WHITE);
+		DrawText("Press Enter to restart", 10, 30, 20, WHITE);
+		DrawText("Press Escape to go to start menu", 10, 50, 20, WHITE);
+	}
+
 	if (game_state == GameState::RESTART)
 	{
 		Restart();
@@ -384,7 +407,7 @@ void ModuleGame::LoseLife()
 
 void ModuleGame::ManageInputs()
 {
-	//if game_state == start_menu, esperar a que se pulse el boton de start y cambiar el game state a playing
+	
 	if (game_state == GameState::START_MENU)
 	{
 		if (IsKeyPressed(KEY_ENTER))
@@ -393,9 +416,19 @@ void ModuleGame::ManageInputs()
 		}
 	}
 
-	//if game_state == playing, mover los flippers y el launcher
+	if (game_state == GameState::PAUSED)
+	{
+		if (IsKeyPressed(KEY_ENTER))
+		{
+			game_state = GameState::PLAYING;
+		}
+		if (IsKeyPressed(KEY_ESCAPE))
+		{
+			game_state = GameState::START_MENU;
+		}
+	}
 
-	if (game_state == GameState::PLAYING)
+	if (game_state == GameState::PLAYING && game_state != GameState::GAME_OVER)
 	{
 		if (IsKeyDown(KEY_SPACE))
 		{
@@ -427,9 +460,13 @@ void ModuleGame::ManageInputs()
 			//lanzar bola
 
 		}
+
+		if (IsKeyDown(KEY_ESCAPE))
+		{
+			game_state = GameState::PAUSED;
+		}
 	}
 
-	//if game_state == game_over, esperar a que se pulse el boton de start y cambiar el game state a playing o que pulse al boton de exit y cambiar el game state a start_menu
 
 	if (game_state == GameState::GAME_OVER)
 	{
