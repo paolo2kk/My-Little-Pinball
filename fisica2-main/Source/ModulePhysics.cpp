@@ -29,7 +29,7 @@ bool ModulePhysics::Start()
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
-
+	Flippers();
 	// big static circle as "ground" in the middle of the screen
 	
 	return true;
@@ -130,6 +130,41 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	pbody->height = height;
 
 	return pbody;
+}
+void ModulePhysics::Flippers()
+{
+	leftFlipper = CreateRectangle(leftFlipperX, leftFlipperY, flipperWidth, flipperHeight);
+	leftFlipperAnchor = CreateCircle(leftFlipperX, leftFlipperY, 2);
+	leftFlipperAnchor->body->SetType(b2_staticBody);
+
+	b2RevoluteJointDef leftFlipperJointDef;
+
+	leftFlipperJointDef.bodyA = leftFlipper->body;
+	leftFlipperJointDef.bodyB = leftFlipperAnchor->body;
+	leftFlipperJointDef.referenceAngle = 0 * DEGTORAD;
+	leftFlipperJointDef.enableLimit = true;
+	leftFlipperJointDef.lowerAngle = -30 * DEGTORAD;
+	leftFlipperJointDef.upperAngle = 30 * DEGTORAD;
+	leftFlipperJointDef.localAnchorA.Set(PIXEL_TO_METERS(-13), 0);
+	leftFlipperJointDef.localAnchorB.Set(0, 0);
+	b2RevoluteJoint* leftFlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&leftFlipperJointDef);
+
+	rightFlipper = CreateRectangle(rightFlipperX, rightFlipperY, flipperWidth, flipperHeight);
+	rightFlipperAnchor = CreateCircle(rightFlipperX, rightFlipperY, 2);
+	rightFlipperAnchor->body->SetType(b2_staticBody);
+
+	b2RevoluteJointDef rightFlipperJointDef;
+
+	rightFlipperJointDef.bodyA = rightFlipper->body;
+	rightFlipperJointDef.bodyB = rightFlipperAnchor->body;
+	rightFlipperJointDef.referenceAngle = 0 * DEGTORAD;
+	rightFlipperJointDef.enableLimit = true;
+	rightFlipperJointDef.lowerAngle = -30 * DEGTORAD;
+	rightFlipperJointDef.upperAngle = 30 * DEGTORAD;
+	rightFlipperJointDef.localAnchorA.Set(PIXEL_TO_METERS(13), 0);
+	rightFlipperJointDef.localAnchorB.Set(0, 0);
+	b2RevoluteJoint* rightFlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&rightFlipperJointDef);
+
 }
 
 PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)

@@ -30,7 +30,7 @@ enum update_status
 };
 
 // Configuration -----------
-#define SCREEN_WIDTH		  512
+#define SCREEN_WIDTH		  648
 #define SCREEN_HEIGHT		  864
 #define SCREEN_SIZE				1
 #define WIN_FULLSCREEN		false
@@ -38,4 +38,4 @@ enum update_status
 #define WIN_BORDERLESS		false
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC				true
-#define TITLE "SEGA pinball"
+#define TITLE "My little pinball... My little piiinballl"

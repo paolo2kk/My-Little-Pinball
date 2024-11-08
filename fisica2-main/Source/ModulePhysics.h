@@ -55,12 +55,29 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
+	void Flippers();
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 	b2World* world;
 	b2Body* ground;
+
+
+	//flipao
+
+	int leftFlipperX = 175;
+	int leftFlipperY = 615;
+	int rightFlipperX = 265;
+	int rightFlipperY = 615;
+	int flipperWidth = 40;
+	int flipperHeight = 10;
+	PhysBody* leftFlipper;
+	PhysBody* rightFlipper;
+	PhysBody* leftFlipperAnchor;
+	PhysBody* rightFlipperAnchor;
+
+	float restitution = 0.4f;
 
 private:
 
