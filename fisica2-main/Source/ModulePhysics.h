@@ -66,16 +66,13 @@ public:
 
 	//flipao
 
-	int leftFlipperX = 175;
-	int leftFlipperY = 615;
-	int rightFlipperX = 265;
-	int rightFlipperY = 615;
+	
 	int flipperWidth = 40;
 	int flipperHeight = 10;
-	PhysBody* leftFlipper;
-	PhysBody* rightFlipper;
-	PhysBody* leftFlipperAnchor;
-	PhysBody* rightFlipperAnchor;
+	PhysBody* flipperL;
+	PhysBody* flipperR;
+	PhysBody* flipperLAnch;
+	PhysBody* flipperRAnch;
 
 	float restitution = 0.4f;
 

@@ -218,10 +218,10 @@ update_status ModuleGame::Update()
 		ray.y = GetMouseY();
 	}
 	if (IsKeyPressed(KEY_A)) {
-		App->physics->leftFlipper->body->ApplyForceToCenter(b2Vec2(0, -50), true);
+		App->physics->flipperL->body->ApplyForceToCenter(b2Vec2(0, -50), true);
 	}
 	if (IsKeyPressed(KEY_D)) {
-		App->physics->rightFlipper->body->ApplyForceToCenter(b2Vec2(0, -50), true);
+		App->physics->flipperR->body->ApplyForceToCenter(b2Vec2(0, -50), true);
 	}
 	if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 	{
