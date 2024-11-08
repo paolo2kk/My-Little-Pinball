@@ -2,15 +2,25 @@
 
 #include "Globals.h"
 #include "Module.h"
+#include "ModulePhysics.h"
 
 #include "p2Point.h"
 
 #include "raylib.h"
 #include <vector>
 
+
 class PhysBody;
 class PhysicEntity;
 
+enum class GameState
+{
+	PLAYING,
+	RESTART,
+	GAME_OVER,
+	START_MENU
+
+};
 
 class ModuleGame : public Module
 {
@@ -22,11 +32,15 @@ public:
 	update_status Update();
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
+	void LoseLife();
+	void ManageInputs();
+	void GameOver();
+	void Restart();
 
 public:
 
 	std::vector<PhysicEntity*> entities;
-	
+
 	PhysBody* sensor;
 	bool sensed;
 
@@ -36,7 +50,20 @@ public:
 	Texture2D background;
 
 	uint32 bonus_fx;
+	uint32 flipper_fx;
+	uint32 game_over_fx;
+	uint32 start_fx;
+	uint32 background_music;
+	uint32 launch_fx;
 
 	vec2<int> ray;
 	bool ray_on;
+
+	PhysBody* death_trigger;
+
+	ColliderType type;
+
+	GameState game_state = GameState::START_MENU;
+
+	int vidas = 3;
 };
