@@ -237,7 +237,7 @@ bool ModuleGame::Start()
 	entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(315), PIXEL_TO_METERS(765), false, this, flipperTexture));
 
 	// Load music
-
+	background_music = App->audio->PlayMusic("Assets/music.ogg");
 
 	// Load FX
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
@@ -249,13 +249,15 @@ bool ModuleGame::Start()
 
 	//Load mierdas para conseguir puntos
 
+	//Load pelotas bien
 
+	//Load paredes
 
 	//Crear death_trigger
 	death_trigger = App->physics->CreateRectangle(0, 0, 10, 10);
 	death_trigger->type = ColliderType::DEATH;
 
-	//launcher joint
+	//Crear launcher
 
 
 	return ret;

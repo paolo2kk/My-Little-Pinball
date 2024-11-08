@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "Module.h"
 #include "ModulePhysics.h"
+#include "ModuleAudio.h"
 
 #include "p2Point.h"
 
@@ -55,6 +56,7 @@ public:
 	uint32 start_fx;
 	uint32 background_music;
 	uint32 launch_fx;
+
 
 	vec2<int> ray;
 	bool ray_on;
