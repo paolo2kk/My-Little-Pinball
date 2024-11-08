@@ -49,6 +49,8 @@ public:
 	Texture2D box;
 	Texture2D rick;
 	Texture2D background;
+	Texture2D flipperL;
+	Texture2D flipperR;
 
 	uint32 bonus_fx;
 	uint32 flipper_fx;

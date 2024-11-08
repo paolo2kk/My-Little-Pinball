@@ -22,7 +22,8 @@ ModulePhysics::~ModulePhysics()
 bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
-
+	flipperLTexture = LoadTexture("Assets/MapComponents/Flipper.png");
+	flipperRTexture = LoadTexture("Assets/MapComponents/Flipper.png");
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 	world->SetContactListener(this);
 
@@ -133,28 +134,28 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 }
 void ModulePhysics::Flippers()
 {
-	flipperL = CreateRectangle(212, 822, flipperWidth, flipperHeight);
-	flipperLAnch = CreateCircle(212, 822, 2);
+	flipperL = CreateRectangle(212, 827, flipperWidth, flipperHeight);
+	flipperLAnch = CreateCircle(212, 827, 2);
 	flipperLAnch->body->SetType(b2_staticBody);
 	b2RevoluteJointDef flipperLJointDef;
 
 	flipperLJointDef.bodyA = flipperL->body;
 	flipperLJointDef.bodyB = flipperLAnch->body;
-	flipperLJointDef.localAnchorA.Set(PIXEL_TO_METERS(-10), 0);
+	flipperLJointDef.localAnchorA.Set(PIXEL_TO_METERS(-30), 0);
 	flipperLJointDef.localAnchorB.Set(0, 0);
 	flipperLJointDef.enableLimit = true;
 	flipperLJointDef.lowerAngle = -30 * DEGTORAD;
 	flipperLJointDef.upperAngle = 30 * DEGTORAD;
 	b2RevoluteJoint* leftFlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&flipperLJointDef);
 
-	flipperR = CreateRectangle(399, 822, flipperWidth, flipperHeight);
-	flipperRAnch = CreateCircle(399, 822, 2);
+	flipperR = CreateRectangle(395, 827, flipperWidth, flipperHeight);
+	flipperRAnch = CreateCircle(395, 827, 2);
 	flipperRAnch->body->SetType(b2_staticBody);
 	b2RevoluteJointDef flipperRJointDef;
 
 	flipperRJointDef.bodyA = flipperR->body;
 	flipperRJointDef.bodyB = flipperRAnch->body;
-	flipperRJointDef.localAnchorA.Set(PIXEL_TO_METERS(10), 0);
+	flipperRJointDef.localAnchorA.Set(PIXEL_TO_METERS(30), 0);
 	flipperRJointDef.localAnchorB.Set(0, 0);
 	flipperRJointDef.enableLimit = true;
 	flipperRJointDef.lowerAngle = -30 * DEGTORAD;
@@ -162,7 +163,30 @@ void ModulePhysics::Flippers()
 	b2RevoluteJoint* rightFlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&flipperRJointDef);
 
 }
+void ModulePhysics::RenderFlippers()
+{
+	int xL, yL;
+	flipperL->GetPhysicPosition(xL, yL);
+	DrawTexturePro(
+		flipperLTexture,
+		Rectangle{ 0, 0, -(float)flipperLTexture.width, (float)flipperLTexture.height },
+		Rectangle{ (float)xL, (float)yL, (float)flipperLTexture.width, (float)flipperLTexture.height },
+		Vector2{ (float)flipperLTexture.width / 2.0f, (float)flipperLTexture.height / 2.0f },
+		flipperL->GetRotation() * RAD2DEG,
+		WHITE
+	);
 
+	int xR, yR;
+	flipperR->GetPhysicPosition(xR, yR);
+	DrawTexturePro(
+		flipperRTexture,
+		Rectangle{ 0, 0, (float)flipperRTexture.width, (float)flipperRTexture.height },
+		Rectangle{ (float)xR, (float)yR, (float)flipperRTexture.width, (float)flipperRTexture.height },
+		Vector2{ (float)flipperRTexture.width / 2.0f, (float)flipperRTexture.height / 2.0f },
+		flipperR->GetRotation() * RAD2DEG,
+		WHITE
+	);
+}
 PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 {
 	b2BodyDef body;
@@ -205,7 +229,7 @@ update_status ModulePhysics::PostUpdate()
 
 	if(!debug)
 		return UPDATE_CONTINUE;
-
+	RenderFlippers();
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
 	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())

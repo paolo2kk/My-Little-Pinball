@@ -56,6 +56,7 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	void Flippers();
+	void RenderFlippers();
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 
 	// b2ContactListener ---
@@ -67,15 +68,16 @@ public:
 	//flipao
 
 	
-	int flipperWidth = 40;
-	int flipperHeight = 10;
+	int flipperWidth = 80;
+	int flipperHeight = 20;
 	PhysBody* flipperL;
 	PhysBody* flipperR;
 	PhysBody* flipperLAnch;
 	PhysBody* flipperRAnch;
 
 	float restitution = 0.4f;
-
+	Texture2D flipperLTexture;
+	Texture2D flipperRTexture;
 private:
 
 	bool debug;

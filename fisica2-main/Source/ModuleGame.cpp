@@ -111,6 +111,8 @@ public:
 		jointDef.motorSpeed = isLeft ? -5.0f : 5.0f;
 
 		flipperJoint = (b2RevoluteJoint*)physics->world->CreateJoint(&jointDef);
+
+
 	}
 
 	void Update() override
@@ -143,51 +145,66 @@ class Rick : public PhysicEntity
 {
 public:
 	// Pivot 0, 0
-	static constexpr int table[80] = {
-	38, 590,
-	30, 595,
-	28, 627,
-	24, 680,
-	24, 754,
-	23, 830,
-	33, 840,
-	50, 840,
-	65, 834,
-	65, 773,
-	183, 833,
-	183, 865,
-	295, 864,
-	294, 832,
-	416, 773,
-	414, 834,
-	423, 840,
-	443, 840,
-	456, 835,
-	456, 667,
-	453, 630,
-	449, 594,
-	433, 577,
-	456, 521,
-	452, 502,
-	469, 486,
-	469, 563,
-	470, 610,
-	464, 616,
-	465, 841,
-	470, 847,
-	503, 848,
-	510, 841,
-	512, 618,
-	507, 613,
-	507, 465,
-	505, 436,
-	499, 421,
-	483, 417,
-	479, 409
+	static constexpr int table[110] = {
+	489, 862,
+	558, 818,
+	558, 654,
+	537, 633,
+	536, 583,
+	552, 567,
+	569, 546,
+	577, 524,
+	580, 500,
+	580, 129,
+	575, 117,
+	565, 106,
+	555, 100,
+	540, 104,
+	489, 131,
+	482, 126,
+	484, 115,
+	526, 73,
+	535, 66,
+	556, 65,
+	575, 71,
+	593, 86,
+	605, 112,
+	608, 126,
+	607, 647,
+	646, 648,
+	647, 140,
+	644, 98,
+	639, 71,
+	628, 48,
+	611, 33,
+	595, 20,
+	580, 14,
+	160, 15,
+	137, 19,
+	106, 39,
+	82, 69,
+	66, 108,
+	56, 157,
+	49, 207,
+	48, 246,
+	32, 269,
+	26, 277,
+	26, 437,
+	36, 477,
+	72, 516,
+	72, 607,
+	49, 641,
+	50, 820,
+	121, 863,
+	0, 863,
+	0, 0,
+	647, 0,
+	647, 863,
+	490, 863
 	};
 
 	Rick(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(), table, 80), _listener)
+		: PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(), table, 110), _listener)
 		, texture(_texture)
 	{
 
@@ -228,13 +245,15 @@ bool ModuleGame::Start()
 	circle = LoadTexture("Assets/wheel.png");
 	box = LoadTexture("Assets/crate.png");
 	rick = LoadTexture("Assets/MapComponents/Whole Map.png");
+	flipperL = LoadTexture("Assets/MapComponents/flipper.png");
+	flipperR = LoadTexture("Assets/MapComponents/flipper.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	entities.emplace_back(new Rick(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, rick));
 
 	Texture2D flipperTexture = LoadTexture("Assets/MapComponents/Flipper.png");
-	entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(210), PIXEL_TO_METERS(765), true, this, flipperTexture));
-	entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(315), PIXEL_TO_METERS(765), false, this, flipperTexture));
+	/*entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(210), PIXEL_TO_METERS(765), true, this, flipperTexture));
+	entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(315), PIXEL_TO_METERS(765), false, this, flipperTexture));*/
 
 	// Load music
 	background_music = App->audio->PlayMusic("Assets/music.ogg");
@@ -280,7 +299,6 @@ update_status ModuleGame::Update()
 	{
 		Restart();
 	}
-
 	ManageInputs();
 
 	if (IsKeyPressed(KEY_SPACE))
@@ -405,7 +423,13 @@ void ModuleGame::ManageInputs()
 				flipper->ControlFlipper(IsKeyDown(KEY_SPACE));
 			}
 		}
+		if (IsKeyDown(KEY_A)) {
+			App->physics->flipperL->body->ApplyForceToCenter(b2Vec2(0, -50), true);
 
+		}
+		if (IsKeyDown(KEY_D)) {
+			App->physics->flipperR->body->ApplyForceToCenter(b2Vec2(0, -50), true);
+		}
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 		{
 			entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), this, circle, ColliderType::BALL));
