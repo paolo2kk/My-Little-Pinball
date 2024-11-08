@@ -133,37 +133,33 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 }
 void ModulePhysics::Flippers()
 {
-	leftFlipper = CreateRectangle(leftFlipperX, leftFlipperY, flipperWidth, flipperHeight);
-	leftFlipperAnchor = CreateCircle(leftFlipperX, leftFlipperY, 2);
-	leftFlipperAnchor->body->SetType(b2_staticBody);
+	flipperL = CreateRectangle(212, 822, flipperWidth, flipperHeight);
+	flipperLAnch = CreateCircle(212, 822, 2);
+	flipperLAnch->body->SetType(b2_staticBody);
+	b2RevoluteJointDef flipperLJointDef;
 
-	b2RevoluteJointDef leftFlipperJointDef;
+	flipperLJointDef.bodyA = flipperL->body;
+	flipperLJointDef.bodyB = flipperLAnch->body;
+	flipperLJointDef.localAnchorA.Set(PIXEL_TO_METERS(-10), 0);
+	flipperLJointDef.localAnchorB.Set(0, 0);
+	flipperLJointDef.enableLimit = true;
+	flipperLJointDef.lowerAngle = -30 * DEGTORAD;
+	flipperLJointDef.upperAngle = 30 * DEGTORAD;
+	b2RevoluteJoint* leftFlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&flipperLJointDef);
 
-	leftFlipperJointDef.bodyA = leftFlipper->body;
-	leftFlipperJointDef.bodyB = leftFlipperAnchor->body;
-	leftFlipperJointDef.referenceAngle = 0 * DEGTORAD;
-	leftFlipperJointDef.enableLimit = true;
-	leftFlipperJointDef.lowerAngle = -30 * DEGTORAD;
-	leftFlipperJointDef.upperAngle = 30 * DEGTORAD;
-	leftFlipperJointDef.localAnchorA.Set(PIXEL_TO_METERS(-13), 0);
-	leftFlipperJointDef.localAnchorB.Set(0, 0);
-	b2RevoluteJoint* leftFlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&leftFlipperJointDef);
+	flipperR = CreateRectangle(399, 822, flipperWidth, flipperHeight);
+	flipperRAnch = CreateCircle(399, 822, 2);
+	flipperRAnch->body->SetType(b2_staticBody);
+	b2RevoluteJointDef flipperRJointDef;
 
-	rightFlipper = CreateRectangle(rightFlipperX, rightFlipperY, flipperWidth, flipperHeight);
-	rightFlipperAnchor = CreateCircle(rightFlipperX, rightFlipperY, 2);
-	rightFlipperAnchor->body->SetType(b2_staticBody);
-
-	b2RevoluteJointDef rightFlipperJointDef;
-
-	rightFlipperJointDef.bodyA = rightFlipper->body;
-	rightFlipperJointDef.bodyB = rightFlipperAnchor->body;
-	rightFlipperJointDef.referenceAngle = 0 * DEGTORAD;
-	rightFlipperJointDef.enableLimit = true;
-	rightFlipperJointDef.lowerAngle = -30 * DEGTORAD;
-	rightFlipperJointDef.upperAngle = 30 * DEGTORAD;
-	rightFlipperJointDef.localAnchorA.Set(PIXEL_TO_METERS(13), 0);
-	rightFlipperJointDef.localAnchorB.Set(0, 0);
-	b2RevoluteJoint* rightFlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&rightFlipperJointDef);
+	flipperRJointDef.bodyA = flipperR->body;
+	flipperRJointDef.bodyB = flipperRAnch->body;
+	flipperRJointDef.localAnchorA.Set(PIXEL_TO_METERS(10), 0);
+	flipperRJointDef.localAnchorB.Set(0, 0);
+	flipperRJointDef.enableLimit = true;
+	flipperRJointDef.lowerAngle = -30 * DEGTORAD;
+	flipperRJointDef.upperAngle = 30 * DEGTORAD;
+	b2RevoluteJoint* rightFlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&flipperRJointDef);
 
 }
 
