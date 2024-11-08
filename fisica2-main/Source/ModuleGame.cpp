@@ -281,7 +281,7 @@ update_status ModuleGame::Update()
 	if (game_state == GameState::START_MENU)
 	{
 		//Draw start menu
-		DrawText("Press Enter to start", 10, 10, 20, WHITE);
+		DrawText(TextFormat("Press Enter to Start"), 40, 40, 20, BLACK);
 	}
 
 	if (game_state == GameState::PAUSED)
