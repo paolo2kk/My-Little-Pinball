@@ -221,7 +221,39 @@ private:
 	Texture2D texture;
 };
 
+class Plunger : public PhysicEntity {
+public:
+	Plunger(PhysBody* ball, Module* listener)
+		: PhysicEntity(nullptr, listener), ball(ball) {}
 
+	void Update() override {
+		if (!ball) return;  // Ensure ball is valid
+
+		// Charge force while space is held down
+		if (IsKeyDown(KEY_SPACE)) {
+			plungerForce += plungerChargeRate;
+			if (plungerForce > maxPlungerForce) {
+				plungerForce = maxPlungerForce;
+			}
+			isCharging = true;
+		}
+		else if (isCharging && IsKeyReleased(KEY_SPACE)) {
+			// Apply impulse to ball on release
+			ball->body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -plungerForce), true);
+
+			// Reset the charge for next use
+			plungerForce = 0.0f;
+			isCharging = false;
+		}
+	}
+
+private:
+	PhysBody* ball;              // Reference to the existing ball
+	float plungerForce = 0.0f;   // Current charge level for plunger
+	const float maxPlungerForce = 800.0f; // Maximum impulse force
+	const float plungerChargeRate = 10.0f; // Rate of charge increase
+	bool isCharging = false;     // True while the plunger is charging
+};
 
 ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -277,6 +309,7 @@ bool ModuleGame::Start()
 	death_trigger->type = ColliderType::DEATH;
 
 	//Crear launcher
+
 
 
 	return ret;
@@ -371,6 +404,14 @@ update_status ModuleGame::Update()
 			DrawLine((int)(ray.x + destination.x), (int)(ray.y + destination.y), (int)(ray.x + destination.x + normal.x * 25.0f), (int)(ray.y + destination.y + normal.y * 25.0f), Color{ 100, 255, 100, 255 });
 		}
 	}
+
+
+
+	// Continue with other game update logic...
+
+
+
+
 	/*for (PhysicEntity* entity : entities)
 	{
 		Flipper* flipper = dynamic_cast<Flipper*>(entity);
@@ -382,6 +423,9 @@ update_status ModuleGame::Update()
 		entity->Update();
 	}*/
 	return UPDATE_CONTINUE;
+
+
+
 }
 
 void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
@@ -457,11 +501,30 @@ void ModuleGame::ManageInputs()
 			}
 		}
 		if (IsKeyDown(KEY_A)) {
-			App->physics->flipperL->body->ApplyForceToCenter(b2Vec2(0, -50), true);
+			// Increase the force gradually, but don't exceed maxForce
+			leftFlipperForce += forceIncrement;
+			if (leftFlipperForce > maxForce) leftFlipperForce = maxForce;
 
+			// Apply the increased force to the left flipper
+			App->physics->flipperL->body->ApplyForceToCenter(b2Vec2(0, -leftFlipperForce), true);
 		}
+		else {
+			// Reset the force when the key is released
+			leftFlipperForce = initialForce;
+		}
+
+		// Check if the D key is held down for the right flipper
 		if (IsKeyDown(KEY_D)) {
-			App->physics->flipperR->body->ApplyForceToCenter(b2Vec2(0, -50), true);
+			// Increase the force gradually, but don't exceed maxForce
+			rightFlipperForce += forceIncrement;
+			if (rightFlipperForce > maxForce) rightFlipperForce = maxForce;
+
+			// Apply the increased force to the right flipper
+			App->physics->flipperR->body->ApplyForceToCenter(b2Vec2(0, -rightFlipperForce), true);
+		}
+		else {
+			// Reset the force when the key is released
+			rightFlipperForce = initialForce;
 		}
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 		{
