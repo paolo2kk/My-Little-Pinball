@@ -40,6 +40,7 @@ public:
 		: PhysicEntity(physics->CreateCircle(_x, _y, 25), _listener)
 		, texture(_texture)
 	{
+		bodyy = (b2Body*)body;
 
 	}
 
@@ -55,13 +56,13 @@ public:
 		float rotation = body->GetRotation() * RAD2DEG;
 		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
 	}
-
-	/*void Circle::LaunchBall(float forceX, float forceY) {
+	
+	void LaunchBall(float forceX, float forceY) {
 		if (body != nullptr) {  // Ensure the body is valid
 			// Apply the force to the center of the body
 			bodyy->ApplyForceToCenter(b2Vec2(forceX, forceY), true);
 		}
-	}*/
+	}
 
 private:
 	Texture2D texture;
@@ -524,7 +525,7 @@ void ModuleGame::ManageInputs()
 			//entities.emplace_back(new Circle(App->physics, 630,620, this, circle, ColliderType::BALL));
 			
 			Circle circle (App->physics, 630, 620, this, circle, ColliderType::BALL);
-			//LaunchBall();
+			circle.LaunchBall(0, 100000000);
 			
 		}
 
