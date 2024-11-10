@@ -70,6 +70,35 @@ private:
 
 };
 
+class Plunger : public PhysicEntity
+{
+public:
+	Plunger(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
+		: PhysicEntity(physics->CreateRectangle(_x, _y, 100, 50), _listener)
+		, texture(_texture)
+	{
+
+	}
+
+	void Update() override
+	{
+		int x, y;
+		body->GetPhysicPosition(x, y);
+		DrawTexturePro(texture, Rectangle{ 0, 0, (float)texture.width, (float)texture.height },
+			Rectangle{ (float)x, (float)y, (float)texture.width, (float)texture.height },
+			Vector2{ (float)texture.width / 2.0f, (float)texture.height / 2.0f }, body->GetRotation() * RAD2DEG, WHITE);
+	}
+
+	int RayHit(vec2<int> ray, vec2<int> mouse, vec2<float>& normal) override
+	{
+		return body->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);;
+	}
+
+private:
+	Texture2D texture;
+
+};
+
 class Box : public PhysicEntity
 {
 public:
@@ -290,6 +319,9 @@ bool ModuleGame::Start()
 	start_fx = App->audio->LoadFx("Assets/start.wav");
 	launch_fx = App->audio->LoadFx("Assets/launch.wav");
 
+	//plunger
+	plung = App->physics->CreateRectangle(610, 617, 35, 35);
+
 
 	//Load mierdas para conseguir puntos
 
@@ -318,7 +350,10 @@ bool ModuleGame::CleanUp()
 
 	return true;
 }
-
+void MovePlungUp(PhysBody* body)
+{
+	if()
+}
 // Update: draw background
 update_status ModuleGame::Update()
 {

@@ -65,6 +65,7 @@ public:
 	bool ray_on;
 
 	PhysBody* death_trigger;
+	PhysBody* plung;
 
 	ColliderType type;
 
