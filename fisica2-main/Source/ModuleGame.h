@@ -35,6 +35,7 @@ public:
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 	void LoseLife();
+	void LaunchBall();
 	void ManageInputs();
 	void GameOver();
 	void Restart();

@@ -33,6 +33,9 @@ protected:
 class Circle : public PhysicEntity
 {
 public:
+
+
+
 	Circle(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture, ColliderType _type)
 		: PhysicEntity(physics->CreateCircle(_x, _y, 25), _listener)
 		, texture(_texture)
@@ -53,8 +56,16 @@ public:
 		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
 	}
 
+	/*void Circle::LaunchBall(float forceX, float forceY) {
+		if (body != nullptr) {  // Ensure the body is valid
+			// Apply the force to the center of the body
+			bodyy->ApplyForceToCenter(b2Vec2(forceX, forceY), true);
+		}
+	}*/
+
 private:
 	Texture2D texture;
+	b2Body *bodyy;
 
 };
 
@@ -221,39 +232,20 @@ private:
 	Texture2D texture;
 };
 
-class Plunger : public PhysicEntity {
+/*class Plunger : public PhysBody {
 public:
-	Plunger(PhysBody* ball, Module* listener)
-		: PhysicEntity(nullptr, listener), ball(ball) {}
-
-	void Update() override {
-		if (!ball) return;  // Ensure ball is valid
-
-		// Charge force while space is held down
-		if (IsKeyDown(KEY_SPACE)) {
-			plungerForce += plungerChargeRate;
-			if (plungerForce > maxPlungerForce) {
-				plungerForce = maxPlungerForce;
-			}
-			isCharging = true;
-		}
-		else if (isCharging && IsKeyReleased(KEY_SPACE)) {
-			// Apply impulse to ball on release
-			ball->body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -plungerForce), true);
-
-			// Reset the charge for next use
-			plungerForce = 0.0f;
-			isCharging = false;
-		}
+	float plungerForce;
+	Plunger(float x, float y, float radius) : PhysBody(x, y, radius), plungerForce(1000.0f) {
+		// Set plunger properties
+		// You can use a spring joint or other force dynamics to simulate a real plunger's behavior
 	}
 
-private:
-	PhysBody* ball;              // Reference to the existing ball
-	float plungerForce = 0.0f;   // Current charge level for plunger
-	const float maxPlungerForce = 800.0f; // Maximum impulse force
-	const float plungerChargeRate = 10.0f; // Rate of charge increase
-	bool isCharging = false;     // True while the plunger is charging
-};
+	void LaunchBall(PhysBody* ball) {
+		// Apply force to the ball when the plunger is released
+		b2Vec2 force(0.0f, plungerForce);  // Modify force direction and magnitude
+		ball->body->ApplyForceToCenter(force, true);
+	}
+};*/
 
 ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -316,6 +308,7 @@ bool ModuleGame::Start()
 
 
 }
+
 
 // Load assets
 bool ModuleGame::CleanUp()
@@ -528,8 +521,11 @@ void ModuleGame::ManageInputs()
 		}
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 		{
-			entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), this, circle, ColliderType::BALL));
-
+			//entities.emplace_back(new Circle(App->physics, 630,620, this, circle, ColliderType::BALL));
+			
+			Circle circle (App->physics, 630, 620, this, circle, ColliderType::BALL);
+			//LaunchBall();
+			
 		}
 
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
