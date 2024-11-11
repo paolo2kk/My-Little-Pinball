@@ -323,7 +323,7 @@ bool ModuleGame::Start()
 	//Load paredes
 
 	//Crear death_trigger
-	death_trigger = App->physics->CreateRectangle(0, 0, 10, 10);
+	death_trigger = App->physics->CreateRectangle(863, 0, 10, 10);
 	death_trigger->type = ColliderType::DEATH;
 
 	//Crear launcher
