@@ -5,6 +5,11 @@
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
 
+#ifdef NDEBUG
+#define DEBUG_ONLY(X)
+#else
+#define DEBUG_ONLY(X) X
+#endif
 class PhysicEntity
 {
 protected:
@@ -26,6 +31,7 @@ public:
 	}
 
 protected:
+
 	PhysBody* body;
 	Module* listener;
 };
@@ -37,7 +43,16 @@ public:
 		: PhysicEntity(physics->CreateCircle(_x, _y, 25), _listener)
 		, texture(_texture)
 	{
+		hasBeenEjected = false;
+	}
 
+	void Launch()
+	{
+		if (IsKeyPressed(KEY_A))
+		{
+			hasBeenEjected = true;
+			this->body->body->ApplyForceToCenter(b2Vec2{ 100, -2500 }, false);
+		}
 	}
 
 	void Update() override
@@ -51,10 +66,16 @@ public:
 		Vector2 origin = { (float)texture.width / 2.0f, (float)texture.height / 2.0f };
 		float rotation = body->GetRotation() * RAD2DEG;
 		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
+		
+		if (!hasBeenEjected) Launch();
+	
+		
 	}
 
 private:
+
 	Texture2D texture;
+	bool hasBeenEjected;
 
 };
 

@@ -144,7 +144,6 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <UseFullPaths>false</UseFullPaths>
       <ShowIncludes>false</ShowIncludes>
-      <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)Source\external\raylib\src;$(SolutionDir)Source\external\box2d\include%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
