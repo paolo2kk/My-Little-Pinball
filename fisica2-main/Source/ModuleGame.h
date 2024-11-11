@@ -74,9 +74,11 @@ public:
 
 	float leftFlipperForce = 100.0f;
 	float rightFlipperForce = 100.0f;
-	float maxForce = 700.0f;       // Set a maximum limit for the force
-	float forceIncrement = 10.0f;   // Increment rate for holding the key
-	float initialForce = 100.0f;    // Initial force when the key is first pressed
+	float maxForce = 700.0f;      
+	float forceIncrement = 10.0f; 
+	float initialForce = 100.0f;
+	bool noBallsInGame = true;
+
 };
 
 

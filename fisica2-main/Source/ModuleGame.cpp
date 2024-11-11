@@ -86,7 +86,7 @@ public:
 		: PhysicEntity(physics->CreateRectangle(_x, _y, 100, 50), _listener)
 		, texture(_texture)
 	{
-
+		
 	}
 
 	void Update() override
@@ -242,39 +242,36 @@ private:
 	Texture2D texture;
 };
 
-class Plunger : public PhysicEntity {
-public:
-	Plunger(PhysBody* ball, Module* listener)
-		: PhysicEntity(nullptr, listener), ball(ball) {}
-
-	void Update() override {
-		if (!ball) return;  // Ensure ball is valid
-
-		// Charge force while space is held down
-		if (IsKeyDown(KEY_SPACE)) {
-			plungerForce += plungerChargeRate;
-			if (plungerForce > maxPlungerForce) {
-				plungerForce = maxPlungerForce;
-			}
-			isCharging = true;
-		}
-		else if (isCharging && IsKeyReleased(KEY_SPACE)) {
-			// Apply impulse to ball on release
-			ball->body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -plungerForce), true);
-
-			// Reset the charge for next use
-			plungerForce = 0.0f;
-			isCharging = false;
-		}
-	}
-
-private:
-	PhysBody* ball;              // Reference to the existing ball
-	float plungerForce = 0.0f;   // Current charge level for plunger
-	const float maxPlungerForce = 800.0f; // Maximum impulse force
-	const float plungerChargeRate = 10.0f; // Rate of charge increase
-	bool isCharging = false;     // True while the plunger is charging
-};
+//class Plunger : public PhysicEntity {
+//public:
+//	Plunger(PhysBody* ball, Module* listener)
+//		: PhysicEntity(nullptr, listener), ball(ball) {}
+//
+//	void Update() override {
+//		if (!ball) return; 
+//
+//		if (IsKeyDown(KEY_SPACE)) {
+//			plungerForce += plungerChargeRate;
+//			if (plungerForce > maxPlungerForce) {
+//				plungerForce = maxPlungerForce;
+//			}
+//			isCharging = true;
+//		}
+//		else if (isCharging && IsKeyReleased(KEY_SPACE)) {
+//			ball->body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -plungerForce), true);
+//
+//			plungerForce = 0.0f;
+//			isCharging = false;
+//		}
+//	}
+//
+//private:
+//	PhysBody* ball;              
+//	float plungerForce = 0.0f;   
+//	const float maxPlungerForce = 800.0f; 
+//	const float plungerChargeRate = 10.0f;
+//	bool isCharging = false;
+//};
 
 ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -477,6 +474,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 void ModuleGame::LoseLife()
 {
+	noBallsInGame = true;
 	vidas--;
 	if (vidas == 0)
 	{
@@ -547,10 +545,11 @@ void ModuleGame::ManageInputs()
 			// Reset the force when the key is released
 			rightFlipperForce = initialForce;
 		}
-		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+		if (/*IsMouseButtonPressed(MOUSE_BUTTON_LEFT)  && */noBallsInGame)
 		{
-			entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), this, circle, ColliderType::BALL));
-
+			noBallsInGame = false;
+			entities.emplace_back(new Circle(App->physics, 625, 611, this, circle, ColliderType::BALL));
+			
 		}
 
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
@@ -563,18 +562,12 @@ void ModuleGame::ManageInputs()
 			entities.emplace_back(new Rick(App->physics, GetMouseX(), GetMouseY(), this, rick));
 		}
 
-		if (IsKeyDown(KEY_DOWN)) {
-
-			//lanzar bola
-
-		}
 
 		if (IsKeyDown(KEY_ESCAPE))
 		{
 			game_state = GameState::PAUSED;
 		}
 	}
-
 
 	if (game_state == GameState::GAME_OVER)
 	{
@@ -599,5 +592,6 @@ void ModuleGame::GameOver()
 void ModuleGame::Restart()
 {
 	//resetear el score, la vida, los objetos que den puntos y por ultimo cambiar el game state a jugar
+
 }
 
