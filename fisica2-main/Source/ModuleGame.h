@@ -36,6 +36,8 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 	void LoseLife();
 	void ManageInputs();
+	void SetScore(int score);
+	void SetHighScore(int score);
 	void GameOver();
 	void Restart();
 
@@ -52,6 +54,9 @@ public:
 	Texture2D background;
 	Texture2D flipperL;
 	Texture2D flipperR;
+	Texture2D startMenu;
+	Texture2D gameOverMenu;
+	
 
 	uint32 bonus_fx;
 	uint32 flipper_fx;
@@ -61,6 +66,11 @@ public:
 	uint32 launch_fx;
 	uint32 bumper_fx;
 	uint32 plunger_fx;
+
+	int score = 0;
+	int high_score = 0;
+
+
 
 	vec2<int> ray;
 	bool ray_on;
@@ -75,9 +85,11 @@ public:
 
 	float leftFlipperForce = 100.0f;
 	float rightFlipperForce = 100.0f;
-	float maxForce = 700.0f;       // Set a maximum limit for the force
-	float forceIncrement = 10.0f;   // Increment rate for holding the key
-	float initialForce = 100.0f;    // Initial force when the key is first pressed
+	float maxForce = 700.0f;      
+	float forceIncrement = 10.0f; 
+	float initialForce = 100.0f;
+	bool noBallsInGame = true;
+
 };
 
 
