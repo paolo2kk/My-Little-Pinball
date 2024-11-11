@@ -11,7 +11,7 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 {
 	world = NULL;
 	mouse_joint = NULL;
-	debug = true;
+	debug = false;
 }
 
 // Destructor
@@ -134,8 +134,8 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 }
 void ModulePhysics::Flippers()
 {
-	flipperL = CreateRectangle(212, 827, flipperWidth, flipperHeight);
-	flipperLAnch = CreateCircle(212, 827, 2);
+	flipperL = CreateRectangle(212, 835, flipperWidth, flipperHeight);
+	flipperLAnch = CreateCircle(212, 835, 2);
 	flipperLAnch->body->SetType(b2_staticBody);
 	b2RevoluteJointDef flipperLJointDef;
 
@@ -148,8 +148,8 @@ void ModulePhysics::Flippers()
 	flipperLJointDef.upperAngle = 30 * DEGTORAD;
 	b2RevoluteJoint* leftFlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&flipperLJointDef);
 
-	flipperR = CreateRectangle(395, 827, flipperWidth, flipperHeight);
-	flipperRAnch = CreateCircle(395, 827, 2);
+	flipperR = CreateRectangle(395, 835, flipperWidth, flipperHeight);
+	flipperRAnch = CreateCircle(395, 835, 2);
 	flipperRAnch->body->SetType(b2_staticBody);
 	b2RevoluteJointDef flipperRJointDef;
 
@@ -226,12 +226,13 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 // 
 update_status ModulePhysics::PostUpdate()
 {
+	RenderFlippers();
+
 	if(IsKeyPressed(KEY_F1))
 		debug = !debug;
 
 	if(!debug)
 		return UPDATE_CONTINUE;
-	RenderFlippers();
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
 	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())

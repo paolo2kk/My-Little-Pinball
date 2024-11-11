@@ -43,7 +43,7 @@ class Circle : public PhysicEntity
 {
 public:
 	Circle(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture, ColliderType _type)
-		: PhysicEntity(physics->CreateCircle(_x, _y, 25), _listener)
+		: PhysicEntity(physics->CreateCircle(_x, _y, 16), _listener)
 		, texture(_texture)
 	{
 		isInsideTheGame = true;
@@ -56,7 +56,7 @@ public:
 		{
 			isInsideTheGame = true;
 			hasBeenEjected = true;
-			this->body->body->ApplyForceToCenter(b2Vec2{ 100, -2100 }, false);
+			this->body->body->ApplyForceToCenter(b2Vec2{ 100, -500 }, false);
 		}
 	}
 
@@ -598,7 +598,7 @@ bool ModuleGame::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	//Load textures
-	circle = LoadTexture("Assets/wheel.png");
+	circle = LoadTexture("Assets/MapComponents/wheel.png");
 	box = LoadTexture("Assets/crate.png");
 	BG = LoadTexture("Assets/MapComponents/Whole Map.png");
 	flipperL = LoadTexture("Assets/MapComponents/flipper.png");
@@ -623,7 +623,6 @@ bool ModuleGame::Start()
 
 
 
-	entities.emplace_back(new Death(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, box, ColliderType::DEATH));
 
 	Texture2D flipperTexture = LoadTexture("Assets/MapComponents/Flipper.png");
 	/*entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(210), PIXEL_TO_METERS(765), true, this, flipperTexture));
