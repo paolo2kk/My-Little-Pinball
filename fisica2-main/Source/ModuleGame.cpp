@@ -293,6 +293,7 @@ private:
 	Texture2D texture;
 };
 
+<<<<<<< Updated upstream
 //class Plunger : public PhysicEntity {
 //public:
 //	Plunger(PhysBody* ball, Module* listener)
@@ -323,6 +324,201 @@ private:
 //	const float plungerChargeRate = 10.0f;
 //	bool isCharging = false;
 //};
+=======
+class MapColl : public PhysicEntity
+{
+public:
+	// Pivot 0, 0
+	static constexpr int LeftDawner[18] = {
+	103, 711,
+	103, 792,
+	191, 840,
+	192, 820,
+	212, 818,
+	124, 772,
+	124, 706,
+	113, 700,
+	103, 711
+	};
+
+	static constexpr int RightDawner[18] = {
+	394, 819,
+	481, 773,
+	482, 709,
+	493, 700,
+	503, 705,
+	503, 791,
+	412, 841,
+	408, 825,
+	394, 819
+	};
+
+	static constexpr int LeftBouncer[12] = {
+	168, 675,
+	168, 720,
+	210, 741,
+	217, 731,
+	178, 667,
+	168, 675
+	};
+
+	static constexpr int RightBouncer[12] = {
+	427, 669,
+	438, 677,
+	438, 717,
+	398, 742,
+	389, 734,
+	426, 669
+	};
+
+	static constexpr int LeftStik[14] = {
+	238, 470,
+	228, 476,
+	228, 540,
+	238, 547,
+	249, 540,
+	249, 476,
+	238, 470
+	};
+
+	static constexpr int MiddleStik[14] = {
+	304, 470,
+	293, 477,
+	293, 541,
+	304, 547,
+	314, 541,
+	314, 477,
+	304, 470
+	};
+
+	static constexpr int RightStik[14] = {
+	368, 470,
+	358, 476,
+	358, 540,
+	369, 547,
+	379, 540,
+	379, 476,
+	368, 470
+	};
+
+	static constexpr int LeftBigCollision[59] = {
+	98, 308,
+	98, 284,
+	110, 278,
+	124, 289,
+	134, 325,
+	146, 352,
+	164, 364,
+	186, 371,
+	202, 376,
+	214, 385,
+	200, 393,
+	197, 403,
+	202, 415,
+	216, 419,
+	217, 430,
+	143, 497,
+	98, 455,
+	98, 438,
+	97, 429,
+	89, 423,
+	89, 398,
+	98, 391,
+	98, 385,
+	89, 382,
+	90, 353,
+	98, 348,
+	99, 341,
+	89, 337,
+	89, 309
+	};
+
+	static constexpr int LeftTopBigCollision[22] = {
+	138, 51,
+	167, 51,
+	203, 81,
+	203, 117,
+	103, 208,
+	83, 194,
+	83, 157,
+	95, 116,
+	108, 86,
+	120, 70,
+	138, 51
+	};
+
+	static constexpr int RightBigCollision[38] = {
+	394, 386,
+	408, 396,
+	411, 405,
+	408, 414,
+	401, 422,
+	515, 500,
+	527, 497,
+	538, 486,
+	538, 198,
+	531, 189,
+	513, 189,
+	504, 198,
+	503, 300,
+	498, 318,
+	493, 327,
+	481, 338,
+	468, 347,
+	396, 380,
+	394, 386
+	};
+
+	MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener)
+		: PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(), LeftBigCollision, 59), _listener)
+	{
+
+	}
+
+	void Update() override
+	{
+		int x, y;
+		body->GetPhysicPosition(x, y);;
+	}
+
+private:
+	
+};
+
+class Plunger : public PhysicEntity {
+public:
+	Plunger(PhysBody* ball, Module* listener)
+		: PhysicEntity(nullptr, listener), ball(ball) {}
+
+	void Update() override {
+		if (!ball) return;  // Ensure ball is valid
+
+		// Charge force while space is held down
+		if (IsKeyDown(KEY_SPACE)) {
+			plungerForce += plungerChargeRate;
+			if (plungerForce > maxPlungerForce) {
+				plungerForce = maxPlungerForce;
+			}
+			isCharging = true;
+		}
+		else if (isCharging && IsKeyReleased(KEY_SPACE)) {
+			// Apply impulse to ball on release
+			ball->body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -plungerForce), true);
+
+			// Reset the charge for next use
+			plungerForce = 0.0f;
+			isCharging = false;
+		}
+	}
+
+private:
+	PhysBody* ball;              // Reference to the existing ball
+	float plungerForce = 0.0f;   // Current charge level for plunger
+	const float maxPlungerForce = 800.0f; // Maximum impulse force
+	const float plungerChargeRate = 10.0f; // Rate of charge increase
+	bool isCharging = false;     // True while the plunger is charging
+};
+>>>>>>> Stashed changes
 
 ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -350,9 +546,13 @@ bool ModuleGame::Start()
 	flipperR = LoadTexture("Assets/MapComponents/flipper.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this));
 	entities.emplace_back(new Rick(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, rick));
 
+<<<<<<< Updated upstream
 	entities.emplace_back(new Death(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, box, ColliderType::DEATH));
+=======
+>>>>>>> Stashed changes
 
 	Texture2D flipperTexture = LoadTexture("Assets/MapComponents/Flipper.png");
 	/*entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(210), PIXEL_TO_METERS(765), true, this, flipperTexture));

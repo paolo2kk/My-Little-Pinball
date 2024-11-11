@@ -204,7 +204,9 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
 	}
 
-	shape.CreateLoop(p, size / 2);
+	int size_ = size / 2;
+
+	shape.CreateLoop(p, size_);
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
