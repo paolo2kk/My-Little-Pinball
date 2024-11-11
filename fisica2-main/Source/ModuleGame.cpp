@@ -464,7 +464,7 @@ public:
 	};
 
 	MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener, COLLISIONS type ):
-			PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(),collision, GetCollider_andSize(type)), _listener)
+			PhysicEntity(physics->CreateChain(0, 0, collision, GetCollider_andSize(type)), _listener)
 	{
 
 	}
@@ -597,7 +597,7 @@ bool ModuleGame::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	//Load textures
-	circle = LoadTexture("Assets/wheel.png");
+	circle = LoadTexture("Assets/MapComponents/wheel.png");
 	box = LoadTexture("Assets/crate.png");
 	BG = LoadTexture("Assets/MapComponents/Whole Map.png");
 	flipperL = LoadTexture("Assets/MapComponents/flipper.png");
