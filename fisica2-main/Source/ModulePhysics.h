@@ -17,7 +17,8 @@
 enum ColliderType
 {
 	BALL,
-	DEATH
+	DEATH,
+	SCORE
 };
 
 // Small class to return to other modules to track position and rotation of physics bodies
