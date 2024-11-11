@@ -59,7 +59,8 @@ public:
 	uint32 start_fx;
 	uint32 background_music;
 	uint32 launch_fx;
-
+	uint32 bumper_fx;
+	uint32 plunger_fx;
 
 	vec2<int> ray;
 	bool ray_on;

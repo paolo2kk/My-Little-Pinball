@@ -50,6 +50,7 @@ public:
 	{
 		if (IsKeyPressed(KEY_A))
 		{
+			
 			hasBeenEjected = true;
 			this->body->body->ApplyForceToCenter(b2Vec2{ 100, -2500 }, false);
 		}
@@ -312,11 +313,13 @@ bool ModuleGame::Start()
 	background_music = App->audio->PlayMusic("Assets/music.ogg");
 
 	// Load FX
-	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
-	flipper_fx = App->audio->LoadFx("Assets/flipper.wav");
-	game_over_fx = App->audio->LoadFx("Assets/game_over.wav");
-	start_fx = App->audio->LoadFx("Assets/start.wav");
-	launch_fx = App->audio->LoadFx("Assets/launch.wav");
+	bonus_fx = App->audio->LoadFx("Assets/sfxandsong/bonus.wav");
+	flipper_fx = App->audio->LoadFx("Assets/sfxandsong/Flipper 1.wav");
+	bumper_fx = App->audio->LoadFx("Assets/sfxandsong/Bumper9.wav");
+	plunger_fx = App->audio->LoadFx("Assets/sfxandsong/PlungerRusty.wav");
+	game_over_fx = App->audio->LoadFx("Assets/sfxandsong/game_over.wav");
+	start_fx = App->audio->LoadFx("Assets/sfxandsong/start.wav");
+	launch_fx = App->audio->LoadFx("Assets/sfxandsong/launch.wav");
 
 
 	//Load mierdas para conseguir puntos
@@ -521,7 +524,8 @@ void ModuleGame::ManageInputs()
 				flipper->ControlFlipper(IsKeyDown(KEY_SPACE));
 			}
 		}
-		if (IsKeyDown(KEY_A)) {
+		if (IsKeyPressed(KEY_A)) {
+			App->audio->PlayFx(flipper_fx);
 			// Increase the force gradually, but don't exceed maxForce
 			leftFlipperForce += forceIncrement;
 			if (leftFlipperForce > maxForce) leftFlipperForce = maxForce;
@@ -536,6 +540,7 @@ void ModuleGame::ManageInputs()
 
 		// Check if the D key is held down for the right flipper
 		if (IsKeyDown(KEY_D)) {
+			App->audio->PlayFx(flipper_fx);
 			// Increase the force gradually, but don't exceed maxForce
 			rightFlipperForce += forceIncrement;
 			if (rightFlipperForce > maxForce) rightFlipperForce = maxForce;
