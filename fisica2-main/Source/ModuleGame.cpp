@@ -66,10 +66,10 @@ public:
 		Vector2 origin = { (float)texture.width / 2.0f, (float)texture.height / 2.0f };
 		float rotation = body->GetRotation() * RAD2DEG;
 		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
-		
+
 		if (!hasBeenEjected) Launch();
-	
-		
+
+
 	}
 
 private:
@@ -86,7 +86,7 @@ public:
 		: PhysicEntity(physics->CreateRectangle(_x, _y, 100, 50), _listener)
 		, texture(_texture)
 	{
-		
+
 	}
 
 	void Update() override
@@ -488,7 +488,7 @@ void ModuleGame::LoseLife()
 
 void ModuleGame::ManageInputs()
 {
-	
+
 	if (game_state == GameState::START_MENU)
 	{
 		if (IsKeyPressed(KEY_ENTER))
@@ -549,7 +549,7 @@ void ModuleGame::ManageInputs()
 		{
 			noBallsInGame = false;
 			entities.emplace_back(new Circle(App->physics, 625, 611, this, circle, ColliderType::BALL));
-			
+
 		}
 
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
