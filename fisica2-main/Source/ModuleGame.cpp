@@ -293,7 +293,7 @@ private:
 	Texture2D texture;
 };
 
-<<<<<<< Updated upstream
+
 //class Plunger : public PhysicEntity {
 //public:
 //	Plunger(PhysBody* ball, Module* listener)
@@ -324,153 +324,145 @@ private:
 //	const float plungerChargeRate = 10.0f;
 //	bool isCharging = false;
 //};
-=======
+
+
 class MapColl : public PhysicEntity
 {
 public:
 	// Pivot 0, 0
-	static constexpr int LeftDawner[18] = {
-	103, 711,
-	103, 792,
-	191, 840,
-	192, 820,
-	212, 818,
-	124, 772,
-	124, 706,
-	113, 700,
-	103, 711
-	};
+	const int* LeftDawner = new const int[17] {
+		103, 711,
+			103, 792,
+			191, 840,
+			192, 820,
+			212, 818,
+			124, 772,
+			124, 706,
+			113, 700
+		};
 
-	static constexpr int RightDawner[18] = {
-	394, 819,
-	481, 773,
-	482, 709,
-	493, 700,
-	503, 705,
-	503, 791,
-	412, 841,
-	408, 825,
-	394, 819
-	};
+	const int* RightDawner = new const int[17] {
+		394, 819,
+			481, 773,
+			482, 709,
+			493, 700,
+			503, 705,
+			503, 791,
+			412, 841,
+			408, 825
+		};
 
-	static constexpr int LeftBouncer[12] = {
-	168, 675,
-	168, 720,
-	210, 741,
-	217, 731,
-	178, 667,
-	168, 675
-	};
+	const int* LeftBouncer = new const int[11] {
+		168, 675,
+			168, 720,
+			210, 741,
+			217, 731,
+			178, 667
+		};
 
-	static constexpr int RightBouncer[12] = {
-	427, 669,
-	438, 677,
-	438, 717,
-	398, 742,
-	389, 734,
-	426, 669
-	};
+	const int* RightBouncer = new const int[11] {
+		427, 669,
+			438, 677,
+			438, 717,
+			398, 742,
+			389, 734
+		};
 
-	static constexpr int LeftStik[14] = {
-	238, 470,
-	228, 476,
-	228, 540,
-	238, 547,
-	249, 540,
-	249, 476,
-	238, 470
-	};
+	const int* LeftStik = new const int[13] {
+		238, 470,
+			228, 476,
+			228, 540,
+			238, 547,
+			249, 540,
+			249, 476
+		};
 
-	static constexpr int MiddleStik[14] = {
-	304, 470,
-	293, 477,
-	293, 541,
-	304, 547,
-	314, 541,
-	314, 477,
-	304, 470
-	};
+	const int* MiddleStik = new const int[13] {
+		304, 470,
+			293, 477,
+			293, 541,
+			304, 547,
+			314, 541,
+			314, 477
+		};
 
-	static constexpr int RightStik[14] = {
-	368, 470,
-	358, 476,
-	358, 540,
-	369, 547,
-	379, 540,
-	379, 476,
-	368, 470
-	};
+	const int* RightStik = new const int[13] {
+		368, 470,
+			358, 476,
+			358, 540,
+			369, 547,
+			379, 540,
+			379, 476
+		};
 
-	static constexpr int LeftBigCollision[59] = {
-	98, 308,
-	98, 284,
-	110, 278,
-	124, 289,
-	134, 325,
-	146, 352,
-	164, 364,
-	186, 371,
-	202, 376,
-	214, 385,
-	200, 393,
-	197, 403,
-	202, 415,
-	216, 419,
-	217, 430,
-	143, 497,
-	98, 455,
-	98, 438,
-	97, 429,
-	89, 423,
-	89, 398,
-	98, 391,
-	98, 385,
-	89, 382,
-	90, 353,
-	98, 348,
-	99, 341,
-	89, 337,
-	89, 309
-	};
+	const int* LeftBigCollision = new const int[59] {
+		98, 308,
+			98, 284,
+			110, 278,
+			124, 289,
+			134, 325,
+			146, 352,
+			164, 364,
+			186, 371,
+			202, 376,
+			214, 385,
+			200, 393,
+			197, 403,
+			202, 415,
+			216, 419,
+			217, 430,
+			143, 497,
+			98, 455,
+			98, 438,
+			97, 429,
+			89, 423,
+			89, 398,
+			98, 391,
+			98, 385,
+			89, 382,
+			90, 353,
+			98, 348,
+			99, 341,
+			89, 337,
+			89, 309
+		};
 
-	static constexpr int LeftTopBigCollision[22] = {
-	138, 51,
-	167, 51,
-	203, 81,
-	203, 117,
-	103, 208,
-	83, 194,
-	83, 157,
-	95, 116,
-	108, 86,
-	120, 70,
-	138, 51
-	};
+	const int* LeftTopBigCollision = new const int[21] {
+		138, 51,
+			167, 51,
+			203, 81,
+			203, 117,
+			103, 208,
+			83, 194,
+			83, 157,
+			95, 116,
+			108, 86,
+			120, 70
+		};
 
-	static constexpr int RightBigCollision[38] = {
-	394, 386,
-	408, 396,
-	411, 405,
-	408, 414,
-	401, 422,
-	515, 500,
-	527, 497,
-	538, 486,
-	538, 198,
-	531, 189,
-	513, 189,
-	504, 198,
-	503, 300,
-	498, 318,
-	493, 327,
-	481, 338,
-	468, 347,
-	396, 380,
-	394, 386
-	};
+	const int* RightBigCollision = new const int[37] {
+		394, 386,
+			408, 396,
+			411, 405,
+			408, 414,
+			401, 422,
+			515, 500,
+			527, 497,
+			538, 486,
+			538, 198,
+			531, 189,
+			513, 189,
+			504, 198,
+			503, 300,
+			498, 318,
+			493, 327,
+			481, 338,
+			468, 347,
+			396, 380
+		};
 
-	MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener)
-		: PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(), LeftBigCollision, 59), _listener)
+	MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener, int ident):
+		 PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(),GetCollType(), size_), _listener)
 	{
 
 	}
@@ -481,8 +473,69 @@ public:
 		body->GetPhysicPosition(x, y);;
 	}
 
+	const int* GetCollType() {
+
+		switch (ty)
+		{
+		case 0:
+			size_ = 17;  // LeftDawner
+			break;
+		case 1:
+			size_ = 17;  // RightDawner
+			break;
+		case 2:
+			size_ = 11;  // LeftBouncer
+			break;
+		case 3:
+			size_ = 11;  // RightBouncer
+			break;
+		case 4:
+			size_ = 13;  // LeftStik
+			break;
+		case 5:
+			size_ = 13;  // MiddleStik
+			break;
+		case 6:
+			size_ = 13;  // RightStik
+			break;
+		case 7:
+			size_ = 59;  // LeftBigCollision
+			break;
+		case 8:
+			size_ = 21;  // LeftTopBigCollision
+			break;
+		case 9:
+			size_ = 37;   // RightBigCollision
+			break;
+		default:
+			break;
+		}
+
+		static std::vector<const int*> arrays = {
+			LeftDawner,
+			RightDawner,
+			LeftBouncer,
+			RightBouncer,
+			LeftStik,
+			MiddleStik,
+			RightStik,
+			LeftBigCollision,
+			LeftTopBigCollision,
+			RightBigCollision
+		};
+
+		if (ty < 10 && ty >= 0) {
+
+			return arrays[ty];
+		}
+		else {
+			return nullptr;
+		}
+	}
+
 private:
-	
+	int size_ = 0;
+	int ty = 0;
 };
 
 class Plunger : public PhysicEntity {
@@ -518,7 +571,6 @@ private:
 	const float plungerChargeRate = 10.0f; // Rate of charge increase
 	bool isCharging = false;     // True while the plunger is charging
 };
->>>>>>> Stashed changes
 
 ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -546,13 +598,22 @@ bool ModuleGame::Start()
 	flipperR = LoadTexture("Assets/MapComponents/flipper.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this));
 	entities.emplace_back(new Rick(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, rick));
+	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 0));
+	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 1));
+	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 2));
+	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 3));
+	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 4));
+	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 5));
+	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 6));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this,7));
+	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 8));
+	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 9));
 
-<<<<<<< Updated upstream
+
+
+
 	entities.emplace_back(new Death(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, box, ColliderType::DEATH));
-=======
->>>>>>> Stashed changes
 
 	Texture2D flipperTexture = LoadTexture("Assets/MapComponents/Flipper.png");
 	/*entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(210), PIXEL_TO_METERS(765), true, this, flipperTexture));
@@ -729,7 +790,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 void ModuleGame::LoseLife()
 {
-	noBallsInGame = true;
+	//noBallsInGame = true;
 	vidas--;
 	if (vidas == 0)
 	{
@@ -802,12 +863,12 @@ void ModuleGame::ManageInputs()
 			// Reset the force when the key is released
 			rightFlipperForce = initialForce;
 		}
-		if (/*IsMouseButtonPressed(MOUSE_BUTTON_LEFT)  && */noBallsInGame)
-		{
-			noBallsInGame = false;
-			entities.emplace_back(new Circle(App->physics, 625, 611, this, circle, ColliderType::BALL));
+		//if (/*IsMouseButtonPressed(MOUSE_BUTTON_LEFT)  && */noBallsInGame)
+		//{
+		//	noBallsInGame = false;
+		//	entities.emplace_back(new Circle(App->physics, 625, 611, this, circle, ColliderType::BALL));
 
-		}
+		//}
 
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
 		{

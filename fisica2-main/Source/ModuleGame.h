@@ -39,6 +39,7 @@ public:
 	void GameOver();
 	void Restart();
 
+
 public:
 
 	std::vector<PhysicEntity*> entities;
