@@ -50,30 +50,38 @@ public:
 
 	void Launch()
 	{
-		if (IsKeyPressed(KEY_A))
+		if (IsKeyPressed(KEY_SPACE))
 		{
-			
+			isInsideTheGame = true;
 			hasBeenEjected = true;
-			this->body->body->ApplyForceToCenter(b2Vec2{ 100, -2500 }, false);
+			this->body->body->ApplyForceToCenter(b2Vec2{ 100, -2100 }, false);
 		}
 	}
 
 	void Die()
 	{
+		b2Vec2 initialPos = { (float)PIXEL_TO_METERS(625), (float)PIXEL_TO_METERS(611) };
+		this->body->body->SetTransform(initialPos, 0);
+		this->body->body->SetLinearVelocity(b2Vec2{ 0, 0 });
+		this->body->body->SetAngularVelocity(0);
+		isInsideTheGame = false;
+		hasBeenEjected = false;
 	}
 
 	void EnsureImInside()
 	{
-		if (this->body->body->GetPosition().x >= 0 && this->body->body->GetPosition().x <= SCREEN_WIDTH &&
-			this->body->body->GetPosition().y >= 0 && this->body->body->GetPosition().y <= SCREEN_HEIGHT)
+		b2Vec2 position = this->body->body->GetPosition();
+		if (position.x >= 0 && position.x <= PIXEL_TO_METERS(SCREEN_WIDTH) &&
+			position.y >= 0 && position.y <= PIXEL_TO_METERS(SCREEN_HEIGHT) + 100)
 		{
 			isInsideTheGame = true;
 		}
-		else {
+		else
+		{
 			isInsideTheGame = false;
 		}
 
-		std::cout << isInsideTheGame;
+		std::cout << "Inside Game: " << isInsideTheGame << std::endl;
 	}
 	
 	void Update() override
