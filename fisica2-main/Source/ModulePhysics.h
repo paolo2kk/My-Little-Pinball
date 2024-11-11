@@ -17,8 +17,7 @@
 enum ColliderType
 {
 	BALL,
-	DEATH,
-	SCORE
+	DEATH
 };
 
 // Small class to return to other modules to track position and rotation of physics bodies
@@ -74,6 +73,8 @@ public:
 	PhysBody* flipperR;
 	PhysBody* flipperLAnch;
 	PhysBody* flipperRAnch;
+	PhysBody* bumperL;
+	PhysBody* bumperR;
 
 	float restitution = 0.4f;
 	Texture2D flipperLTexture;
