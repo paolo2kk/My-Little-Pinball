@@ -231,25 +231,25 @@ class MapColl : public PhysicEntity
 public:
 	// Pivot 0, 0
 	static constexpr int LeftDawner[16] = {
-	113, 701,
-	103, 707,
-	103, 789,
-	191, 839,
-	192, 820,
-	209, 816,
+	123, 706,
 	124, 773,
-	123, 706
+	209, 816,
+	192, 820,
+	191, 839,
+	103, 789,
+	103, 707,
+	113, 701
 	};
 
 	static constexpr int RightDawner[16] = {
-		397, 816,
-		412, 820,
-		415, 839,
-		504, 793,
-		503, 705,
-		492, 700,
+		481, 773,
 		483, 707,
-		481, 773
+		492, 700,
+		503, 705,
+		504, 793,
+		415, 839,
+		412, 820,
+		397, 816
 	};
 
 	static constexpr int LeftBouncer[12] = {
@@ -270,96 +270,96 @@ public:
 	};
 
 	static constexpr int LeftStik[12] = {
-		238, 471,
-		228, 479,
-		228, 540,
-		239, 546,
+		248, 479,
 		248, 540,
-		248, 479
+		239, 546,
+		228, 540,
+		228, 479,
+		238, 471
 	};
 
 	static constexpr int MiddleStik[12] = {
-		303, 470,
-		293, 477,
-		293, 539,
-		303, 546,
+		313, 477,
 		313, 540,
-		313, 477
+		303, 546,
+		293, 539,
+		293, 477,
+		303, 470
 	};
 
 	static constexpr int RightStik[12] = {
-	368, 470,
-	358, 477,
-	358, 540,
-	369, 546,
-	379, 539,
-	379, 477
+		379, 477,
+		379, 539,
+		369, 546,
+		358, 540,
+		358, 477,
+		368, 470
 	};
 
 	static constexpr int LeftBigCollision[58] = {
-		141, 496,
-		216, 431,
-		216, 419,
-		200, 415,
-		197, 401,
-		201, 390,
-		213, 384,
-		177, 369,
-		156, 360,
-		142, 345,
-		132, 321,
-		124, 290,
-		113, 279,
-		99, 282,
-		98, 305,
-		89, 313,
-		89, 328,
-		98, 338,
-		101, 346,
-		90, 358,
-		90, 372,
-		98, 383,
-		100, 391,
-		90, 400,
-		90, 422,
-		101, 429,
-		97, 440,
+		118, 476,
 		99, 453,
-		118, 476
+		97, 440,
+		101, 429,
+		90, 422,
+		90, 400,
+		100, 391,
+		98, 383,
+		90, 372,
+		90, 358,
+		101, 346,
+		98, 338,
+		89, 328,
+		89, 313,
+		98, 305,
+		99, 282,
+		113, 279,
+		124, 290,
+		132, 321,
+		142, 345,
+		156, 360,
+		177, 369,
+		213, 384,
+		201, 390,
+		197, 401,
+		200, 415,
+		216, 419,
+		216, 431,
+		141, 496
 	};
 
 	static constexpr int LeftTopBigCollision[26] = {
-		105, 208,
-		202, 115,
-		203, 84,
-		167, 51,
-		139, 51,
-		119, 71,
-		105, 95,
-		95, 122,
-		87, 150,
-		85, 168,
-		85, 182,
+		95, 205,
 		88, 198,
-		95, 205
+		85, 182,
+		85, 168,
+		87, 150,
+		95, 122,
+		105, 95,
+		119, 71,
+		139, 51,
+		167, 51,
+		203, 84,
+		202, 115,
+		105, 208
 	};
 
 	static constexpr int RightBigCollision[30] = {
-		523, 187,
-		504, 197,
-		503, 300,
-		498, 320,
-		487, 334,
-		467, 348,
-		396, 382,
-		406, 392,
-		410, 402,
-		407, 411,
-		400, 422,
-		515, 499,
-		530, 495,
+		539, 199,
 		539, 486,
-		539, 199
+		530, 495,
+		515, 499,
+		400, 422,
+		407, 411,
+		410, 402,
+		406, 392,
+		396, 382,
+		467, 348,
+		487, 334,
+		498, 320,
+		503, 300,
+		504, 197,
+		523, 187
 	};
 
 	static constexpr int BallLeft[20] = {
@@ -404,6 +404,7 @@ public:
 	387, 216,
 	393, 212
 	};
+
 
 	static constexpr int MainMap[110] = {
 	489, 862,
@@ -464,7 +465,7 @@ public:
 	};
 
 	MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener, COLLISIONS type ):
-			PhysicEntity(physics->CreateChain(0, 0, collision, GetCollider_andSize(type)), _listener)
+			PhysicEntity(physics->CreateChain(0, 0,collision, GetCollider_andSize(type)), _listener)
 	{
 
 	}
@@ -597,7 +598,7 @@ bool ModuleGame::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	//Load textures
-	circle = LoadTexture("Assets/MapComponents/wheel.png");
+	circle = LoadTexture("Assets/wheel.png");
 	box = LoadTexture("Assets/crate.png");
 	BG = LoadTexture("Assets/MapComponents/Whole Map.png");
 	flipperL = LoadTexture("Assets/MapComponents/flipper.png");
