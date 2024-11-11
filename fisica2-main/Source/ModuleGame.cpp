@@ -107,6 +107,34 @@ private:
 	Texture2D texture;
 
 };
+class Death : public PhysicEntity
+{
+public:
+	Death(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture, ColliderType type)
+		: PhysicEntity(physics->CreateRectangleSensor(_x, _y, 100, 50), _listener)
+		, texture(_texture)
+	{
+
+	}
+
+	void Update() override
+	{
+		int x, y;
+		body->GetPhysicPosition(x, y);
+		DrawTexturePro(texture, Rectangle{ 0, 0, (float)texture.width, (float)texture.height },
+			Rectangle{ (float)x, (float)y, (float)texture.width, (float)texture.height },
+			Vector2{ (float)texture.width / 2.0f, (float)texture.height / 2.0f }, body->GetRotation() * RAD2DEG, WHITE);
+	}
+
+	int RayHit(vec2<int> ray, vec2<int> mouse, vec2<float>& normal) override
+	{
+		return body->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);;
+	}
+
+private:
+	Texture2D texture;
+
+};
 class Flipper : public PhysicEntity
 {
 public:
@@ -300,7 +328,7 @@ bool ModuleGame::Start()
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	entities.emplace_back(new Rick(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, rick));
 
-	entities.emplace_back(new Box(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, box, ColliderType::DEATH));
+	entities.emplace_back(new Death(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, box, ColliderType::DEATH));
 
 	Texture2D flipperTexture = LoadTexture("Assets/MapComponents/Flipper.png");
 	/*entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(210), PIXEL_TO_METERS(765), true, this, flipperTexture));
@@ -466,6 +494,8 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::DEATH)
 	{
+		//hacer que se delete la pelota
+		
 		LoseLife();
 	}
 
@@ -590,7 +620,10 @@ void ModuleGame::GameOver()
 
 void ModuleGame::Restart()
 {
-	//resetear el score, la vida, los objetos que den puntos y por ultimo cambiar el game state a jugar
+	//hacer que desaparezca la pelota y aparezca en otra posicion, resetear los objetos que den puntos y por ultimo cambiar el game state a jugar
+	
+	game_state = GameState::PLAYING;
+
 
 }
 
