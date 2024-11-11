@@ -36,6 +36,8 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 	void LoseLife();
 	void ManageInputs();
+	void SetScore(int score);
+	void SetHighScore(int score);
 	void GameOver();
 	void Restart();
 
