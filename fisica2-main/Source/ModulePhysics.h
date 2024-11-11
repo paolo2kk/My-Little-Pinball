@@ -39,6 +39,7 @@ public:
 	b2Body* body;
 	ColliderType type;
 	Module* listener;
+	
 };
 
 // Module --------------------------------------
@@ -65,8 +66,6 @@ public:
 	b2World* world;
 	b2Body* ground;
 
-
-	//flipao
 
 	
 	int flipperWidth = 80;

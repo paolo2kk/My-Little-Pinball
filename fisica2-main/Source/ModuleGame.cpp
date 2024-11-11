@@ -4,6 +4,7 @@
 #include "ModuleGame.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include <iostream>
 
 #ifdef NDEBUG
 #define DEBUG_ONLY(X)
@@ -43,6 +44,7 @@ public:
 		: PhysicEntity(physics->CreateCircle(_x, _y, 25), _listener)
 		, texture(_texture)
 	{
+		isInsideTheGame = true;
 		hasBeenEjected = false;
 	}
 
@@ -55,6 +57,24 @@ public:
 		}
 	}
 
+	void Die()
+	{
+	}
+
+	void EnsureImInside()
+	{
+		if (this->body->body->GetPosition().x >= 0 && this->body->body->GetPosition().x <= SCREEN_WIDTH &&
+			this->body->body->GetPosition().y >= 0 && this->body->body->GetPosition().y <= SCREEN_HEIGHT)
+		{
+			isInsideTheGame = true;
+		}
+		else {
+			isInsideTheGame = false;
+		}
+
+		std::cout << isInsideTheGame;
+	}
+	
 	void Update() override
 	{
 		int x, y;
@@ -68,15 +88,18 @@ public:
 		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
 
 		if (!hasBeenEjected) Launch();
-
-
+		EnsureImInside();
+		if (!isInsideTheGame)
+		{
+			Die();
+		}
 	}
 
-private:
+public:
 
 	Texture2D texture;
 	bool hasBeenEjected;
-
+	bool isInsideTheGame;
 };
 
 class Box : public PhysicEntity
