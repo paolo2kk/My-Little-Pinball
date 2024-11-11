@@ -82,11 +82,11 @@ private:
 class Box : public PhysicEntity
 {
 public:
-	Box(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
+	Box(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture, ColliderType type)
 		: PhysicEntity(physics->CreateRectangle(_x, _y, 100, 50), _listener)
 		, texture(_texture)
 	{
-
+	
 	}
 
 	void Update() override
@@ -165,7 +165,6 @@ private:
 class Rick : public PhysicEntity
 {
 public:
-	// Pivot 0, 0
 	static constexpr int table[110] = {
 	489, 862,
 	558, 818,
@@ -301,6 +300,8 @@ bool ModuleGame::Start()
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	entities.emplace_back(new Rick(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, rick));
 
+	entities.emplace_back(new Box(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, box, ColliderType::DEATH));
+
 	Texture2D flipperTexture = LoadTexture("Assets/MapComponents/Flipper.png");
 	/*entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(210), PIXEL_TO_METERS(765), true, this, flipperTexture));
 	entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(315), PIXEL_TO_METERS(765), false, this, flipperTexture));*/
@@ -323,9 +324,7 @@ bool ModuleGame::Start()
 	//Load paredes
 
 	//Crear death_trigger
-	death_trigger = App->physics->CreateRectangle(0, 0, 10, 10);
-	death_trigger->type = ColliderType::DEATH;
-
+	
 	//Crear launcher
 
 
@@ -554,7 +553,7 @@ void ModuleGame::ManageInputs()
 
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
 		{
-			entities.emplace_back(new Box(App->physics, GetMouseX(), GetMouseY(), this, box));
+			entities.emplace_back(new Box(App->physics, GetMouseX(), GetMouseY(), this, box, ColliderType::DEATH));
 		}
 
 		if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE))
