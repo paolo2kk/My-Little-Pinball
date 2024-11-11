@@ -12,7 +12,6 @@
 #define DEBUG_ONLY(X) X
 #endif
 
-int a =-1;
 
 class PhysicEntity
 {
@@ -216,84 +215,6 @@ private:
 	b2RevoluteJoint* flipperJoint;
 	Texture2D texture;
 	bool isLeft;
-};
-class Rick : public PhysicEntity
-{
-public:
-	static constexpr int table[110] = {
-	489, 862,
-	558, 818,
-	558, 654,
-	537, 633,
-	536, 583,
-	552, 567,
-	569, 546,
-	577, 524,
-	580, 500,
-	580, 129,
-	575, 117,
-	565, 106,
-	555, 100,
-	540, 104,
-	489, 131,
-	482, 126,
-	484, 115,
-	526, 73,
-	535, 66,
-	556, 65,
-	575, 71,
-	593, 86,
-	605, 112,
-	608, 126,
-	607, 647,
-	646, 648,
-	647, 140,
-	644, 98,
-	639, 71,
-	628, 48,
-	611, 33,
-	595, 20,
-	580, 14,
-	160, 15,
-	137, 19,
-	106, 39,
-	82, 69,
-	66, 108,
-	56, 157,
-	49, 207,
-	48, 246,
-	32, 269,
-	26, 277,
-	26, 437,
-	36, 477,
-	72, 516,
-	72, 607,
-	49, 641,
-	50, 820,
-	121, 863,
-	0, 863,
-	0, 0,
-	647, 0,
-	647, 863,
-	490, 863
-	};
-
-	Rick(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(), table, 110), _listener)
-		, texture(_texture)
-	{
-
-	}
-
-	void Update() override
-	{
-		int x, y;
-		body->GetPhysicPosition(x, y);
-		DrawTextureEx(texture, Vector2{ (float)x, (float)y }, body->GetRotation() * RAD2DEG, 1.0f, WHITE);
-	}
-
-private:
-	Texture2D texture;
 };
 
 
@@ -508,108 +429,135 @@ public:
 	393, 212
 	};
 
-	MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener,int type):
-			PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(),GetCollType(type), GetSize(type)), _listener)
+	static constexpr int MainMap[110] = {
+	489, 862,
+	558, 818,
+	558, 654,
+	537, 633,
+	536, 583,
+	552, 567,
+	569, 546,
+	577, 524,
+	580, 500,
+	580, 129,
+	575, 117,
+	565, 106,
+	555, 100,
+	540, 104,
+	489, 131,
+	482, 126,
+	484, 115,
+	526, 73,
+	535, 66,
+	556, 65,
+	575, 71,
+	593, 86,
+	605, 112,
+	608, 126,
+	607, 647,
+	646, 648,
+	647, 140,
+	644, 98,
+	639, 71,
+	628, 48,
+	611, 33,
+	595, 20,
+	580, 14,
+	160, 15,
+	137, 19,
+	106, 39,
+	82, 69,
+	66, 108,
+	56, 157,
+	49, 207,
+	48, 246,
+	32, 269,
+	26, 277,
+	26, 437,
+	36, 477,
+	72, 516,
+	72, 607,
+	49, 641,
+	50, 820,
+	121, 863,
+	0, 863,
+	0, 0,
+	647, 0,
+	647, 863,
+	490, 863
+	};
+
+	MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener, COLLISIONS type ):
+			PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(),collision, GetCollider_andSize(type)), _listener)
 	{
 
-	//}
-
-	//void Update() override
-	//{
-	//	int x, y;
-	//	body->GetPhysicPosition(x, y);;
-	//}
-
-	const int* GetCollType(int ty) {
-
-		switch (ty)
-		{
-		case 0:  
-			return LeftDawner;
-			break;
-		case 1:
-			return RightDawner;
-			break;
-		case 2:
-			return LeftBouncer;
-			break;
-		case 3:
-			return  RightBouncer;
-			break;
-		case 4:
-			return  LeftStik;
-			break;
-		case 5:
-			return  MiddleStik;
-			break;
-		case 6:
-			return  RightStik;
-			break;
-		case 7:
-			return  LeftBigCollision;
-			break;
-		case 8:
-			return  LeftTopBigCollision;
-			break;
-		case 9:
-			return  RightBigCollision;
-			break;
-		case 10:
-			return  BallLeft;
-			break;
-		case 11:
-			return  BallMiddle;
-			break;
-		case 12:
-			return  BallRight;
-			break;
-		default:
-			break;
-		}
 	}
 
-	int GetSize(int ty)
+	void Update() override
 	{
+		int x, y;
+		body->GetPhysicPosition(x, y);;
+	}
+
+	int GetCollider_andSize(COLLISIONS ty) {
+
 		switch (ty)
 		{
-		case 0:  
-			return 16;	// LeftDawner
+		case COLLISIONS::LEFT_DOWNER:  
+			collision = LeftDawner;
+			return 16;
 			break;
-		case 1:  
-			return 16;	// RightDawner
+		case COLLISIONS::RIGHT_DOWNER:
+			collision = RightDawner;
+			return 16;
 			break;
-		case 2:
-			return 12;  // LeftBouncer
+		case COLLISIONS::LEFT_BOUNCER:
+			collision = LeftBouncer;
+			return 12;
 			break;
-		case 3:
-			return 10;  // RightBouncer
+		case COLLISIONS::RIGHT_BOUNCER:
+			collision = RightBouncer;
+			return 10;
 			break;
-		case 4:
-			return 12;  // LeftStik
+		case COLLISIONS::LEFT_STIK:
+			collision = LeftStik;
+			return 12;
 			break;
-		case 5:
-			return 12;  // MiddleStik
+		case COLLISIONS::MIDLE_STIK:
+			collision = MiddleStik;
+			return 12;
 			break;
-		case 6:
-			return 12;  // RightStik
+		case COLLISIONS::RIGHT_STIK:
+			collision = RightStik;
+			return 12;
 			break;
-		case 7:
-			return 58;  // LeftBigCollision
+		case COLLISIONS::LEFT_WING:
+			collision = LeftBigCollision;
+			return 58;
 			break;
-		case 8:
-			return 26;  // LeftTopBigCollision
+		case COLLISIONS::LEFT_OBSTACLE:
+			collision = LeftTopBigCollision;
+			return 26;
 			break;
-		case 9:
-			return 30;   // RightBigCollision
+		case COLLISIONS::RIGHT_OBSTACLE:
+			collision = RightBigCollision;
+			return 30;
 			break;
-		case 10:
-			return 20;   // BallLeft
+		case COLLISIONS::LEFT_BALL:
+			collision = BallLeft;
+			return 20;
 			break;
-		case 11:
-			return 22;   // BallLeft
+		case COLLISIONS::MIDLE_BALL:
+			collision = BallMiddle;
+			return 22;
 			break;
-		case 12:
-			return 26;   // BallLeft
+		case COLLISIONS::RIGHT_BALL:
+			collision = BallRight;
+			return 26;
+			break;
+		case COLLISIONS::MAIN_MAP:
+			collision = MainMap;
+			return 110;
 			break;
 		default:
 			break;
@@ -617,6 +565,7 @@ public:
 	}
 
 private:
+	const int* collision;
 };
 
 class Plunger : public PhysicEntity {
@@ -674,25 +623,25 @@ bool ModuleGame::Start()
 	//Load textures
 	circle = LoadTexture("Assets/wheel.png");
 	box = LoadTexture("Assets/crate.png");
-	rick = LoadTexture("Assets/MapComponents/Whole Map.png");
+	BG = LoadTexture("Assets/MapComponents/Whole Map.png");
 	flipperL = LoadTexture("Assets/MapComponents/flipper.png");
 	flipperR = LoadTexture("Assets/MapComponents/flipper.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
-	entities.emplace_back(new Rick(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, rick));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 0));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 1));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 2));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 3));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 4));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 5));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 6));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 7));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 8));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 9));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 10));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 11));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 12));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_DOWNER));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_DOWNER));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_BOUNCER));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_BOUNCER));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_STIK));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::MIDLE_STIK));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_STIK));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_WING));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_OBSTACLE));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_OBSTACLE));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_BALL));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::MIDLE_BALL));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_BALL));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::MAIN_MAP));
 
 
 
@@ -744,7 +693,8 @@ bool ModuleGame::CleanUp()
 // Update: draw background
 update_status ModuleGame::Update()
 {
-
+	//DrawBG
+	DrawTexture(BG, 0, 0, WHITE);
 
 	if (game_state == GameState::START_MENU)
 	{
@@ -957,11 +907,6 @@ void ModuleGame::ManageInputs()
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
 		{
 			entities.emplace_back(new Box(App->physics, GetMouseX(), GetMouseY(), this, box, ColliderType::DEATH));
-		}
-
-		if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE))
-		{
-			entities.emplace_back(new Rick(App->physics, GetMouseX(), GetMouseY(), this, rick));
 		}
 
 
