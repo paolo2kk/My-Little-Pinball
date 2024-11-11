@@ -11,6 +11,8 @@
 #else
 #define DEBUG_ONLY(X) X
 #endif
+
+
 class PhysicEntity
 {
 protected:
@@ -222,10 +224,220 @@ private:
 	Texture2D texture;
 	bool isLeft;
 };
-class Rick : public PhysicEntity
+
+
+//class Plunger : public PhysicEntity {
+//public:
+//	Plunger(PhysBody* ball, Module* listener)
+//		: PhysicEntity(nullptr, listener), ball(ball) {}
+//
+//	void Update() override {
+//		if (!ball) return; 
+//
+//		if (IsKeyDown(KEY_SPACE)) {
+//			plungerForce += plungerChargeRate;
+//			if (plungerForce > maxPlungerForce) {
+//				plungerForce = maxPlungerForce;
+//			}
+//			isCharging = true;
+//		}
+//		else if (isCharging && IsKeyReleased(KEY_SPACE)) {
+//			ball->body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -plungerForce), true);
+//
+//			plungerForce = 0.0f;
+//			isCharging = false;
+//		}
+//	}
+//
+//private:
+//	PhysBody* ball;              
+//	float plungerForce = 0.0f;   
+//	const float maxPlungerForce = 800.0f; 
+//	const float plungerChargeRate = 10.0f;
+//	bool isCharging = false;
+//};
+
+
+class MapColl : public PhysicEntity
 {
 public:
-	static constexpr int table[110] = {
+	// Pivot 0, 0
+	static constexpr int LeftDawner[16] = {
+	113, 701,
+	103, 707,
+	103, 789,
+	191, 839,
+	192, 820,
+	209, 816,
+	124, 773,
+	123, 706
+	};
+
+	static constexpr int RightDawner[16] = {
+		397, 816,
+		412, 820,
+		415, 839,
+		504, 793,
+		503, 705,
+		492, 700,
+		483, 707,
+		481, 773
+	};
+
+	static constexpr int LeftBouncer[12] = {
+	170, 674,
+	181, 668,
+	218, 729,
+	209, 741,
+	169, 719,
+	169, 693
+	};
+
+	static constexpr int RightBouncer[10] = {
+		426, 667,
+		438, 676,
+		438, 719,
+		399, 742,
+		389, 733
+	};
+
+	static constexpr int LeftStik[12] = {
+		238, 471,
+		228, 479,
+		228, 540,
+		239, 546,
+		248, 540,
+		248, 479
+	};
+
+	static constexpr int MiddleStik[12] = {
+		303, 470,
+		293, 477,
+		293, 539,
+		303, 546,
+		313, 540,
+		313, 477
+	};
+
+	static constexpr int RightStik[12] = {
+	368, 470,
+	358, 477,
+	358, 540,
+	369, 546,
+	379, 539,
+	379, 477
+	};
+
+	static constexpr int LeftBigCollision[58] = {
+		141, 496,
+		216, 431,
+		216, 419,
+		200, 415,
+		197, 401,
+		201, 390,
+		213, 384,
+		177, 369,
+		156, 360,
+		142, 345,
+		132, 321,
+		124, 290,
+		113, 279,
+		99, 282,
+		98, 305,
+		89, 313,
+		89, 328,
+		98, 338,
+		101, 346,
+		90, 358,
+		90, 372,
+		98, 383,
+		100, 391,
+		90, 400,
+		90, 422,
+		101, 429,
+		97, 440,
+		99, 453,
+		118, 476
+	};
+
+	static constexpr int LeftTopBigCollision[26] = {
+		105, 208,
+		202, 115,
+		203, 84,
+		167, 51,
+		139, 51,
+		119, 71,
+		105, 95,
+		95, 122,
+		87, 150,
+		85, 168,
+		85, 182,
+		88, 198,
+		95, 205
+	};
+
+	static constexpr int RightBigCollision[30] = {
+		523, 187,
+		504, 197,
+		503, 300,
+		498, 320,
+		487, 334,
+		467, 348,
+		396, 382,
+		406, 392,
+		410, 402,
+		407, 411,
+		400, 422,
+		515, 499,
+		530, 495,
+		539, 486,
+		539, 199
+	};
+
+	static constexpr int BallLeft[20] = {
+	227, 211,
+	237, 213,
+	243, 220,
+	243, 232,
+	239, 240,
+	230, 244,
+	219, 243,
+	211, 235,
+	211, 223,
+	217, 215
+	};
+
+	static constexpr int BallMiddle[22] = {
+	315, 103,
+	323, 104,
+	327, 110,
+	329, 117,
+	327, 126,
+	320, 132,
+	309, 132,
+	302, 125,
+	300, 116,
+	303, 108,
+	308, 104
+	};
+
+	static constexpr int BallRight[26] = {
+	400, 210,
+	410, 212,
+	416, 219,
+	417, 228,
+	416, 234,
+	412, 241,
+	402, 244,
+	393, 243,
+	388, 238,
+	384, 231,
+	384, 224,
+	387, 216,
+	393, 212
+	};
+
+	static constexpr int MainMap[110] = {
 	489, 862,
 	558, 818,
 	558, 654,
@@ -283,9 +495,8 @@ public:
 	490, 863
 	};
 
-	Rick(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(), table, 110), _listener)
-		, texture(_texture)
+	MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener, COLLISIONS type ):
+			PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(),collision, GetCollider_andSize(type)), _listener)
 	{
 
 	}
@@ -293,257 +504,76 @@ public:
 	void Update() override
 	{
 		int x, y;
-		body->GetPhysicPosition(x, y);
-		DrawTextureEx(texture, Vector2{ (float)x, (float)y }, body->GetRotation() * RAD2DEG, 1.0f, WHITE);
+		body->GetPhysicPosition(x, y);;
+	}
+
+	int GetCollider_andSize(COLLISIONS ty) {
+
+		switch (ty)
+		{
+		case COLLISIONS::LEFT_DOWNER:  
+			collision = LeftDawner;
+			return 16;
+			break;
+		case COLLISIONS::RIGHT_DOWNER:
+			collision = RightDawner;
+			return 16;
+			break;
+		case COLLISIONS::LEFT_BOUNCER:
+			collision = LeftBouncer;
+			return 12;
+			break;
+		case COLLISIONS::RIGHT_BOUNCER:
+			collision = RightBouncer;
+			return 10;
+			break;
+		case COLLISIONS::LEFT_STIK:
+			collision = LeftStik;
+			return 12;
+			break;
+		case COLLISIONS::MIDLE_STIK:
+			collision = MiddleStik;
+			return 12;
+			break;
+		case COLLISIONS::RIGHT_STIK:
+			collision = RightStik;
+			return 12;
+			break;
+		case COLLISIONS::LEFT_WING:
+			collision = LeftBigCollision;
+			return 58;
+			break;
+		case COLLISIONS::LEFT_OBSTACLE:
+			collision = LeftTopBigCollision;
+			return 26;
+			break;
+		case COLLISIONS::RIGHT_OBSTACLE:
+			collision = RightBigCollision;
+			return 30;
+			break;
+		case COLLISIONS::LEFT_BALL:
+			collision = BallLeft;
+			return 20;
+			break;
+		case COLLISIONS::MIDLE_BALL:
+			collision = BallMiddle;
+			return 22;
+			break;
+		case COLLISIONS::RIGHT_BALL:
+			collision = BallRight;
+			return 26;
+			break;
+		case COLLISIONS::MAIN_MAP:
+			collision = MainMap;
+			return 110;
+			break;
+		default:
+			break;
+		}
 	}
 
 private:
-	Texture2D texture;
-};
-
-
-//class Plunger : public PhysicEntity {
-//public:
-//	Plunger(PhysBody* ball, Module* listener)
-//		: PhysicEntity(nullptr, listener), ball(ball) {}
-//
-//	void Update() override {
-//		if (!ball) return; 
-//
-//		if (IsKeyDown(KEY_SPACE)) {
-//			plungerForce += plungerChargeRate;
-//			if (plungerForce > maxPlungerForce) {
-//				plungerForce = maxPlungerForce;
-//			}
-//			isCharging = true;
-//		}
-//		else if (isCharging && IsKeyReleased(KEY_SPACE)) {
-//			ball->body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -plungerForce), true);
-//
-//			plungerForce = 0.0f;
-//			isCharging = false;
-//		}
-//	}
-//
-//private:
-//	PhysBody* ball;              
-//	float plungerForce = 0.0f;   
-//	const float maxPlungerForce = 800.0f; 
-//	const float plungerChargeRate = 10.0f;
-//	bool isCharging = false;
-//};
-
-
-class MapColl : public PhysicEntity
-{
-public:
-	// Pivot 0, 0
-	const int* LeftDawner = new const int[17] {
-		103, 711,
-			103, 792,
-			191, 840,
-			192, 820,
-			212, 818,
-			124, 772,
-			124, 706,
-			113, 700
-		};
-
-	const int* RightDawner = new const int[17] {
-		394, 819,
-			481, 773,
-			482, 709,
-			493, 700,
-			503, 705,
-			503, 791,
-			412, 841,
-			408, 825
-		};
-
-	const int* LeftBouncer = new const int[11] {
-		168, 675,
-			168, 720,
-			210, 741,
-			217, 731,
-			178, 667
-		};
-
-	const int* RightBouncer = new const int[11] {
-		427, 669,
-			438, 677,
-			438, 717,
-			398, 742,
-			389, 734
-		};
-
-	const int* LeftStik = new const int[13] {
-		238, 470,
-			228, 476,
-			228, 540,
-			238, 547,
-			249, 540,
-			249, 476
-		};
-
-	const int* MiddleStik = new const int[13] {
-		304, 470,
-			293, 477,
-			293, 541,
-			304, 547,
-			314, 541,
-			314, 477
-		};
-
-	const int* RightStik = new const int[13] {
-		368, 470,
-			358, 476,
-			358, 540,
-			369, 547,
-			379, 540,
-			379, 476
-		};
-
-	const int* LeftBigCollision = new const int[59] {
-		98, 308,
-			98, 284,
-			110, 278,
-			124, 289,
-			134, 325,
-			146, 352,
-			164, 364,
-			186, 371,
-			202, 376,
-			214, 385,
-			200, 393,
-			197, 403,
-			202, 415,
-			216, 419,
-			217, 430,
-			143, 497,
-			98, 455,
-			98, 438,
-			97, 429,
-			89, 423,
-			89, 398,
-			98, 391,
-			98, 385,
-			89, 382,
-			90, 353,
-			98, 348,
-			99, 341,
-			89, 337,
-			89, 309
-		};
-
-	const int* LeftTopBigCollision = new const int[21] {
-		138, 51,
-			167, 51,
-			203, 81,
-			203, 117,
-			103, 208,
-			83, 194,
-			83, 157,
-			95, 116,
-			108, 86,
-			120, 70
-		};
-
-	const int* RightBigCollision = new const int[37] {
-		394, 386,
-			408, 396,
-			411, 405,
-			408, 414,
-			401, 422,
-			515, 500,
-			527, 497,
-			538, 486,
-			538, 198,
-			531, 189,
-			513, 189,
-			504, 198,
-			503, 300,
-			498, 318,
-			493, 327,
-			481, 338,
-			468, 347,
-			396, 380
-		};
-
-	//MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener, int ident):
-	//	 PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(),GetCollType(), size_), _listener)
-	//{
-
-	//}
-
-	//void Update() override
-	//{
-	//	int x, y;
-	//	body->GetPhysicPosition(x, y);;
-	//}
-
-	//const int* GetCollType() {
-
-	//	switch (ty)
-	//	{
-	//	case 0:
-	//		size_ = 17;  // LeftDawner
-	//		break;
-	//	case 1:
-	//		size_ = 17;  // RightDawner
-	//		break;
-	//	case 2:
-	//		size_ = 11;  // LeftBouncer
-	//		break;
-	//	case 3:
-	//		size_ = 11;  // RightBouncer
-	//		break;
-	//	case 4:
-	//		size_ = 13;  // LeftStik
-	//		break;
-	//	case 5:
-	//		size_ = 13;  // MiddleStik
-	//		break;
-	//	case 6:
-	//		size_ = 13;  // RightStik
-	//		break;
-	//	case 7:
-	//		size_ = 59;  // LeftBigCollision
-	//		break;
-	//	case 8:
-	//		size_ = 21;  // LeftTopBigCollision
-	//		break;
-	//	case 9:
-	//		size_ = 37;   // RightBigCollision
-	//		break;
-	//	default:
-	//		break;
-	//	}
-
-	//	static std::vector<const int*> arrays = {
-	//		LeftDawner,
-	//		RightDawner,
-	//		LeftBouncer,
-	//		RightBouncer,
-	//		LeftStik,
-	//		MiddleStik,
-	//		RightStik,
-	//		LeftBigCollision,
-	//		LeftTopBigCollision,
-	//		RightBigCollision
-	//	};
-
-	//	if (ty < 10 && ty >= 0) {
-
-	//		return arrays[ty];
-	//	}
-	//	else {
-	//		return nullptr;
-	//	}
-	//}
-
-private:
-	int size_ = 0;
-	int ty = 0;
+	const int* collision;
 };
 
 class Plunger : public PhysicEntity {
@@ -601,22 +631,25 @@ bool ModuleGame::Start()
 	//Load textures
 	circle = LoadTexture("Assets/wheel.png");
 	box = LoadTexture("Assets/crate.png");
-	rick = LoadTexture("Assets/MapComponents/Whole Map.png");
+	BG = LoadTexture("Assets/MapComponents/Whole Map.png");
 	flipperL = LoadTexture("Assets/MapComponents/flipper.png");
 	flipperR = LoadTexture("Assets/MapComponents/flipper.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
-	entities.emplace_back(new Rick(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, rick));
-	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 0));
-	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 1));
-	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 2));
-	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 3));
-	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 4));
-	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 5));
-	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 6));
-	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this,7));
-	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 8));
-	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 9));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_DOWNER));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_DOWNER));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_BOUNCER));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_BOUNCER));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_STIK));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::MIDLE_STIK));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_STIK));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_WING));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_OBSTACLE));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_OBSTACLE));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_BALL));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::MIDLE_BALL));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_BALL));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::MAIN_MAP));
 
 
 
@@ -668,7 +701,8 @@ bool ModuleGame::CleanUp()
 // Update: draw background
 update_status ModuleGame::Update()
 {
-
+	//DrawBG
+	DrawTexture(BG, 0, 0, WHITE);
 
 	if (game_state == GameState::START_MENU)
 	{
@@ -881,11 +915,6 @@ void ModuleGame::ManageInputs()
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
 		{
 			entities.emplace_back(new Box(App->physics, GetMouseX(), GetMouseY(), this, box, ColliderType::DEATH));
-		}
-
-		if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE))
-		{
-			entities.emplace_back(new Rick(App->physics, GetMouseX(), GetMouseY(), this, rick));
 		}
 
 

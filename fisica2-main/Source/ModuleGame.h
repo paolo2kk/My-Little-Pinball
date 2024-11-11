@@ -24,6 +24,24 @@ enum class GameState
 
 };
 
+enum class COLLISIONS
+{
+	LEFT_DOWNER,
+	RIGHT_DOWNER,
+	LEFT_BOUNCER,
+	RIGHT_BOUNCER,
+	LEFT_STIK,
+	MIDLE_STIK,
+	RIGHT_STIK,
+	LEFT_WING,
+	LEFT_OBSTACLE,
+	RIGHT_OBSTACLE,
+	LEFT_BALL,
+	MIDLE_BALL,
+	RIGHT_BALL,
+	MAIN_MAP
+};
+
 class ModuleGame : public Module
 {
 public:
@@ -49,7 +67,7 @@ public:
 
 	Texture2D circle;
 	Texture2D box;
-	Texture2D rick;
+	Texture2D BG;
 	Texture2D background;
 	Texture2D flipperL;
 	Texture2D flipperR;
