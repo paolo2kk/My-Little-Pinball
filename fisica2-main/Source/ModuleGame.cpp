@@ -83,7 +83,6 @@ public:
 			isInsideTheGame = false;
 		}
 
-		std::cout << "Inside Game: " << isInsideTheGame << std::endl;
 	}
 	
 	void Update() override
@@ -225,37 +224,6 @@ private:
 	bool isLeft;
 };
 
-
-//class Plunger : public PhysicEntity {
-//public:
-//	Plunger(PhysBody* ball, Module* listener)
-//		: PhysicEntity(nullptr, listener), ball(ball) {}
-//
-//	void Update() override {
-//		if (!ball) return; 
-//
-//		if (IsKeyDown(KEY_SPACE)) {
-//			plungerForce += plungerChargeRate;
-//			if (plungerForce > maxPlungerForce) {
-//				plungerForce = maxPlungerForce;
-//			}
-//			isCharging = true;
-//		}
-//		else if (isCharging && IsKeyReleased(KEY_SPACE)) {
-//			ball->body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -plungerForce), true);
-//
-//			plungerForce = 0.0f;
-//			isCharging = false;
-//		}
-//	}
-//
-//private:
-//	PhysBody* ball;              
-//	float plungerForce = 0.0f;   
-//	const float maxPlungerForce = 800.0f; 
-//	const float plungerChargeRate = 10.0f;
-//	bool isCharging = false;
-//};
 
 
 class MapColl : public PhysicEntity
@@ -910,6 +878,12 @@ void ModuleGame::ManageInputs()
 			ballsInGame = true;
 			entities.emplace_back(new Circle(App->physics, 625, 611, this, circle, ColliderType::BALL));
 		
+		}
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) )
+		{
+			ballsInGame = true;
+			entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), this, circle, ColliderType::BALL));
+
 		}
 
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
