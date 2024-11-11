@@ -279,6 +279,8 @@ bool ModuleGame::Start()
 	rick = LoadTexture("Assets/MapComponents/Whole Map.png");
 	flipperL = LoadTexture("Assets/MapComponents/flipper.png");
 	flipperR = LoadTexture("Assets/MapComponents/flipper.png");
+	startMenu = LoadTexture("Assets/MapComponents/Start Menu.png");
+	gameOverMenu = LoadTexture("Assets/MapComponents/Game Over.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	entities.emplace_back(new Rick(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, rick));
@@ -332,8 +334,7 @@ update_status ModuleGame::Update()
 
 	if (game_state == GameState::START_MENU)
 	{
-		//Draw start menu
-		DrawText(TextFormat("Press Enter to Start"), 40, 40, 20, BLACK);
+		DrawTexture(startMenu, 0, 0, WHITE);
 	}
 
 	if (game_state == GameState::PAUSED)
@@ -345,16 +346,9 @@ update_status ModuleGame::Update()
 
 	if (game_state == GameState::GAME_OVER)
 	{
-		//Draw game over menu
-		DrawText("Game Over", 10, 10, 20, WHITE);
-		DrawText("Press Enter to restart", 10, 30, 20, WHITE);
-		DrawText("Press Escape to go to start menu", 10, 50, 20, WHITE);
+		DrawTexture(gameOverMenu, 0, 0, WHITE);
 	}
 
-	if (game_state == GameState::RESTART)
-	{
-		Restart();
-	}
 	ManageInputs();
 
 	if (IsKeyPressed(KEY_SPACE))
@@ -463,7 +457,7 @@ void ModuleGame::LoseLife()
 	}
 	else
 	{
-		game_state = GameState::RESTART;
+		Restart();
 	}
 }
 
@@ -492,14 +486,14 @@ void ModuleGame::ManageInputs()
 
 	if (game_state == GameState::PLAYING && game_state != GameState::GAME_OVER)
 	{
-		if (IsKeyDown(KEY_SPACE))
+		/*if (IsKeyDown(KEY_SPACE))
 		{
 			Flipper* flipper = dynamic_cast<Flipper*>(entities[1]);
 			if (flipper)
 			{
 				flipper->ControlFlipper(IsKeyDown(KEY_SPACE));
 			}
-		}
+		}*/
 		if (IsKeyDown(KEY_A)) {
 			// Increase the force gradually, but don't exceed maxForce
 			leftFlipperForce += forceIncrement;
@@ -578,5 +572,9 @@ void ModuleGame::GameOver()
 void ModuleGame::Restart()
 {
 	//resetear el score, la vida, los objetos que den puntos y por ultimo cambiar el game state a jugar
+	vidas = 3;
+	game_state = GameState::PLAYING;
+	//hacer que apareza la bola en el launcher
+	entities.emplace_back(new Circle(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, this, circle, ColliderType::BALL));
 }
 

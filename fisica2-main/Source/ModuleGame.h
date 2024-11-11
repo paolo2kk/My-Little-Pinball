@@ -52,6 +52,9 @@ public:
 	Texture2D background;
 	Texture2D flipperL;
 	Texture2D flipperR;
+	Texture2D startMenu;
+	Texture2D gameOverMenu;
+	
 
 	uint32 bonus_fx;
 	uint32 flipper_fx;
@@ -59,6 +62,11 @@ public:
 	uint32 start_fx;
 	uint32 background_music;
 	uint32 launch_fx;
+
+
+	int score = 0;
+	int high_score = 0;
+
 
 
 	vec2<int> ray;
