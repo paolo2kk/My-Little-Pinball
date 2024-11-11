@@ -75,6 +75,7 @@ public:
 	GameState game_state = GameState::START_MENU;
 
 	int vidas = 3;
+	bool ballsInGame = false;
 
 	float leftFlipperForce = 100.0f;
 	float rightFlipperForce = 100.0f;

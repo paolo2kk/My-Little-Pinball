@@ -461,77 +461,77 @@ public:
 			396, 380
 		};
 
-	MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener, int ident):
-		 PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(),GetCollType(), size_), _listener)
-	{
+	//MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener, int ident):
+	//	 PhysicEntity(physics->CreateChain(GetMouseX(), GetMouseY(),GetCollType(), size_), _listener)
+	//{
 
-	}
+	//}
 
-	void Update() override
-	{
-		int x, y;
-		body->GetPhysicPosition(x, y);;
-	}
+	//void Update() override
+	//{
+	//	int x, y;
+	//	body->GetPhysicPosition(x, y);;
+	//}
 
-	const int* GetCollType() {
+	//const int* GetCollType() {
 
-		switch (ty)
-		{
-		case 0:
-			size_ = 17;  // LeftDawner
-			break;
-		case 1:
-			size_ = 17;  // RightDawner
-			break;
-		case 2:
-			size_ = 11;  // LeftBouncer
-			break;
-		case 3:
-			size_ = 11;  // RightBouncer
-			break;
-		case 4:
-			size_ = 13;  // LeftStik
-			break;
-		case 5:
-			size_ = 13;  // MiddleStik
-			break;
-		case 6:
-			size_ = 13;  // RightStik
-			break;
-		case 7:
-			size_ = 59;  // LeftBigCollision
-			break;
-		case 8:
-			size_ = 21;  // LeftTopBigCollision
-			break;
-		case 9:
-			size_ = 37;   // RightBigCollision
-			break;
-		default:
-			break;
-		}
+	//	switch (ty)
+	//	{
+	//	case 0:
+	//		size_ = 17;  // LeftDawner
+	//		break;
+	//	case 1:
+	//		size_ = 17;  // RightDawner
+	//		break;
+	//	case 2:
+	//		size_ = 11;  // LeftBouncer
+	//		break;
+	//	case 3:
+	//		size_ = 11;  // RightBouncer
+	//		break;
+	//	case 4:
+	//		size_ = 13;  // LeftStik
+	//		break;
+	//	case 5:
+	//		size_ = 13;  // MiddleStik
+	//		break;
+	//	case 6:
+	//		size_ = 13;  // RightStik
+	//		break;
+	//	case 7:
+	//		size_ = 59;  // LeftBigCollision
+	//		break;
+	//	case 8:
+	//		size_ = 21;  // LeftTopBigCollision
+	//		break;
+	//	case 9:
+	//		size_ = 37;   // RightBigCollision
+	//		break;
+	//	default:
+	//		break;
+	//	}
 
-		static std::vector<const int*> arrays = {
-			LeftDawner,
-			RightDawner,
-			LeftBouncer,
-			RightBouncer,
-			LeftStik,
-			MiddleStik,
-			RightStik,
-			LeftBigCollision,
-			LeftTopBigCollision,
-			RightBigCollision
-		};
+	//	static std::vector<const int*> arrays = {
+	//		LeftDawner,
+	//		RightDawner,
+	//		LeftBouncer,
+	//		RightBouncer,
+	//		LeftStik,
+	//		MiddleStik,
+	//		RightStik,
+	//		LeftBigCollision,
+	//		LeftTopBigCollision,
+	//		RightBigCollision
+	//	};
 
-		if (ty < 10 && ty >= 0) {
+	//	if (ty < 10 && ty >= 0) {
 
-			return arrays[ty];
-		}
-		else {
-			return nullptr;
-		}
-	}
+	//		return arrays[ty];
+	//	}
+	//	else {
+	//		return nullptr;
+	//	}
+	//}
 
 private:
 	int size_ = 0;
@@ -606,7 +606,7 @@ bool ModuleGame::Start()
 	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 4));
 	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 5));
 	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 6));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this,7));
+	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this,7));
 	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 8));
 	//entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, 9));
 
@@ -842,7 +842,7 @@ void ModuleGame::ManageInputs()
 			if (leftFlipperForce > maxForce) leftFlipperForce = maxForce;
 
 			// Apply the increased force to the left flipper
-			App->physics->flipperL->body->ApplyForceToCenter(b2Vec2(0, -leftFlipperForce), true);
+			App->physics->flipperL->body->ApplyForceToCenter(b2Vec2(0, -maxForce), true);
 		}
 		else {
 			// Reset the force when the key is released
@@ -850,25 +850,25 @@ void ModuleGame::ManageInputs()
 		}
 
 		// Check if the D key is held down for the right flipper
-		if (IsKeyDown(KEY_D)) {
+		if (IsKeyPressed(KEY_D)) {
 			App->audio->PlayFx(flipper_fx);
 			// Increase the force gradually, but don't exceed maxForce
 			rightFlipperForce += forceIncrement;
 			if (rightFlipperForce > maxForce) rightFlipperForce = maxForce;
 
 			// Apply the increased force to the right flipper
-			App->physics->flipperR->body->ApplyForceToCenter(b2Vec2(0, -rightFlipperForce), true);
+			App->physics->flipperR->body->ApplyForceToCenter(b2Vec2(0, -maxForce), true);
 		}
 		else {
 			// Reset the force when the key is released
 			rightFlipperForce = initialForce;
 		}
-		//if (/*IsMouseButtonPressed(MOUSE_BUTTON_LEFT)  && */noBallsInGame)
-		//{
-		//	noBallsInGame = false;
-		//	entities.emplace_back(new Circle(App->physics, 625, 611, this, circle, ColliderType::BALL));
-
-		//}
+		if (/*IsMouseButtonPressed(MOUSE_BUTTON_LEFT)  && */!ballsInGame)
+		{
+			ballsInGame = true;
+			entities.emplace_back(new Circle(App->physics, 625, 611, this, circle, ColliderType::BALL));
+		
+		}
 
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
 		{
