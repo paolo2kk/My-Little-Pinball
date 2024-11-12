@@ -59,6 +59,7 @@ public:
 	void Flippers();
 	void RenderFlippers();
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
+	PhysBody* CreateBumper(const int* points, int pointCount, int x, int y);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
@@ -73,12 +74,13 @@ public:
 	PhysBody* flipperR;
 	PhysBody* flipperLAnch;
 	PhysBody* flipperRAnch;
-	PhysBody* bumperL;
-	PhysBody* bumperR;
+	PhysBody* leftBumper;
+	PhysBody* rightBumper;
 
 	float restitution = 0.4f;
 	Texture2D flipperLTexture;
 	Texture2D flipperRTexture;
+	
 private:
 
 	bool debug;

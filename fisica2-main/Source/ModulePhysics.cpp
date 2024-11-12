@@ -31,6 +31,14 @@ bool ModulePhysics::Start()
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 	Flippers();
+
+	// Define puntos para los bumpers (ejemplo de posición y tamaño)
+	int bumperPoints[] = { -20, -20, 20, -20, 20, 20, -20, 20 };
+	int bumperPointCount = 8;  // Número de puntos
+
+	// Crear leftBumper y rightBumper en posiciones específicas
+	leftBumper = CreateBumper(bumperPoints, bumperPointCount, 150, 600); // posición (150, 600)
+	rightBumper = CreateBumper(bumperPoints, bumperPointCount, 500, 600);
 	// big static circle as "ground" in the middle of the screen
 	
 	return true;
@@ -223,6 +231,33 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 	return pbody;
 }
 
+PhysBody* ModulePhysics::CreateBumper(const int* points, int pointCount, int x, int y) {
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_staticBody;
+	bodyDef.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* bumperBody = world->CreateBody(&bodyDef);
+
+	b2PolygonShape bumperShape;
+	b2Vec2* vertices = new b2Vec2[pointCount / 2];
+	for (int i = 0; i < pointCount / 2; ++i) {
+		vertices[i].Set(PIXEL_TO_METERS(points[i * 2]), PIXEL_TO_METERS(points[i * 2 + 1]));
+	}
+	bumperShape.Set(vertices, pointCount / 2);
+	delete[] vertices;
+
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &bumperShape;
+	fixtureDef.density = 1.0f;
+	fixtureDef.restitution = 1.2f;
+	bumperBody->CreateFixture(&fixtureDef);
+
+	PhysBody* pBumper = new PhysBody();
+	pBumper->body = bumperBody;
+	bumperBody->GetUserData().pointer = reinterpret_cast<uintptr_t>(pBumper);
+	return pBumper;
+}
+
 // 
 update_status ModulePhysics::PostUpdate()
 {
@@ -233,6 +268,13 @@ update_status ModulePhysics::PostUpdate()
 
 	if(!debug)
 		return UPDATE_CONTINUE;
+
+	int x, y;
+	leftBumper->GetPhysicPosition(x, y);
+	DrawCircle(x, y, 20, RED);  // Dibuja el bumper izquierdo en rojo
+
+	rightBumper->GetPhysicPosition(x, y);
+	DrawCircle(x, y, 20, BLUE);
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
 	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())
