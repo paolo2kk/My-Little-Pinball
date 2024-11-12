@@ -43,17 +43,19 @@ class Circle : public PhysicEntity
 {
 public:
 	Circle(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture, ColliderType _type)
-		: PhysicEntity(physics->CreateCircle(_x, _y, 16), _listener)
+		: PhysicEntity(physics->CreateCircle(_x, _y, 14), _listener)
 		, texture(_texture)
 	{
 		isInsideTheGame = true;
 		hasBeenEjected = false;
+		posblock = true;
 	}
 
 	void Launch()
 	{
 		if (IsKeyPressed(KEY_SPACE))
 		{
+			posblock = false;
 			isInsideTheGame = true;
 			hasBeenEjected = true;
 			this->body->body->ApplyForceToCenter(b2Vec2{ 100, -500 }, false);
@@ -68,6 +70,7 @@ public:
 		this->body->body->SetAngularVelocity(0);
 		isInsideTheGame = false;
 		hasBeenEjected = false;
+		posblock = true;
 	}
 
 	void EnsureImInside()
@@ -103,6 +106,14 @@ public:
 		{
 			Die();
 		}
+
+		if (posblock)
+		{
+			b2Vec2 initialPos = { (float)PIXEL_TO_METERS(625), (float)PIXEL_TO_METERS(630) };
+			this->body->body->SetLinearVelocity(b2Vec2{ 0, 0 });
+			this->body->body->SetAngularVelocity(0);
+			this->body->body->SetTransform(initialPos, 0);
+		}
 	}
 
 public:
@@ -110,6 +121,7 @@ public:
 	Texture2D texture;
 	bool hasBeenEjected;
 	bool isInsideTheGame;
+	bool posblock;
 };
 
 class Box : public PhysicEntity
