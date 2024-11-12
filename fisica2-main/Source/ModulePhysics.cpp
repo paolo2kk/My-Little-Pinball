@@ -32,14 +32,14 @@ bool ModulePhysics::Start()
 	ground = world->CreateBody(&bd);
 	Flippers();
 
-	// Define puntos para los bumpers (ejemplo de posición y tamaño)
+	
 	int bumperPoints[] = { -20, -20, 20, -20, 20, 20, -20, 20 };
-	int bumperPointCount = 8;  // Número de puntos
-
-	// Crear leftBumper y rightBumper en posiciones específicas
-	leftBumper = CreateBumper(bumperPoints, bumperPointCount, 150, 600); // posición (150, 600)
+	int bumperPointCount = 8;  
+																					//change aqui
+	
+	leftBumper = CreateBumper(bumperPoints, bumperPointCount, 150, 600); 
 	rightBumper = CreateBumper(bumperPoints, bumperPointCount, 500, 600);
-	// big static circle as "ground" in the middle of the screen
+	
 	
 	return true;
 }
@@ -270,10 +270,10 @@ update_status ModulePhysics::PostUpdate()
 		return UPDATE_CONTINUE;
 
 	int x, y;
-	leftBumper->GetPhysicPosition(x, y);
-	DrawCircle(x, y, 20, RED);  // Dibuja el bumper izquierdo en rojo
+	leftBumper->GetPhysicPosition(x, y); // Bumper aqui
+	DrawCircle(x, y, 20, RED);  
 
-	rightBumper->GetPhysicPosition(x, y);
+	rightBumper->GetPhysicPosition(x, y); // bumper aqui change per lo que hi ha a modulegame
 	DrawCircle(x, y, 20, BLUE);
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
