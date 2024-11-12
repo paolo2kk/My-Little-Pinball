@@ -603,6 +603,7 @@ bool ModuleGame::Start()
 	BG = LoadTexture("Assets/MapComponents/Whole Map.png");
 	flipperL = LoadTexture("Assets/MapComponents/flipper.png");
 	flipperR = LoadTexture("Assets/MapComponents/flipper.png");
+	PointBoard = LoadTexture("Assets/MapComponents/PointBoard.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_DOWNER));
@@ -641,6 +642,8 @@ bool ModuleGame::Start()
 	launch_fx = App->audio->LoadFx("Assets/sfxandsong/launch.wav");
 
 
+	points.Initialise("Assets/MapComponents/Points.png", '0', 36);
+
 	//Load mierdas para conseguir puntos
 
 	//Load pelotas bien
@@ -672,9 +675,13 @@ update_status ModuleGame::Update()
 	//DrawBG
 	DrawTexture(BG, 0, 0, WHITE);
 
+
 	if (game_state == GameState::START_MENU)
 	{
 		//Draw start menu
+		DrawTexture(PointBoard, (SCREEN_WIDTH/2)-(PointBoard.width/2), 0, WHITE);
+		points.Draw(SCREEN_WIDTH/2.8, 3, "00000",WHITE);
+
 		DrawText(TextFormat("Press Enter to Start"), 40, 40, 20, BLACK);
 	}
 
