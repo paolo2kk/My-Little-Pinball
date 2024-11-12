@@ -76,6 +76,7 @@ public:
 	PhysBody* flipperRAnch;
 	PhysBody* leftBumper;
 	PhysBody* rightBumper;
+	PhysBody* topBumper;
 
 	float restitution = 0.4f;
 	Texture2D flipperLTexture;

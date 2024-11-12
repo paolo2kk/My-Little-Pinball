@@ -35,10 +35,11 @@ bool ModulePhysics::Start()
 	
 	int bumperPoints[] = { -20, -20, 20, -20, 20, 20, -20, 20 };
 	int bumperPointCount = 8;  
-																					//change aqui
+																					
 	
-	leftBumper = CreateBumper(bumperPoints, bumperPointCount, 150, 600); 
-	rightBumper = CreateBumper(bumperPoints, bumperPointCount, 500, 600);
+	leftBumper = CreateBumper(bumperPoints, bumperPointCount, 226, 226);
+	rightBumper = CreateBumper(bumperPoints, bumperPointCount, 400, 226);
+	topBumper= CreateBumper(bumperPoints, bumperPointCount, 315, 117);
 	
 	
 	return true;
@@ -238,18 +239,16 @@ PhysBody* ModulePhysics::CreateBumper(const int* points, int pointCount, int x, 
 
 	b2Body* bumperBody = world->CreateBody(&bodyDef);
 
-	b2PolygonShape bumperShape;
-	b2Vec2* vertices = new b2Vec2[pointCount / 2];
-	for (int i = 0; i < pointCount / 2; ++i) {
-		vertices[i].Set(PIXEL_TO_METERS(points[i * 2]), PIXEL_TO_METERS(points[i * 2 + 1]));
-	}
-	bumperShape.Set(vertices, pointCount / 2);
-	delete[] vertices;
+	
+	b2CircleShape bumperShape;
+	
+	float radius = 20.0f;  
+	bumperShape.m_radius = PIXEL_TO_METERS(radius);
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &bumperShape;
 	fixtureDef.density = 1.0f;
-	fixtureDef.restitution = 1.2f;
+	fixtureDef.restitution = 1.2f;  
 	bumperBody->CreateFixture(&fixtureDef);
 
 	PhysBody* pBumper = new PhysBody();
@@ -270,11 +269,16 @@ update_status ModulePhysics::PostUpdate()
 		return UPDATE_CONTINUE;
 
 	int x, y;
-	leftBumper->GetPhysicPosition(x, y); // Bumper aqui
+	
+	leftBumper->GetPhysicPosition(x, y);
 	DrawCircle(x, y, 20, RED);  
 
-	rightBumper->GetPhysicPosition(x, y); // bumper aqui change per lo que hi ha a modulegame
-	DrawCircle(x, y, 20, BLUE);
+	
+	rightBumper->GetPhysicPosition(x, y);
+	DrawCircle(x, y, 20, RED);  
+
+	topBumper->GetPhysicPosition(x, y);
+	DrawCircle(x, y, 20, RED);
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
 	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())
