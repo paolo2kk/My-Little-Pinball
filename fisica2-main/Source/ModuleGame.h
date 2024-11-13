@@ -4,6 +4,8 @@
 #include "Module.h"
 #include "ModulePhysics.h"
 #include "ModuleAudio.h"
+
+#include "Text.h"
 #include "p2Point.h"
 
 #include "raylib.h"
@@ -72,6 +74,7 @@ public:
 	Texture2D flipperR;
 	Texture2D bumperL;
 	Texture2D bumperR;
+	Texture2D PointBoard;
 
 	Texture2D fruit1;
 	Texture2D fruit2;
@@ -94,6 +97,7 @@ public:
 	PhysBody* death_trigger;
 
 	ColliderType type;
+	Text points;
 
 	GameState game_state = GameState::START_MENU;
 
