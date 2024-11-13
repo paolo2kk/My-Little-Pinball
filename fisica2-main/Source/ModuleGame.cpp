@@ -579,6 +579,49 @@ private:
 	bool isCharging = false;     // True while the plunger is charging
 };
 
+class Object : public PhysicEntity
+{
+public:
+	Object(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture, ColliderType _type)
+		: PhysicEntity(physics->CreateCircle(_x, _y, 16), _listener) 
+		, texture(_texture)
+		, type(_type)
+	{
+		isDestroyed = false;
+	}
+
+
+
+	void Update() override
+	{
+		if (isDestroyed) return;  
+
+		int x, y;
+		body->GetPhysicPosition(x, y);
+		Vector2 position{ (float)x, (float)y };
+		float scale = 1.0f;
+		Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
+		Rectangle dest = { position.x, position.y, (float)texture.width * scale, (float)texture.height * scale };
+		Vector2 origin = { (float)texture.width / 2.0f, (float)texture.height / 2.0f };
+		float rotation = body->GetRotation() * RAD2DEG;
+
+		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
+	}
+
+
+	void Destroy()
+	{
+		isDestroyed = true;
+		body->body->GetWorld()->DestroyBody(body->body);  // Elimina el cuerpo físico del mundo
+	}
+
+public:
+	Texture2D texture;
+	ColliderType type;
+	bool isDestroyed;
+	int score = 0;
+};
+
 ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	ray_on = false;
@@ -642,6 +685,16 @@ bool ModuleGame::Start()
 
 
 	//Load mierdas para conseguir puntos
+
+	fruit1 = LoadTexture("Assets/MapComponents/fruit1.png");
+	fruit2 = LoadTexture("Assets/MapComponents/fruit2.png");
+	fruit3 = LoadTexture("Assets/MapComponents/fruit3.png");
+
+	//Crear Objetos
+
+	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, this, fruit1, ColliderType::FRUIT1));
+	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, this, fruit2, ColliderType::FRUIT2));
+	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 2, this, fruit3, ColliderType::FRUIT3));
 
 	//Load pelotas bien
 
@@ -775,23 +828,47 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	App->audio->PlayFx(bonus_fx);
 
-	/*
-	int x, y;
-	if(bodyA)
+	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT1)
 	{
-		bodyA->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
+		// Incrementar el puntaje
+		score += 50;
+
+		// Llamar a Destroy para eliminar el objeto de la escena
+		Object* fruit = dynamic_cast<Object*>(bodyB->listener);
+		if (fruit)
+		{
+			fruit->Destroy();
+		}
+	}
+	else if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT2)
+	{
+		// Incrementar el puntaje
+		score += 50;
+
+		// Eliminar el objeto de la escena
+		Object* fruit = dynamic_cast<Object*>(bodyB->listener);
+		if (fruit)
+		{
+			fruit->Destroy();
+		}
+	}
+	else if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT3)
+	{
+		// Incrementar el puntaje
+		score += 50;
+
+		// Eliminar el objeto de la escena
+		Object* fruit = dynamic_cast<Object*>(bodyB->listener);
+		if (fruit)
+		{
+			fruit->Destroy();
+		}
 	}
 
-	if(bodyB)
-	{
-		bodyB->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}*/
 
 	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::DEATH)
 	{
-		//hacer que se delete la pelota
+		
 		
 		LoseLife();
 	}

@@ -4,7 +4,6 @@
 #include "Module.h"
 #include "ModulePhysics.h"
 #include "ModuleAudio.h"
-
 #include "p2Point.h"
 
 #include "raylib.h"
@@ -74,6 +73,12 @@ public:
 	Texture2D bumperL;
 	Texture2D bumperR;
 
+	Texture2D fruit1;
+	Texture2D fruit2;
+	Texture2D fruit3;
+	Texture2D object1;
+	Texture2D object2;
+
 	uint32 bonus_fx;
 	uint32 flipper_fx;
 	uint32 game_over_fx;
@@ -93,6 +98,7 @@ public:
 	GameState game_state = GameState::START_MENU;
 
 	int vidas = 3;
+	int score = 0;
 	bool ballsInGame = false;
 
 	float leftFlipperForce = 100.0f;
