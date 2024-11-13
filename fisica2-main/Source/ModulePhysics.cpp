@@ -31,7 +31,16 @@ bool ModulePhysics::Start()
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 	Flippers();
-	// big static circle as "ground" in the middle of the screen
+
+	
+	int bumperPoints[] = { -20, -20, 20, -20, 20, 20, -20, 20 };
+	int bumperPointCount = 8;  
+																					
+	
+	leftBumper = CreateBumper(bumperPoints, bumperPointCount, 226, 226);
+	rightBumper = CreateBumper(bumperPoints, bumperPointCount, 400, 226);
+	topBumper= CreateBumper(bumperPoints, bumperPointCount, 315, 117);
+	
 	
 	return true;
 }
@@ -247,6 +256,31 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 	return pbody;
 }
 
+PhysBody* ModulePhysics::CreateBumper(const int* points, int pointCount, int x, int y) {
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_staticBody;
+	bodyDef.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* bumperBody = world->CreateBody(&bodyDef);
+
+	
+	b2CircleShape bumperShape;
+	
+	float radius = 20.0f;  
+	bumperShape.m_radius = PIXEL_TO_METERS(radius);
+
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &bumperShape;
+	fixtureDef.density = 1.0f;
+	fixtureDef.restitution = 1.2f;  
+	bumperBody->CreateFixture(&fixtureDef);
+
+	PhysBody* pBumper = new PhysBody();
+	pBumper->body = bumperBody;
+	bumperBody->GetUserData().pointer = reinterpret_cast<uintptr_t>(pBumper);
+	return pBumper;
+}
+
 // 
 update_status ModulePhysics::PostUpdate()
 {
@@ -257,6 +291,18 @@ update_status ModulePhysics::PostUpdate()
 
 	if(!debug)
 		return UPDATE_CONTINUE;
+
+	int x, y;
+	
+	leftBumper->GetPhysicPosition(x, y);
+	DrawCircle(x, y, 20, RED);  
+
+	
+	rightBumper->GetPhysicPosition(x, y);
+	DrawCircle(x, y, 20, RED);  
+
+	topBumper->GetPhysicPosition(x, y);
+	DrawCircle(x, y, 20, RED);
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
 	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())

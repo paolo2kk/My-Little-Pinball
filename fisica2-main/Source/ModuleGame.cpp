@@ -43,17 +43,19 @@ class Circle : public PhysicEntity
 {
 public:
 	Circle(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture, ColliderType _type)
-		: PhysicEntity(physics->CreateCircle(_x, _y, 16), _listener)
+		: PhysicEntity(physics->CreateCircle(_x, _y, 14), _listener)
 		, texture(_texture)
 	{
 		isInsideTheGame = true;
 		hasBeenEjected = false;
+		posblock = true;
 	}
 
 	void Launch()
 	{
 		if (IsKeyPressed(KEY_SPACE))
 		{
+			posblock = false;
 			isInsideTheGame = true;
 			hasBeenEjected = true;
 			this->body->body->ApplyForceToCenter(b2Vec2{ 100, -500 }, false);
@@ -68,6 +70,7 @@ public:
 		this->body->body->SetAngularVelocity(0);
 		isInsideTheGame = false;
 		hasBeenEjected = false;
+		posblock = true;
 	}
 
 	void EnsureImInside()
@@ -103,6 +106,14 @@ public:
 		{
 			Die();
 		}
+
+		if (posblock)
+		{
+			b2Vec2 initialPos = { (float)PIXEL_TO_METERS(625), (float)PIXEL_TO_METERS(630) };
+			this->body->body->SetLinearVelocity(b2Vec2{ 0, 0 });
+			this->body->body->SetAngularVelocity(0);
+			this->body->body->SetTransform(initialPos, 0);
+		}
 	}
 
 public:
@@ -110,6 +121,7 @@ public:
 	Texture2D texture;
 	bool hasBeenEjected;
 	bool isInsideTheGame;
+	bool posblock;
 };
 
 class Box : public PhysicEntity
@@ -646,6 +658,7 @@ bool ModuleGame::Start()
 	BG = LoadTexture("Assets/MapComponents/Whole Map.png");
 	flipperL = LoadTexture("Assets/MapComponents/flipper.png");
 	flipperR = LoadTexture("Assets/MapComponents/flipper.png");
+	PointBoard = LoadTexture("Assets/MapComponents/PointBoard.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_DOWNER));
@@ -683,6 +696,8 @@ bool ModuleGame::Start()
 	start_fx = App->audio->LoadFx("Assets/sfxandsong/start.wav");
 	launch_fx = App->audio->LoadFx("Assets/sfxandsong/launch.wav");
 
+
+	points.Initialise("Assets/MapComponents/Points.png", '0', 36);
 
 	//Load mierdas para conseguir puntos
 
@@ -725,9 +740,13 @@ update_status ModuleGame::Update()
 	//DrawBG
 	DrawTexture(BG, 0, 0, WHITE);
 
+
 	if (game_state == GameState::START_MENU)
 	{
 		//Draw start menu
+		DrawTexture(PointBoard, (SCREEN_WIDTH/2)-(PointBoard.width/2), 0, WHITE);
+		points.Draw(SCREEN_WIDTH/2.8, 3, "00000",WHITE);
+
 		DrawText(TextFormat("Press Enter to Start"), 40, 40, 20, BLACK);
 	}
 
