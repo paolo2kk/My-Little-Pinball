@@ -14,6 +14,7 @@
 
 class PhysBody;
 class PhysicEntity;
+class Circle;
 
 enum class GameState
 {
@@ -114,6 +115,8 @@ public:
 	float initialForce = 100.0f; 
 
 	PhysBody* ball;
+
+	Circle* player;
 };
 
 
