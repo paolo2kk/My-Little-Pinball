@@ -1058,7 +1058,7 @@ void ModuleGame::ManageInputs()
 		if (/*IsMouseButtonPressed(MOUSE_BUTTON_LEFT)  && */!ballsInGame)
 		{
 			ballsInGame = true;
-			entities.emplace_back(new Circle(App->physics, 625, 611, this, circle, ColliderType::BALL));
+			ball->body->SetTransform(b2Vec2{ 500, 550 }, 0);
 		
 		}
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) )
