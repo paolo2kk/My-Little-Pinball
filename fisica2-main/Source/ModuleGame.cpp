@@ -33,7 +33,7 @@ public:
 		return 0;
 	}
 
-public:
+protected:
 
 	PhysBody* body;
 	Module* listener;
@@ -674,30 +674,44 @@ private:
 class Object : public PhysicEntity
 {
 public:
-	Object(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateStaticCircle(_x, _y, 23), _listener)
+	Object(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture, ColliderType _type)
+		: PhysicEntity(physics->CreateCircle(_x, _y, 16), _listener) 
 		, texture(_texture)
+		, type(_type)
 	{
-
+		isDestroyed = false;
 	}
+
+
 
 	void Update() override
 	{
-		body->objetos = true;
+		if (isDestroyed) return;  
+
 		int x, y;
 		body->GetPhysicPosition(x, y);
 		Vector2 position{ (float)x, (float)y };
-		float scale = 3.0f;
+		float scale = 1.0f;
 		Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
-		Rectangle dest = { position.x , position.y , (float)texture.width * scale, (float)texture.height * scale };
-		Vector2 origin = { (float)texture.width * 1.5f , (float)texture.height * 1.5f };
-		float rotation = 0;
+		Rectangle dest = { position.x, position.y, (float)texture.width * scale, (float)texture.height * scale };
+		Vector2 origin = { (float)texture.width / 2.0f, (float)texture.height / 2.0f };
+		float rotation = body->GetRotation() * RAD2DEG;
+
 		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
 	}
 
-private:
-	Texture2D texture;
 
+	void Destroy()
+	{
+		isDestroyed = true;
+		body->body->GetWorld()->DestroyBody(body->body);  // Elimina el cuerpo físico del mundo
+	}
+
+public:
+	Texture2D texture;
+	ColliderType type;
+	bool isDestroyed;
+	int score = 0;
 };
 
 ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -727,11 +741,6 @@ bool ModuleGame::Start()
 	PointBoard = LoadTexture("Assets/MapComponents/PointBoard.png");
 	boosterR = LoadTexture("Assets/MapComponents/boosterR.png");
 	boosterL = LoadTexture("Assets/MapComponents/boosterL.png");
-
-	entities.emplace_back(new Circle(App->physics, 500, 550, this, circle,ColliderType::BALL));
-	player = dynamic_cast<Circle*>(entities[0]);
-	player->body->body->SetFixedRotation(0);
-	player->body->isBaller = true;
 
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
@@ -783,14 +792,12 @@ bool ModuleGame::Start()
 
 	//Crear Objetos
 
-	entities.emplace_back(new Object(App->physics, 200, 550, this, fruit1));
-
-	/*entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, this, fruit1, ColliderType::FRUIT1));
+	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, this, fruit1, ColliderType::FRUIT1));
 	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, this, fruit2, ColliderType::FRUIT2));
 	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 2, this, fruit3, ColliderType::FRUIT3));
 
 
-	entities.emplace_back(new Frutica(App->physics, 200, 200, this, fruit1, ColliderType::FRUIT1));*/
+	entities.emplace_back(new Frutica(App->physics, 200, 200, this, fruit1, ColliderType::FRUIT1));
 
 	//Load pelotas bien
 
@@ -928,7 +935,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	App->audio->PlayFx(bonus_fx);
 
-	/*if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT1)
+	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT1)
 	{
 		// Incrementar el puntaje
 		score += 50;
@@ -964,7 +971,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			fruit->Destroy();
 		}
 	}
-	*/
+
 
 	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::DEATH)
 	{
@@ -973,9 +980,19 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		LoseLife();
 	}
 
-	if (bodyA->objetos || bodyB->objetos)
+	if (bodyA->isFrutica)
 	{
-		std::cout << "Colision con objeto" << std::endl;
+		std::cout << "oli";
+	}
+	
+	if (bodyB->isFrutica)
+	{
+		std::cout << "oli";
+	}
+
+	if (bodyA->isBall || bodyB->isFrutica )
+	{
+		std::cout << "oli";
 	}
 
 }
@@ -1058,7 +1075,7 @@ void ModuleGame::ManageInputs()
 		if (/*IsMouseButtonPressed(MOUSE_BUTTON_LEFT)  && */!ballsInGame)
 		{
 			ballsInGame = true;
-			ball->body->SetTransform(b2Vec2{ 500, 550 }, 0);
+			entities.emplace_back(new Circle(App->physics, 625, 611, this, circle, ColliderType::BALL));
 		
 		}
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) )
