@@ -193,8 +193,8 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 }
 void ModulePhysics::Flippers()
 {
-	flipperL = CreateRectangle(214, 835, flipperWidth, flipperHeight);
-	flipperLAnch = CreateCircle(214, 835, 2);
+	flipperL = CreateRectangle(214, 837, flipperWidth, flipperHeight);
+	flipperLAnch = CreateCircle(214, 837, 2);
 	flipperLAnch->body->SetType(b2_staticBody);
 	b2RevoluteJointDef flipperLJointDef;
 
@@ -207,8 +207,8 @@ void ModulePhysics::Flippers()
 	flipperLJointDef.upperAngle = 30 * DEGTORAD;
 	b2RevoluteJoint* leftFlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&flipperLJointDef);
 
-	flipperR = CreateRectangle(390, 835, flipperWidth, flipperHeight);
-	flipperRAnch = CreateCircle(390, 835, 2);
+	flipperR = CreateRectangle(390, 837, flipperWidth, flipperHeight);
+	flipperRAnch = CreateCircle(390, 837, 2);
 	flipperRAnch->body->SetType(b2_staticBody);
 	b2RevoluteJointDef flipperRJointDef;
 
@@ -281,6 +281,30 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 
 	return pbody;
 }
+PhysBody* ModulePhysics::CreateCircleNew(int x, int y, int radius, b2BodyType static_body)
+{
+	b2BodyDef body;
+	body.type = static_body;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	body.userData.pointer = reinterpret_cast<uintptr_t>(pbody);
+	pbody->width = pbody->height = radius;
+
+	return pbody;
+
+}
 
 PhysBody* ModulePhysics::CreateBumper(const int* points, int pointCount, int x, int y) {
 	b2BodyDef bodyDef;
@@ -298,7 +322,7 @@ PhysBody* ModulePhysics::CreateBumper(const int* points, int pointCount, int x, 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &bumperShape;
 	fixtureDef.density = 1.0f;
-	fixtureDef.restitution = 1.2f;  
+	fixtureDef.restitution = 2;  
 	bumperBody->CreateFixture(&fixtureDef);
 
 	PhysBody* pBumper = new PhysBody();
@@ -323,7 +347,6 @@ update_status ModulePhysics::PostUpdate()
 	leftBumper->GetPhysicPosition(x, y);
 	DrawCircle(x, y, 20, RED);  
 
-	
 	rightBumper->GetPhysicPosition(x, y);
 	DrawCircle(x, y, 20, RED);  
 
@@ -514,5 +537,24 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+
+
+	if (physA && physA->listener != NULL)
+	{
+		if (physA->type == ColliderType::BALL)  
+		{
+			LOG("Collision detected");
+		}
+		physA->listener->OnCollision(physB, physA);
+	}
+
+	if (physB && physB->listener != NULL)
+	{
+		if (physB->type == ColliderType::BALL) 
+		{
+			LOG("Collision detected");
+		}
+		physB->listener->OnCollision(physA, physB);
+	}
 }
 
