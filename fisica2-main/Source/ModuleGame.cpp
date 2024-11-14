@@ -124,6 +124,7 @@ public:
 		}
 	}
 
+
 public:
 
 	Texture2D texture;

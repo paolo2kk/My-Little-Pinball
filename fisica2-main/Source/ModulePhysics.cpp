@@ -530,5 +530,8 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 		}
 		physB->listener->OnCollision(physA, physB);
 	}
+	if (physA && physB) {
+		LOG("Collision between %d and %d", physA->type, physB->type);
+	}
 }
 
