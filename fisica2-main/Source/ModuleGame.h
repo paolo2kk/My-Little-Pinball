@@ -14,6 +14,7 @@
 
 class PhysBody;
 class PhysicEntity;
+class Circle;
 
 enum class GameState
 {
@@ -81,6 +82,8 @@ public:
 	Texture2D fruit3;
 	Texture2D object1;
 	Texture2D object2;
+	Texture2D boosterL;
+	Texture2D boosterR;
 
 	uint32 bonus_fx;
 	uint32 flipper_fx;
@@ -107,9 +110,13 @@ public:
 
 	float leftFlipperForce = 100.0f;
 	float rightFlipperForce = 100.0f;
-	float maxForce = 1400;       
+	float maxForce = 2400;       
 	float forceIncrement = 10.0f;
 	float initialForce = 100.0f; 
+
+	PhysBody* ball;
+
+	Circle* player;
 };
 
 
