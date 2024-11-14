@@ -90,6 +90,8 @@ public:
 	
 	void Update() override
 	{
+		body->isBall = true;
+
 		int x, y;
 		body->GetPhysicPosition(x, y);
 		Vector2 position{ (float)x, (float)y };
@@ -99,7 +101,13 @@ public:
 		Vector2 origin = { (float)texture.width / 2.0f, (float)texture.height / 2.0f };
 		float rotation = body->GetRotation() * RAD2DEG;
 		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
-
+		if (this->body->body->GetPosition().x >= PIXEL_TO_METERS(603))
+		{
+			hasBeenEjected = false;
+		}
+		else {
+			hasBeenEjected = true;
+		}
 		if (!hasBeenEjected) Launch();
 		EnsureImInside();
 		if (!isInsideTheGame)
@@ -124,6 +132,78 @@ public:
 	bool posblock;
 };
 
+class Frutica : public PhysicEntity
+{
+public:
+	Frutica(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture, ColliderType _type)
+		: PhysicEntity(physics->CreateRectangleSensor(_x, _y, SCREEN_WIDTH - 20, SCREEN_WIDTH - 20), _listener)
+		, texture(_texture)
+	{
+		this->listener = _listener;
+	}
+
+	
+	void Update() override
+	{
+		this->body->isFrutica = true;
+
+		int x, y;
+		body->GetPhysicPosition(x, y);
+		Vector2 position{ (float)x, (float)y };
+		float scale = 1.0f;
+		Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
+		Rectangle dest = { position.x, position.y, (float)texture.width * scale, (float)texture.height * scale };
+		Vector2 origin = { (float)texture.width / 2.0f, (float)texture.height / 2.0f };
+		float rotation = body->GetRotation() * RAD2DEG;
+		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
+		
+	}
+
+public:
+
+	Texture2D texture;
+	
+};
+class Booster : public PhysicEntity
+{
+public:
+	Booster(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture, ColliderType _type, bool what)
+		: PhysicEntity(physics->CreateRectangleSensor(_x, _y, 20, 20), _listener)
+		, texture(_texture)
+	{
+		this->listener = _listener;
+		flag = what;
+	}
+
+
+	void Update() override
+	{
+		this->body->isFrutica = true;
+
+		int x, y;
+		body->GetPhysicPosition(x, y);
+		Vector2 position{ (float)x, (float)y };
+		float scale = 1.0f;
+		Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
+		Rectangle dest = { position.x, position.y, (float)texture.width * scale, (float)texture.height * scale };
+		Vector2 origin = { (float)texture.width / 2.0f, (float)texture.height / 2.0f };
+		float rotation = body->GetRotation() * RAD2DEG;
+		if (flag)
+		{
+			DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
+		}
+		else if (!flag)
+		{
+			DrawTexturePro(texture, source, dest, origin, -rotation, WHITE);
+		}
+
+	}
+
+public:
+
+	Texture2D texture;
+	bool flag;
+};
 class Box : public PhysicEntity
 {
 public:
@@ -659,6 +739,9 @@ bool ModuleGame::Start()
 	flipperL = LoadTexture("Assets/MapComponents/flipper.png");
 	flipperR = LoadTexture("Assets/MapComponents/flipper.png");
 	PointBoard = LoadTexture("Assets/MapComponents/PointBoard.png");
+	boosterR = LoadTexture("Assets/MapComponents/boosterR.png");
+	boosterL = LoadTexture("Assets/MapComponents/boosterL.png");
+
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_DOWNER));
@@ -676,8 +759,10 @@ bool ModuleGame::Start()
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_BALL));
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::MAIN_MAP));
 
-
-
+	/*entities.emplace_back(new Booster(App->physics, 42, 441, this, boosterL, ColliderType::FRUIT2, true));
+	entities.emplace_back(new Booster(App->physics, 66, 485, this, boosterR,ColliderType::FRUIT2, false));*/
+	//ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture, ColliderType _type, bool what
+	ball = App->physics->CreateCircleNew(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 13, b2_dynamicBody);
 
 
 	Texture2D flipperTexture = LoadTexture("Assets/MapComponents/Flipper.png");
@@ -710,6 +795,9 @@ bool ModuleGame::Start()
 	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, this, fruit1, ColliderType::FRUIT1));
 	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, this, fruit2, ColliderType::FRUIT2));
 	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 2, this, fruit3, ColliderType::FRUIT3));
+
+
+	entities.emplace_back(new Frutica(App->physics, 200, 200, this, fruit1, ColliderType::FRUIT1));
 
 	//Load pelotas bien
 
@@ -890,6 +978,21 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		
 		
 		LoseLife();
+	}
+
+	if (bodyA->isFrutica)
+	{
+		std::cout << "oli";
+	}
+	
+	if (bodyB->isFrutica)
+	{
+		std::cout << "oli";
+	}
+
+	if (bodyA->isBall || bodyB->isFrutica )
+	{
+		std::cout << "oli";
 	}
 
 }
