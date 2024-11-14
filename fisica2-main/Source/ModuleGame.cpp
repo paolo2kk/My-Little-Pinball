@@ -43,7 +43,7 @@ class Circle : public PhysicEntity
 {
 public:
 	Circle(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture, ColliderType _type)
-		: PhysicEntity(physics->CreateCircle(_x, _y, 14), _listener)
+		: PhysicEntity(physics->CreateCircle(_x, _y, 13), _listener)
 		, texture(_texture)
 	{
 		isInsideTheGame = true;

@@ -167,8 +167,8 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 }
 void ModulePhysics::Flippers()
 {
-	flipperL = CreateRectangle(212, 835, flipperWidth, flipperHeight);
-	flipperLAnch = CreateCircle(212, 835, 2);
+	flipperL = CreateRectangle(214, 835, flipperWidth, flipperHeight);
+	flipperLAnch = CreateCircle(214, 835, 2);
 	flipperLAnch->body->SetType(b2_staticBody);
 	b2RevoluteJointDef flipperLJointDef;
 
@@ -181,8 +181,8 @@ void ModulePhysics::Flippers()
 	flipperLJointDef.upperAngle = 30 * DEGTORAD;
 	b2RevoluteJoint* leftFlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&flipperLJointDef);
 
-	flipperR = CreateRectangle(395, 835, flipperWidth, flipperHeight);
-	flipperRAnch = CreateCircle(395, 835, 2);
+	flipperR = CreateRectangle(390, 835, flipperWidth, flipperHeight);
+	flipperRAnch = CreateCircle(390, 835, 2);
 	flipperRAnch->body->SetType(b2_staticBody);
 	b2RevoluteJointDef flipperRJointDef;
 

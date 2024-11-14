@@ -72,8 +72,8 @@ public:
 
 
 	
-	int flipperWidth = 80;
-	int flipperHeight = 20;
+	int flipperWidth = 92;
+	int flipperHeight = 23;
 	PhysBody* flipperL;
 	PhysBody* flipperR;
 	PhysBody* flipperLAnch;
