@@ -83,6 +83,11 @@ public:
 	PhysBody* flipperR;
 	PhysBody* flipperLAnch;
 	PhysBody* flipperRAnch;
+
+	PhysBody* flipperLa;
+	PhysBody* flipperLAncha;
+
+
 	PhysBody* leftBumper;
 	PhysBody* rightBumper;
 	PhysBody* topBumper;
