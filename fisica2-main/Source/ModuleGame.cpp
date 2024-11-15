@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRender.h"
+#include "Module.h"
 #include "ModuleGame.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
@@ -21,7 +22,7 @@ protected:
 		: body(_body)
 		, listener(_listener)
 	{
-
+		body->listener = listener;
 	}
 
 public:
@@ -140,7 +141,7 @@ public:
 		: PhysicEntity(physics->CreateRectangleSensor(_x, _y, SCREEN_WIDTH - 20, SCREEN_WIDTH - 20), _listener)
 		, texture(_texture)
 	{
-		this->listener = _listener;
+		
 	}
 
 	
@@ -657,7 +658,7 @@ public:
 		else if (isCharging && IsKeyReleased(KEY_SPACE)) {
 			// Apply impulse to ball on release
 			ball->body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -plungerForce), true);
-
+			
 			// Reset the charge for next use
 			plungerForce = 0.0f;
 			isCharging = false;
@@ -670,6 +671,7 @@ private:
 	const float maxPlungerForce = 800.0f; // Maximum impulse force
 	const float plungerChargeRate = 10.0f; // Rate of charge increase
 	bool isCharging = false;     // True while the plunger is charging
+	Module* App;
 };
 
 class Object : public PhysicEntity
@@ -794,13 +796,13 @@ bool ModuleGame::Start()
 
 	//Crear Objetos
 
-	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, this, fruit1, ColliderType::FRUIT1));
+/*	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, this, fruit1, ColliderType::FRUIT1));
 	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, this, fruit2, ColliderType::FRUIT2));
 	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 2, this, fruit3, ColliderType::FRUIT3));
 
 
 	entities.emplace_back(new Frutica(App->physics, 200, 200, this, fruit1, ColliderType::FRUIT1));
-
+	*/
 	//Load pelotas bien
 
 	//Load paredes
@@ -828,7 +830,7 @@ bool ModuleGame::CleanUp()
 update_status ModuleGame::Update()
 {
 	
-	UpdateMusicStream(background_music);
+	//UpdateMusicStream(background_music);
 	//DrawBG
 	DrawTexture(BG, 0, 0, WHITE);
 
@@ -939,7 +941,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	App->audio->PlayFx(bonus_fx);
 
-	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT1)
+	/*if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT1)
 	{
 		// Incrementar el puntaje
 		score += 50;
@@ -950,8 +952,8 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			fruit->Destroy();
 		}
-	}
-	else if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT2)
+	}*/
+	/*if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT2)
 	{
 		// Incrementar el puntaje
 		score += 50;
@@ -962,8 +964,8 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			fruit->Destroy();
 		}
-	}
-	else if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT3)
+	}*/
+/*	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT3)
 	{
 		// Incrementar el puntaje
 		score += 50;
@@ -974,21 +976,22 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			fruit->Destroy();
 		}
-	}
+	}*/
 
 
-	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::DEATH)
+	/*if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::DEATH)
 	{
 		
 		
 		LoseLife();
 	}
-
-	if (bodyA->isFrutica)
+	*/
+	/*if (bodyA->isFrutica)
 	{
 		std::cout << "oli";
 	}
-	
+	*/
+/*
 	if (bodyB->isFrutica)
 	{
 		std::cout << "oli";
@@ -998,7 +1001,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		std::cout << "oli";
 	}
-
+	*/
 }
 
 void ModuleGame::LoseLife()
@@ -1047,12 +1050,7 @@ void ModuleGame::ManageInputs()
 	{
 		if (IsKeyDown(KEY_SPACE))
 		{
-			
-			Flipper* flipper = dynamic_cast<Flipper*>(entities[1]);
-			if (flipper)
-			{
-				flipper->ControlFlipper(IsKeyDown(KEY_SPACE));
-			}
+			App->audio->PlayFx(plunger_fx);
 		}
 		if (IsKeyPressed(KEY_A)) {
 			App->audio->PlayFx(flipper_fx);
