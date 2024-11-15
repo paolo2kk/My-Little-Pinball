@@ -221,6 +221,19 @@ void ModulePhysics::Flippers()
 	flipperRJointDef.upperAngle = 30 * DEGTORAD;
 	b2RevoluteJoint* rightFlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&flipperRJointDef);
 
+	flipperLa = CreateRectangle(220, 406, flipperWidth, flipperHeight);
+	flipperLAncha = CreateCircle(220, 406, 2);
+	flipperLAncha->body->SetType(b2_staticBody);
+	b2RevoluteJointDef flipperLJointDefa;
+
+	flipperLJointDefa.bodyA = flipperLa->body;
+	flipperLJointDefa.bodyB = flipperLAncha->body;
+	flipperLJointDefa.localAnchorA.Set(PIXEL_TO_METERS(-30), 0);
+	flipperLJointDefa.localAnchorB.Set(0, 0);
+	flipperLJointDefa.enableLimit = true;
+	flipperLJointDefa.lowerAngle = -30 * DEGTORAD;
+	flipperLJointDefa.upperAngle = 30 * DEGTORAD;
+	b2RevoluteJoint* leftFlipperJointa = (b2RevoluteJoint*)world->CreateJoint(&flipperLJointDefa);
 }
 void ModulePhysics::RenderFlippers()
 {
@@ -243,6 +256,17 @@ void ModulePhysics::RenderFlippers()
 		Rectangle{ (float)xR, (float)yR, (float)flipperRTexture.width, (float)flipperRTexture.height },
 		Vector2{ (float)flipperRTexture.width / 2.0f, (float)flipperRTexture.height / 2.0f },
 		flipperR->GetRotation() * RAD2DEG,
+		WHITE
+	);
+
+	int xE, yE;
+	flipperLa->GetPhysicPosition(xE, yE);
+	DrawTexturePro(
+		flipperLTexture,
+		Rectangle{ 0, 0, -(float)flipperLTexture.width, (float)flipperLTexture.height },
+		Rectangle{ (float)xE, (float)yE, (float)flipperLTexture.width, (float)flipperLTexture.height },
+		Vector2{ (float)flipperLTexture.width / 2.0f, (float)flipperLTexture.height / 2.0f },
+		flipperLa->GetRotation() * RAD2DEG,
 		WHITE
 	);
 }
