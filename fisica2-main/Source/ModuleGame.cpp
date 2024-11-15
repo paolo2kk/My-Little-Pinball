@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRender.h"
+#include "Module.h"
 #include "ModuleGame.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
@@ -657,7 +658,7 @@ public:
 		else if (isCharging && IsKeyReleased(KEY_SPACE)) {
 			// Apply impulse to ball on release
 			ball->body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -plungerForce), true);
-
+			
 			// Reset the charge for next use
 			plungerForce = 0.0f;
 			isCharging = false;
@@ -670,6 +671,7 @@ private:
 	const float maxPlungerForce = 800.0f; // Maximum impulse force
 	const float plungerChargeRate = 10.0f; // Rate of charge increase
 	bool isCharging = false;     // True while the plunger is charging
+	Module* App;
 };
 
 class Object : public PhysicEntity
@@ -828,7 +830,7 @@ bool ModuleGame::CleanUp()
 update_status ModuleGame::Update()
 {
 	
-	UpdateMusicStream(background_music);
+	//UpdateMusicStream(background_music);
 	//DrawBG
 	DrawTexture(BG, 0, 0, WHITE);
 
@@ -1047,12 +1049,7 @@ void ModuleGame::ManageInputs()
 	{
 		if (IsKeyDown(KEY_SPACE))
 		{
-			
-			Flipper* flipper = dynamic_cast<Flipper*>(entities[1]);
-			if (flipper)
-			{
-				flipper->ControlFlipper(IsKeyDown(KEY_SPACE));
-			}
+			App->audio->PlayFx(plunger_fx);
 		}
 		if (IsKeyPressed(KEY_A)) {
 			App->audio->PlayFx(flipper_fx);
