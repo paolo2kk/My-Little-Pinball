@@ -771,15 +771,16 @@ bool ModuleGame::Start()
 	entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(315), PIXEL_TO_METERS(765), false, this, flipperTexture));*/
 
 	// Load music
-	background_music = App->audio->PlayMusic("Assets/music.ogg");
-
+	background_music= LoadMusicStream("Assets/sfxandsong/32 Nightmaren.ogg");
+	SetMusicVolume(background_music, 100);
+	PlayMusicStream(background_music);
 	// Load FX
 	bonus_fx = App->audio->LoadFx("Assets/sfxandsong/bonus.wav");
 	flipper_fx = App->audio->LoadFx("Assets/sfxandsong/Flipper 1.wav");
 	bumper_fx = App->audio->LoadFx("Assets/sfxandsong/Bumper9.wav");
 	plunger_fx = App->audio->LoadFx("Assets/sfxandsong/PlungerRusty.wav");
 	game_over_fx = App->audio->LoadFx("Assets/sfxandsong/game_over.wav");
-	start_fx = App->audio->LoadFx("Assets/sfxandsong/start.wav");
+	start_fx = App->audio->LoadFx("Assets/sfxandsong/Flipper 1.wav");
 	launch_fx = App->audio->LoadFx("Assets/sfxandsong/launch.wav");
 
 
@@ -826,10 +827,12 @@ bool ModuleGame::CleanUp()
 // Update: draw background
 update_status ModuleGame::Update()
 {
+	
+	UpdateMusicStream(background_music);
 	//DrawBG
 	DrawTexture(BG, 0, 0, WHITE);
 
-
+	
 	if (game_state == GameState::START_MENU)
 	{
 		//Draw start menu
@@ -1019,7 +1022,10 @@ void ModuleGame::ManageInputs()
 	{
 		if (IsKeyPressed(KEY_ENTER))
 		{
+
 			game_state = GameState::PLAYING;
+			
+
 		}
 	}
 
@@ -1027,6 +1033,8 @@ void ModuleGame::ManageInputs()
 	{
 		if (IsKeyPressed(KEY_ENTER))
 		{
+			
+
 			game_state = GameState::PLAYING;
 		}
 		if (IsKeyPressed(KEY_ESCAPE))
@@ -1039,6 +1047,7 @@ void ModuleGame::ManageInputs()
 	{
 		if (IsKeyDown(KEY_SPACE))
 		{
+			
 			Flipper* flipper = dynamic_cast<Flipper*>(entities[1]);
 			if (flipper)
 			{
@@ -1058,6 +1067,8 @@ void ModuleGame::ManageInputs()
 			// Reset the force when the key is released
 			leftFlipperForce = initialForce;
 		}
+
+		
 
 		// Check if the D key is held down for the right flipper
 		if (IsKeyPressed(KEY_D)) {

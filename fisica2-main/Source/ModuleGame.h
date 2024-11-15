@@ -88,7 +88,7 @@ public:
 	uint32 flipper_fx;
 	uint32 game_over_fx;
 	uint32 start_fx;
-	uint32 background_music;
+	Music background_music;
 	uint32 launch_fx;
 	uint32 bumper_fx;
 	uint32 plunger_fx;
