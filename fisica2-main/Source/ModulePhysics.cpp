@@ -40,6 +40,12 @@ bool ModulePhysics::Start()
 	leftBumper = CreateBumper(bumperPoints, bumperPointCount, 226, 226);
 	rightBumper = CreateBumper(bumperPoints, bumperPointCount, 400, 226);
 	topBumper= CreateBumper(bumperPoints, bumperPointCount, 315, 117);
+	//DownLBumper = CreateBumper(bumperPoints, bumperPointCount, 187, 710);
+	//DownRBumper = CreateBumper(bumperPoints, bumperPointCount, 315, 117);
+	//mini1Bumper = CreateBumperChain(170,670,bumperPoints, bumperPointCount);
+	//mini2Bumper = CreateBumper(bumperPoints, bumperPointCount, 315, 117);
+	//mini12Bumper = CreateBumper(bumperPoints, bumperPointCount, 315, 117);
+	//mini21Bumper = CreateBumper(bumperPoints, bumperPointCount, 315, 117);
 	
 	
 	return true;
@@ -355,7 +361,69 @@ PhysBody* ModulePhysics::CreateBumper(const int* points, int pointCount, int x, 
 	return pBumper;
 }
 
-// 
+//PhysBody* ModulePhysics::CreateMiniBumper(const int* points, int pointCount, int x, int y) {
+//	b2BodyDef bodyDef;
+//	bodyDef.type = b2_staticBody;
+//	bodyDef.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+//
+//	b2Body* bumperBody = world->CreateBody(&bodyDef);
+//
+//
+//	b2CircleShape bumperShape;
+//
+//	float radius = 10.0f;
+//	bumperShape.m_radius = PIXEL_TO_METERS(radius);
+//
+//	b2FixtureDef fixtureDef;
+//	fixtureDef.shape = &bumperShape;
+//	fixtureDef.density = 1.0f;
+//	fixtureDef.restitution = 2;
+//	bumperBody->CreateFixture(&fixtureDef);
+//
+//	PhysBody* pBumper = new PhysBody();
+//	pBumper->body = bumperBody;
+//	bumperBody->GetUserData().pointer = reinterpret_cast<uintptr_t>(pBumper);
+//	return pBumper;
+//}
+
+//PhysBody* ModulePhysics::CreateBumperChain(int x, int y, const int* points, int size)
+//{
+//	b2BodyDef body;
+//	body.type = b2_dynamicBody;
+//	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+//
+//	b2Body* b = world->CreateBody(&body);
+//
+//	b2ChainShape shape;
+//	b2Vec2* p = new b2Vec2[size / 2];
+//
+//	for (int i = 0; i < size / 2; ++i)
+//	{
+//		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+//		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+//	}
+//
+//	int size_ = size / 2;
+//
+//	shape.CreateLoop(p, size_);
+//
+//	b2FixtureDef fixture;
+//	fixture.shape = &shape;
+//	b2FixtureDef fixtureDef;
+//	fixtureDef.density = 1.0f;
+//	fixtureDef.restitution = 2;
+//	
+//	b->CreateFixture(&fixture);
+//
+//	delete p;
+//
+//	PhysBody* pbody = new PhysBody();
+//	pbody->body = b;
+//	body.userData.pointer = reinterpret_cast<uintptr_t>(pbody);
+//	pbody->width = pbody->height = 0;
+//
+//	return pbody;
+//}
 update_status ModulePhysics::PostUpdate()
 {
 	RenderFlippers();
@@ -376,6 +444,25 @@ update_status ModulePhysics::PostUpdate()
 
 	topBumper->GetPhysicPosition(x, y);
 	DrawCircle(x, y, 20, RED);
+
+	//DownLBumper->GetPhysicPosition(x, y);
+	//DrawCircle(x, y, 20, RED);
+
+	//DownRBumper->GetPhysicPosition(x, y);
+	/*DrawCircle(x, y, 20, RED);
+
+	mini1Bumper->GetPhysicPosition(x, y);
+	DrawCircle(x, y, 20, RED);
+
+	mini2Bumper->GetPhysicPosition(x, y);
+	DrawCircle(x, y, 20, RED);
+
+	mini12Bumper->GetPhysicPosition(x, y);
+	DrawCircle(x, y, 20, RED);
+
+	mini21Bumper->GetPhysicPosition(x, y);
+	DrawCircle(x, y, 20, RED);*/
+
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
 	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())

@@ -67,8 +67,8 @@ public:
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 	PhysBody* CreateCircleNew(int x, int y, int radius, b2BodyType static_body);
 	PhysBody* CreateBumper(const int* points, int pointCount, int x, int y);
-
-
+	//PhysBody* CreateMiniBumper(const int* points, int pointCount, int x, int y);
+	//PhysBody* CreateBumperChain(int x, int y, const int* points, int size);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
@@ -91,6 +91,13 @@ public:
 	PhysBody* leftBumper;
 	PhysBody* rightBumper;
 	PhysBody* topBumper;
+	PhysBody* DownLBumper;
+	PhysBody* DownRBumper;
+	PhysBody* mini1Bumper;
+	PhysBody* mini2Bumper;
+	PhysBody* mini12Bumper;
+	PhysBody* mini21Bumper;
+
 
 	float restitution = 0.4f;
 	Texture2D flipperLTexture;
