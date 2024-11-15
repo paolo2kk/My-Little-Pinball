@@ -141,7 +141,7 @@ public:
 		: PhysicEntity(physics->CreateRectangleSensor(_x, _y, SCREEN_WIDTH - 20, SCREEN_WIDTH - 20), _listener)
 		, texture(_texture)
 	{
-		this->listener = _listener;
+		
 	}
 
 	
@@ -796,13 +796,13 @@ bool ModuleGame::Start()
 
 	//Crear Objetos
 
-	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, this, fruit1, ColliderType::FRUIT1));
+/*	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, this, fruit1, ColliderType::FRUIT1));
 	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, this, fruit2, ColliderType::FRUIT2));
 	entities.emplace_back(new Object(App->physics, SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 2, this, fruit3, ColliderType::FRUIT3));
 
 
 	entities.emplace_back(new Frutica(App->physics, 200, 200, this, fruit1, ColliderType::FRUIT1));
-
+	*/
 	//Load pelotas bien
 
 	//Load paredes
@@ -941,7 +941,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	App->audio->PlayFx(bonus_fx);
 
-	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT1)
+	/*if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT1)
 	{
 		// Incrementar el puntaje
 		score += 50;
@@ -952,8 +952,8 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			fruit->Destroy();
 		}
-	}
-	else if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT2)
+	}*/
+	/*if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT2)
 	{
 		// Incrementar el puntaje
 		score += 50;
@@ -964,8 +964,8 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			fruit->Destroy();
 		}
-	}
-	else if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT3)
+	}*/
+/*	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT3)
 	{
 		// Incrementar el puntaje
 		score += 50;
@@ -976,21 +976,22 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			fruit->Destroy();
 		}
-	}
+	}*/
 
 
-	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::DEATH)
+	/*if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::DEATH)
 	{
 		
 		
 		LoseLife();
 	}
-
-	if (bodyA->isFrutica)
+	*/
+	/*if (bodyA->isFrutica)
 	{
 		std::cout << "oli";
 	}
-	
+	*/
+/*
 	if (bodyB->isFrutica)
 	{
 		std::cout << "oli";
@@ -1000,7 +1001,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		std::cout << "oli";
 	}
-
+	*/
 }
 
 void ModuleGame::LoseLife()
