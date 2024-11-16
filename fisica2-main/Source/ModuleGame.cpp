@@ -800,6 +800,9 @@ bool ModuleGame::Start()
 	boosterL = LoadTexture("Assets/MapComponents/boosterL.png");
 	PointBubble_2 = LoadTexture("Assets/MapComponents/PointsExplosion_2digits.png");
 	PointBubble_3 = LoadTexture("Assets/MapComponents/PointsExplosion_3digits.png");
+	cora1=LoadTexture("Assets/MapComponents/cora1.png");
+	cora2 = LoadTexture("Assets/MapComponents/cora2.png");
+	cora3 = LoadTexture("Assets/MapComponents/cora3.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_DOWNER));
@@ -894,7 +897,24 @@ update_status ModuleGame::Update()
 	
 	//Score Managing
 	DrawTexture(PointBoard, (SCREEN_WIDTH / 2) - (PointBoard.width / 2), 0, WHITE);
-	SCORE.Draw((SCREEN_WIDTH / 3), 3, std::to_string(score), WHITE);
+	SCORE.Draw(200, 3, std::to_string(score), WHITE);
+
+	if (vidas == 3) {
+
+		DrawTexture(cora3, 350,7,WHITE);
+
+
+	}
+	else if (vidas == 2) {
+
+		DrawTexture(cora2, 350, 7, WHITE);
+	}
+	else if (vidas == 1) {
+
+		DrawTexture(cora1, 350, 7, WHITE);
+	}
+
+
 
 	if (showBubble == true && BubbleTime.ReadSec() <0.2)
 	{
@@ -932,7 +952,7 @@ update_status ModuleGame::Update()
 	if (game_state == GameState::GAME_OVER)
 	{
 		//Draw game over menu
-		DrawText("Game Over", 10, 10, 20, WHITE);
+		DrawText("Game Over", 175, 450, 75, WHITE);
 		DrawText("Press Enter to restart", 10, 30, 20, WHITE);
 		DrawText("Press Escape to go to start menu", 10, 50, 20, WHITE);
 	}

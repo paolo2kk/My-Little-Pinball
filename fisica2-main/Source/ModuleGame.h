@@ -77,6 +77,9 @@ public:
 	Texture2D PointBoard;
 	Texture2D PointBubble_2;
 	Texture2D PointBubble_3;
+	Texture2D cora1;
+	Texture2D cora2;
+	Texture2D cora3;
 
 	Texture2D fruit1;
 	Texture2D fruit2;
