@@ -59,9 +59,6 @@ public:
 	void GameOver();
 	void Restart();
 
-	void UpdateScore();
-
-
 public:
 
 	std::vector<PhysicEntity*> entities;
@@ -89,15 +86,15 @@ public:
 	Texture2D boosterL;
 	Texture2D boosterR;
 
-	uint32 bonus_fx;
+	Sound bonus_fx;
 	uint32 flipper_fx;
-	uint32 game_over_fx;
-	uint32 start_fx;
+	Sound game_over_fx;
+	Sound start_fx;
 	Music background_music;
-	uint32 launch_fx;
-	uint32 bumper_fx;
-	uint32 plunger_fx;
-	uint32 BellRing;
+	Sound launch_fx;
+	Sound bumper_fx;
+	Sound plunger_fx;
+	Sound BellRing;
 
 	vec2<int> ray;
 	bool ray_on;

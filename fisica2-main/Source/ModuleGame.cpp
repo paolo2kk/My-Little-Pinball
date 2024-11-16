@@ -199,6 +199,11 @@ public:
 			DrawTexturePro(texture, source, dest, origin, -rotation, WHITE);
 		}
 
+
+	}
+	void Boost(PhysBody* BodyB)
+	{
+		BodyB->body->ApplyLinearImpulseToCenter({ 0,-100 }, true);
 	}
 
 public:
@@ -229,6 +234,7 @@ public:
 	{
 		return body->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);;
 	}
+
 
 private:
 	Texture2D texture;
@@ -390,36 +396,50 @@ public:
 		368, 470
 	};
 
-	static constexpr int LeftBigCollision[58] = {
-		118, 476,
-		99, 453,
-		97, 440,
-		101, 429,
-		90, 422,
-		90, 400,
-		100, 391,
-		98, 383,
-		90, 372,
-		90, 358,
-		101, 346,
-		98, 338,
-		89, 328,
-		89, 313,
-		98, 305,
-		99, 282,
-		113, 279,
-		124, 290,
-		132, 321,
-		142, 345,
-		156, 360,
-		177, 369,
-		213, 384,
-		201, 390,
-		197, 401,
-		200, 415,
-		216, 419,
-		216, 431,
-		141, 496
+	static constexpr int LeftBigCollision[84] = {
+		201, 387,
+		195, 391,
+		190, 399,
+		189, 407,
+		194, 418,
+		202, 424,
+		214, 432,
+		207, 436,
+		197, 444,
+		185, 456,
+		167, 473,
+		153, 488,
+		143, 494,
+		134, 490,
+		111, 469,
+		98, 453,
+		98, 442,
+		99, 430,
+		89, 416,
+		89, 407,
+		91, 399,
+		97, 393,
+		99, 385,
+		94, 380,
+		89, 373,
+		88, 363,
+		92, 354,
+		97, 349,
+		99, 342,
+		90, 335,
+		90, 323,
+		91, 312,
+		98, 303,
+		98, 294,
+		99, 283,
+		106, 278,
+		116, 282,
+		126, 302,
+		134, 328,
+		146, 350,
+		173, 368,
+		212, 383,
+
 	};
 
 	static constexpr int LeftTopBigCollision[26] = {
@@ -561,7 +581,10 @@ public:
 	MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener, COLLISIONS type):
 			PhysicEntity(physics->CreateChain(0, 0,collision, type_, GetCollider_andSize(type)), _listener)
 	{
-
+		if (type_ == ColliderType::BUMPER || type_ == ColliderType::BUMPER_STIKS)
+		{
+			body->body->GetFixtureList()->SetRestitution(1);
+		}
 	}
 
 	void Update() override
@@ -596,23 +619,23 @@ public:
 			break;
 		case COLLISIONS::LEFT_STIK:
 			collision = LeftStik;
-			type_ = ColliderType::BUMPER;
+			type_ = ColliderType::BUMPER_STIKS;
 			return 12;
 			break;
 		case COLLISIONS::MIDLE_STIK:
 			collision = MiddleStik;
-			type_ = ColliderType::BUMPER;
+			type_ = ColliderType::BUMPER_STIKS;
 			return 12;
 			break;
 		case COLLISIONS::RIGHT_STIK:
 			collision = RightStik;
-			type_ = ColliderType::BUMPER;
+			type_ = ColliderType::BUMPER_STIKS;
 			return 12;
 			break;
 		case COLLISIONS::LEFT_WING:
 			collision = LeftBigCollision;
 			type_ = ColliderType::WALL;
-			return 58;
+			return 84;
 			break;
 		case COLLISIONS::LEFT_OBSTACLE:
 			collision = LeftTopBigCollision;
@@ -626,17 +649,17 @@ public:
 			break;
 		case COLLISIONS::LEFT_BALL:
 			collision = BallLeft;
-			type_ = ColliderType::BUMPER;
+			type_ = ColliderType::BUMPER_BALLS;
 			return 20;
 			break;
 		case COLLISIONS::MIDLE_BALL:
 			collision = BallMiddle;
-			type_ = ColliderType::BUMPER;
+			type_ = ColliderType::BUMPER_BALLS;
 			return 22;
 			break;
 		case COLLISIONS::RIGHT_BALL:
 			collision = BallRight;
-			type_ = ColliderType::BUMPER;
+			type_ = ColliderType::BUMPER_BALLS;
 			return 26;
 			break;
 		case COLLISIONS::MAIN_MAP:
@@ -669,6 +692,7 @@ public:
 				plungerForce = maxPlungerForce;
 			}
 			isCharging = true;
+
 		}
 		else if (isCharging && IsKeyReleased(KEY_SPACE)) {
 			// Apply impulse to ball on release
@@ -677,6 +701,7 @@ public:
 			// Reset the charge for next use
 			plungerForce = 0.0f;
 			isCharging = false;
+
 		}
 	}
 
@@ -687,6 +712,7 @@ private:
 	const float plungerChargeRate = 10.0f; // Rate of charge increase
 	bool isCharging = false;     // True while the plunger is charging
 	Module* App;
+	Sound plunger_fx = LoadSound("Assets/sfxandsong/Ball release.wav");
 };
 
 class Object : public PhysicEntity
@@ -777,11 +803,13 @@ bool ModuleGame::Start()
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::MIDLE_BALL));
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_BALL));
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::MAIN_MAP));
+	//entities.emplace_back(new Booster(App->physics, 80,485 , this,boosterL,ColliderType::BOOSTER,true));
+	//entities.emplace_back(new Booster(App->physics, 550 , 485, this,boosterR, ColliderType::BOOSTER,false));
+	
 
 	/*entities.emplace_back(new Booster(App->physics, 42, 441, this, boosterL, ColliderType::FRUIT2, true));
 	entities.emplace_back(new Booster(App->physics, 66, 485, this, boosterR,ColliderType::FRUIT2, false));*/
 	//ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture, ColliderType _type, bool what
-	ball = App->physics->CreateCircleNew(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 13, b2_dynamicBody);
 
 
 	Texture2D flipperTexture = LoadTexture("Assets/MapComponents/Flipper.png");
@@ -790,17 +818,18 @@ bool ModuleGame::Start()
 
 	// Load music
 	background_music= LoadMusicStream("Assets/sfxandsong/32 Nightmaren.ogg");
-	SetMusicVolume(background_music, 100);
+	SetMusicVolume(background_music, 0.5);
 	PlayMusicStream(background_music);
+
 	// Load FX
-	bonus_fx = App->audio->LoadFx("Assets/sfxandsong/bonus.wav");
+	bonus_fx = LoadSound("Assets/sfxandsong/bonus.wav");
 	flipper_fx = App->audio->LoadFx("Assets/sfxandsong/Flipper 1.wav");
-	bumper_fx = App->audio->LoadFx("Assets/sfxandsong/Bumper9.wav");
-	plunger_fx = App->audio->LoadFx("Assets/sfxandsong/PlungerRusty.wav");
-	game_over_fx = App->audio->LoadFx("Assets/sfxandsong/game_over.wav");
-	start_fx = App->audio->LoadFx("Assets/sfxandsong/Flipper 1.wav");
-	launch_fx = App->audio->LoadFx("Assets/sfxandsong/launch.wav");
-	BellRing = App->audio->LoadFx("Assets/sfxandsong/Bell ring1.wav");
+	bumper_fx = LoadSound("Assets/sfxandsong/Bumper9.wav");
+	plunger_fx = LoadSound("Assets/sfxandsong/Ball release.wav");
+	game_over_fx = LoadSound("Assets/sfxandsong/game_over.wav");
+	start_fx = LoadSound("Assets/sfxandsong/Flipper 1.wav");
+	launch_fx = LoadSound("Assets/sfxandsong/launch.wav");
+	BellRing = LoadSound("Assets/sfxandsong/Bell ring1.wav");
 
 
 	SCORE.Initialise("Assets/MapComponents/Points.png", '0', 36);
@@ -843,20 +872,10 @@ bool ModuleGame::CleanUp()
 	return true;
 }
 
-void ModuleGame::UpdateScore()
-{
-	if (showBubble == false)
-	{
-		score += points;
-		BubbleTime.Start();
-	}
-	showBubble = true;
-}
-
 // Update: draw background
 update_status ModuleGame::Update()
 {
-	//UpdateMusicStream(background_music);
+	UpdateMusicStream(background_music);
 	//DrawBG
 	DrawTexture(BG, 0, 0, WHITE);
 	
@@ -864,10 +883,19 @@ update_status ModuleGame::Update()
 	DrawTexture(PointBoard, (SCREEN_WIDTH / 2) - (PointBoard.width / 2), 0, WHITE);
 	SCORE.Draw((SCREEN_WIDTH / 3), 3, std::to_string(score), WHITE);
 
-	if (showBubble == true && BubbleTime.ReadSec() <0.5)
+	if (showBubble == true && BubbleTime.ReadSec() <0.2)
 	{
-		DrawTexture(PointBubble_2,METERS_TO_PIXELS(bubblePos.x-40),METERS_TO_PIXELS( bubblePos.y-40), WHITE);
-		SCORE.Draw(METERS_TO_PIXELS(bubblePos.x-25), METERS_TO_PIXELS(bubblePos.y-10), std::to_string(points), WHITE);
+		if (points < 100)
+		{
+			DrawTexture(PointBubble_2, METERS_TO_PIXELS(bubblePos.x - 40), METERS_TO_PIXELS(bubblePos.y - 40), WHITE);
+			SCORE.Draw(METERS_TO_PIXELS(bubblePos.x - 25), METERS_TO_PIXELS(bubblePos.y - 10), std::to_string(points), WHITE);
+		}
+		else
+		{
+			DrawTexture(PointBubble_3, METERS_TO_PIXELS(bubblePos.x - 40), METERS_TO_PIXELS(bubblePos.y - 40), WHITE);
+			SCORE.Draw(METERS_TO_PIXELS(bubblePos.x), METERS_TO_PIXELS(bubblePos.y - 10), std::to_string(points), WHITE);
+		}
+		
 	}
 	else
 	{
@@ -878,7 +906,7 @@ update_status ModuleGame::Update()
 	{
 		//Draw start menu
 
-		DrawText(TextFormat("Press Enter to Start"), 40, 40, 20, BLACK);
+		DrawText(TextFormat("Press Enter to Start"), 80, (SCREEN_HEIGHT/3)*2, 40, DARKBLUE);
 	}
 
 	if (game_state == GameState::PAUSED)
@@ -975,89 +1003,48 @@ update_status ModuleGame::Update()
 
 void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-
-	App->audio->PlayFx(bonus_fx);
-	if (ballsInGame == true)
+	if (ballsInGame == true && bodyB != nullptr && bodyA != nullptr)
 	{
 
-		if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::BUMPER)
+		if (bodyA->type == ColliderType::BUMPER && bodyB->type == ColliderType::BALL)
 		{
-			// Incrementar el puntaje
-
 			if (showBubble == false)
 			{
-				bubblePos = bodyA->body->GetPosition();
+				bubblePos = bodyB->body->GetPosition();
+				points = 100;
+				score += points;
+				BubbleTime.Start();
+				PlaySound(BellRing);
+			}
+			showBubble = true;
+		}
+		if (bodyA->type == ColliderType::BUMPER_STIKS && bodyB->type == ColliderType::BALL)
+		{
+			if (showBubble == false)
+			{
+				bubblePos = bodyB->body->GetPosition();
 				points = 50;
 				score += points;
 				BubbleTime.Start();
+				PlaySound(BellRing);
 			}
 			showBubble = true;
-
-			
 		}
-	}
-    /*
-	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT1)
-	{
-		// Incrementar el puntaje
-		score += 50;
-
-		// Llamar a Destroy para eliminar el objeto de la escena
-		Object* fruit = dynamic_cast<Object*>(bodyB->listener);
-		if (fruit)
+		if (bodyA->type == ColliderType::BUMPER_BALLS && bodyB->type == ColliderType::BALL)
 		{
-			fruit->Destroy();
+			if (showBubble == false)
+			{
+				bubblePos = bodyB->body->GetPosition();
+				points = 80;
+				score += points;
+				BubbleTime.Start();
+				PlaySound(BellRing);
+			}
+			showBubble = true;
 		}
-	}*/
-	/*if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT2)
-	{
-		// Incrementar el puntaje
-		score += 50;
 
-		// Eliminar el objeto de la escena
-		Object* fruit = dynamic_cast<Object*>(bodyB->listener);
-		if (fruit)
-		{
-			fruit->Destroy();
-		}
-	}*/
-/*	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT3)
-	{
-		// Incrementar el puntaje
-		score += 50;
-
-		// Eliminar el objeto de la escena
-		Object* fruit = dynamic_cast<Object*>(bodyB->listener);
-		if (fruit)
-		{
-			fruit->Destroy();
-		}
-	}*/
-
-
-	/*if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::DEATH)
-	{
-		
-		
-		LoseLife();
-	}
-	*/
-	/*if (bodyA->isFrutica)
-	{
-		std::cout << "oli";
-	}
-	*/
-/*
-	if (bodyB->isFrutica)
-	{
-		std::cout << "oli";
 	}
 
-	if (bodyA->isBall || bodyB->isFrutica )
-	{
-		std::cout << "oli";
-	}
-	*/
 }
 
 void ModuleGame::LoseLife()
@@ -1106,16 +1093,16 @@ void ModuleGame::ManageInputs()
 	{
 		if (IsKeyDown(KEY_SPACE))
 		{
-			App->audio->PlayFx(plunger_fx);
+			PlaySound(plunger_fx);
 		}
 		if (IsKeyPressed(KEY_A)) {
 			App->audio->PlayFx(flipper_fx);
 			// Increase the force gradually, but don't exceed maxForce
 			leftFlipperForce += forceIncrement;
 			if (leftFlipperForce > maxForce) leftFlipperForce = maxForce;
-
 			// Apply the increased force to the left flipper
 			App->physics->flipperL->body->ApplyForceToCenter(b2Vec2(0, -maxForce), true);
+			App->physics->flipperLa->body->ApplyForceToCenter(b2Vec2(0, -maxForce), true);
 		}
 		else {
 			// Reset the force when the key is released
@@ -1179,7 +1166,7 @@ void ModuleGame::ManageInputs()
 //github no va
 void ModuleGame::GameOver()
 {
-	App->audio->PlayFx(game_over_fx);
+	PlaySound(game_over_fx);
 	game_state = GameState::GAME_OVER;
 }
 

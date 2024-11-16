@@ -22,7 +22,11 @@ enum ColliderType
 	FRUIT2,
 	FRUIT3,
 	BUMPER,
-	WALL
+	WALL,
+	BUMPER_BALLS,
+	BUMPER_STIKS,
+	BOOSTER
+
 };
 
 // Small class to return to other modules to track position and rotation of physics bodies

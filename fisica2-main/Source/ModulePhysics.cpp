@@ -349,6 +349,7 @@ PhysBody* ModulePhysics::CreateBumper(const int* points, int pointCount, int x, 
 	PhysBody* pBumper = new PhysBody();
 	pBumper->body = bumperBody;
 	bumperBody->GetUserData().pointer = reinterpret_cast<uintptr_t>(pBumper);
+	pBumper->type = ColliderType::BUMPER;
 	return pBumper;
 }
 
