@@ -20,7 +20,9 @@ enum ColliderType
 	DEATH,
 	FRUIT1,
 	FRUIT2,
-	FRUIT3
+	FRUIT3,
+	BUMPER,
+	WALL
 };
 
 // Small class to return to other modules to track position and rotation of physics bodies
@@ -64,7 +66,7 @@ public:
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	void Flippers();
 	void RenderFlippers();
-	PhysBody* CreateChain(int x, int y, const int* points, int size);
+	PhysBody* CreateChain(int x, int y, const int* points, ColliderType type_, int size);
 	PhysBody* CreateCircleNew(int x, int y, int radius, b2BodyType static_body);
 	PhysBody* CreateBumper(const int* points, int pointCount, int x, int y);
 	//PhysBody* CreateMiniBumper(const int* points, int pointCount, int x, int y);

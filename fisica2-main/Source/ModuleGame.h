@@ -6,6 +6,7 @@
 #include "ModuleAudio.h"
 
 #include "Text.h"
+#include "Timer.h"
 #include "p2Point.h"
 
 #include "raylib.h"
@@ -58,6 +59,8 @@ public:
 	void GameOver();
 	void Restart();
 
+	void UpdateScore();
+
 
 public:
 
@@ -75,6 +78,8 @@ public:
 	Texture2D bumperL;
 	Texture2D bumperR;
 	Texture2D PointBoard;
+	Texture2D PointBubble_2;
+	Texture2D PointBubble_3;
 
 	Texture2D fruit1;
 	Texture2D fruit2;
@@ -92,6 +97,7 @@ public:
 	uint32 launch_fx;
 	uint32 bumper_fx;
 	uint32 plunger_fx;
+	uint32 BellRing;
 
 	vec2<int> ray;
 	bool ray_on;
@@ -99,7 +105,11 @@ public:
 	PhysBody* death_trigger;
 
 	ColliderType type;
-	Text points;
+	Text SCORE;
+	bool showBubble = false;
+	b2Vec2 bubblePos;
+	int points;
+	Timer BubbleTime;
 
 	GameState game_state = GameState::START_MENU;
 

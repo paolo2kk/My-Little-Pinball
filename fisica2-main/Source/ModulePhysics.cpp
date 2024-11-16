@@ -263,7 +263,7 @@ void ModulePhysics::RenderFlippers()
 		WHITE
 	);
 }
-PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
+PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, ColliderType type_,int size)
 {
 	PhysBody* pbody = new PhysBody();
 
@@ -297,6 +297,8 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 	
 	pbody->body = b;
 	pbody->width = pbody->height = 0;
+	
+	pbody->type = type_;
 
 	return pbody;
 }
@@ -648,6 +650,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 		if (physA->type == ColliderType::BALL)  
 		{
 			LOG("Collision detected");
+
 		}
 		physA->listener->OnCollision(physB, physA);
 	}

@@ -558,8 +558,8 @@ public:
 	490, 863
 	};
 
-	MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener, COLLISIONS type ):
-			PhysicEntity(physics->CreateChain(0, 0,collision, GetCollider_andSize(type)), _listener)
+	MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener, COLLISIONS type):
+			PhysicEntity(physics->CreateChain(0, 0,collision, type_, GetCollider_andSize(type)), _listener)
 	{
 
 	}
@@ -576,58 +576,72 @@ public:
 		{
 		case COLLISIONS::LEFT_DOWNER:  
 			collision = LeftDawner;
+			type_ = ColliderType::WALL;
 			return 16;
 			break;
 		case COLLISIONS::RIGHT_DOWNER:
 			collision = RightDawner;
+			type_ = ColliderType::WALL;
 			return 16;
 			break;
 		case COLLISIONS::LEFT_BOUNCER:
 			collision = LeftBouncer;
+			type_ = ColliderType::BUMPER;
 			return 12;
 			break;
 		case COLLISIONS::RIGHT_BOUNCER:
 			collision = RightBouncer;
+			type_ = ColliderType::BUMPER;
 			return 10;
 			break;
 		case COLLISIONS::LEFT_STIK:
 			collision = LeftStik;
+			type_ = ColliderType::BUMPER;
 			return 12;
 			break;
 		case COLLISIONS::MIDLE_STIK:
 			collision = MiddleStik;
+			type_ = ColliderType::BUMPER;
 			return 12;
 			break;
 		case COLLISIONS::RIGHT_STIK:
 			collision = RightStik;
+			type_ = ColliderType::BUMPER;
 			return 12;
 			break;
 		case COLLISIONS::LEFT_WING:
 			collision = LeftBigCollision;
+			type_ = ColliderType::WALL;
 			return 58;
 			break;
 		case COLLISIONS::LEFT_OBSTACLE:
 			collision = LeftTopBigCollision;
+			type_ = ColliderType::WALL;
 			return 26;
 			break;
 		case COLLISIONS::RIGHT_OBSTACLE:
 			collision = RightBigCollision;
+			type_ = ColliderType::WALL;
 			return 30;
 			break;
 		case COLLISIONS::LEFT_BALL:
 			collision = BallLeft;
+			type_ = ColliderType::BUMPER;
 			return 20;
 			break;
 		case COLLISIONS::MIDLE_BALL:
 			collision = BallMiddle;
+			type_ = ColliderType::BUMPER;
 			return 22;
 			break;
 		case COLLISIONS::RIGHT_BALL:
 			collision = BallRight;
+			type_ = ColliderType::BUMPER;
 			return 26;
 			break;
 		case COLLISIONS::MAIN_MAP:
 			collision = MainMap;
+			type_ = ColliderType::WALL;
 			return 110;
 			break;
 		default:
@@ -637,6 +651,7 @@ public:
 
 private:
 	const int* collision;
+	ColliderType type_;
 };
 
 class Plunger : public PhysicEntity {
@@ -744,7 +759,8 @@ bool ModuleGame::Start()
 	PointBoard = LoadTexture("Assets/MapComponents/PointBoard.png");
 	boosterR = LoadTexture("Assets/MapComponents/boosterR.png");
 	boosterL = LoadTexture("Assets/MapComponents/boosterL.png");
-
+	PointBubble_2 = LoadTexture("Assets/MapComponents/PointsExplosion_2digits.png");
+	PointBubble_3 = LoadTexture("Assets/MapComponents/PointsExplosion_3digits.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_DOWNER));
@@ -784,9 +800,10 @@ bool ModuleGame::Start()
 	game_over_fx = App->audio->LoadFx("Assets/sfxandsong/game_over.wav");
 	start_fx = App->audio->LoadFx("Assets/sfxandsong/Flipper 1.wav");
 	launch_fx = App->audio->LoadFx("Assets/sfxandsong/launch.wav");
+	BellRing = App->audio->LoadFx("Assets/sfxandsong/Bell ring1.wav");
 
 
-	points.Initialise("Assets/MapComponents/Points.png", '0', 36);
+	SCORE.Initialise("Assets/MapComponents/Points.png", '0', 36);
 
 	//Load mierdas para conseguir puntos
 
@@ -826,20 +843,40 @@ bool ModuleGame::CleanUp()
 	return true;
 }
 
+void ModuleGame::UpdateScore()
+{
+	if (showBubble == false)
+	{
+		score += points;
+		BubbleTime.Start();
+	}
+	showBubble = true;
+}
+
 // Update: draw background
 update_status ModuleGame::Update()
 {
-	
 	//UpdateMusicStream(background_music);
 	//DrawBG
 	DrawTexture(BG, 0, 0, WHITE);
+	
+	//Score Managing
+	DrawTexture(PointBoard, (SCREEN_WIDTH / 2) - (PointBoard.width / 2), 0, WHITE);
+	SCORE.Draw(SCREEN_WIDTH / 2.8, 3, std::to_string(score), WHITE);
 
+	if (showBubble == true && BubbleTime.ReadSec() <0.5)
+	{
+		DrawTexture(PointBubble_2, bubblePos.x, bubblePos.y, WHITE);
+		SCORE.Draw(16, 28, std::to_string(points), WHITE);
+	}
+	else
+	{
+		showBubble=false;
+	}
 	
 	if (game_state == GameState::START_MENU)
 	{
 		//Draw start menu
-		DrawTexture(PointBoard, (SCREEN_WIDTH/2)-(PointBoard.width/2), 0, WHITE);
-		points.Draw(SCREEN_WIDTH/2.8, 3, "00000",WHITE);
 
 		DrawText(TextFormat("Press Enter to Start"), 40, 40, 20, BLACK);
 	}
@@ -940,8 +977,19 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 
 	App->audio->PlayFx(bonus_fx);
+	if (ballsInGame == true)
+	{
 
-	/*if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT1)
+		if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::BUMPER)
+		{
+			// Incrementar el puntaje
+			points = 50;
+			UpdateScore();
+			bubblePos = bodyB->body->GetPosition();
+		}
+	}
+    /*
+	if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::FRUIT1)
 	{
 		// Incrementar el puntaje
 		score += 50;

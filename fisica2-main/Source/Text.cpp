@@ -30,7 +30,7 @@ void Text::Draw(int x, int y, const std::string& text, const Color& col) const
 	{
 		DrawCharacter(offset_x, y, text[i], col);
 
-		offset_x += character_size;
+		offset_x += character_size-8;
 
 	}
 }
