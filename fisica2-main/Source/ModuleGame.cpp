@@ -54,8 +54,9 @@ public:
 
 	void Launch()
 	{
-		if (IsKeyPressed(KEY_SPACE))
+		if (IsKeyPressed(KEY_SPACE)&&module_game->game_state==GameState::PLAYING)
 		{
+
 			posblock = false;
 			isInsideTheGame = true;
 			hasBeenEjected = true;
@@ -145,6 +146,7 @@ public:
 	bool hasBeenEjected;
 	bool isInsideTheGame;
 	bool posblock;
+	ModuleGame* module_game=dynamic_cast<ModuleGame*>(listener);
 };
 
 class Frutica : public PhysicEntity
@@ -913,7 +915,7 @@ update_status ModuleGame::Update()
 		DrawTexture(cora1, 350, 7, WHITE);
 	}
 
-	if (score == 1000 && vidas != 3) {
+	if (score >=1000&& score <= 1050 && vidas != 3 ){
 
 		vidas++;
 
