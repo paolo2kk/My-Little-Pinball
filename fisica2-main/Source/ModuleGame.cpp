@@ -74,20 +74,33 @@ public:
 		posblock = true;
 	}
 
+
 	void EnsureImInside()
 	{
 		b2Vec2 position = this->body->body->GetPosition();
 		if (position.x >= 0 && position.x <= PIXEL_TO_METERS(SCREEN_WIDTH) &&
-			position.y >= 0 && position.y <= PIXEL_TO_METERS(SCREEN_HEIGHT) + 100)
+			position.y >= 0 && position.y <= PIXEL_TO_METERS(SCREEN_HEIGHT) + 10)
 		{
 			isInsideTheGame = true;
 		}
 		else
 		{
 			isInsideTheGame = false;
+			HandleBallOut();
 		}
 
 	}
+
+	void Circle::HandleBallOut()
+	{
+
+		ModuleGame* gameModule = dynamic_cast<ModuleGame*>(listener);
+		if (gameModule != nullptr) {
+			gameModule->LoseLife();
+		}
+		Die();
+	}
+
 	
 	void Update() override
 	{
@@ -995,9 +1008,12 @@ update_status ModuleGame::Update()
 
 		entity->Update();
 	}*/
+
+
+
 	return UPDATE_CONTINUE;
 
-
+	
 
 }
 
