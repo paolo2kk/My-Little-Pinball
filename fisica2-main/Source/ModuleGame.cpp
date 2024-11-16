@@ -917,7 +917,10 @@ update_status ModuleGame::Update()
 
 	if (score >=1000&& score <= 1050 && vidas != 3 ){
 
-		vidas++;
+		if (vidas == 1) {
+
+			vidas == 2;
+		}
 
 	}
 
@@ -1035,7 +1038,11 @@ update_status ModuleGame::Update()
 	}*/
 
 
+	if (vidas == 0) {
 
+		game_state = GameState::GAME_OVER;
+
+	}
 	return UPDATE_CONTINUE;
 
 	
@@ -1166,23 +1173,18 @@ void ModuleGame::ManageInputs()
 			// Reset the force when the key is released
 			rightFlipperForce = initialForce;
 		}
-		if (/*IsMouseButtonPressed(MOUSE_BUTTON_LEFT)  && */!ballsInGame)
+		if (!ballsInGame)
 		{
 			ballsInGame = true;
 			entities.emplace_back(new Circle(App->physics, 625, 611, this, circle, ColliderType::BALL));
 		
 		}
-		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) )
+		/*if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 		{
 			ballsInGame = true;
 			entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), this, circle, ColliderType::BALL));
 
-		}
-
-		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
-		{
-			entities.emplace_back(new Box(App->physics, GetMouseX(), GetMouseY(), this, box, ColliderType::DEATH));
-		}
+		}*/
 
 
 		if (IsKeyDown(KEY_ESCAPE))
@@ -1196,11 +1198,21 @@ void ModuleGame::ManageInputs()
 		if (IsKeyPressed(KEY_ENTER))
 		{
 			game_state = GameState::PLAYING;
+			vidas=3;
 		}
 		if (IsKeyPressed(KEY_ESCAPE))
 		{
 			game_state = GameState::START_MENU;
 		}
+	}
+
+
+	//DEBUG
+
+	if (IsKeyPressed(KEY_F)) {
+
+		vidas--;
+
 	}
 
 }
