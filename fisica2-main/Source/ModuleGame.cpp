@@ -903,7 +903,6 @@ update_status ModuleGame::Update()
 
 		DrawTexture(cora3, 350,7,WHITE);
 
-
 	}
 	else if (vidas == 2) {
 
@@ -914,7 +913,11 @@ update_status ModuleGame::Update()
 		DrawTexture(cora1, 350, 7, WHITE);
 	}
 
+	if (score == 1000 && vidas != 3) {
 
+		vidas++;
+
+	}
 
 	if (showBubble == true && BubbleTime.ReadSec() <0.2)
 	{
