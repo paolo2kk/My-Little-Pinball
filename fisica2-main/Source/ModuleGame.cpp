@@ -862,12 +862,12 @@ update_status ModuleGame::Update()
 	
 	//Score Managing
 	DrawTexture(PointBoard, (SCREEN_WIDTH / 2) - (PointBoard.width / 2), 0, WHITE);
-	SCORE.Draw(SCREEN_WIDTH / 2.8, 3, std::to_string(score), WHITE);
+	SCORE.Draw((SCREEN_WIDTH / 3), 3, std::to_string(score), WHITE);
 
 	if (showBubble == true && BubbleTime.ReadSec() <0.5)
 	{
-		DrawTexture(PointBubble_2, bubblePos.x, bubblePos.y, WHITE);
-		SCORE.Draw(16, 28, std::to_string(points), WHITE);
+		DrawTexture(PointBubble_2,METERS_TO_PIXELS(bubblePos.x-40),METERS_TO_PIXELS( bubblePos.y-40), WHITE);
+		SCORE.Draw(METERS_TO_PIXELS(bubblePos.x-25), METERS_TO_PIXELS(bubblePos.y-10), std::to_string(points), WHITE);
 	}
 	else
 	{
@@ -983,9 +983,17 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyA->type == ColliderType::BALL && bodyB->type == ColliderType::BUMPER)
 		{
 			// Incrementar el puntaje
-			points = 50;
-			UpdateScore();
-			bubblePos = bodyB->body->GetPosition();
+
+			if (showBubble == false)
+			{
+				bubblePos = bodyA->body->GetPosition();
+				points = 50;
+				score += points;
+				BubbleTime.Start();
+			}
+			showBubble = true;
+
+			
 		}
 	}
     /*

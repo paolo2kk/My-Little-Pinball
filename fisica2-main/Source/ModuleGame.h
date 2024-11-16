@@ -107,9 +107,9 @@ public:
 	ColliderType type;
 	Text SCORE;
 	bool showBubble = false;
-	b2Vec2 bubblePos;
 	int points;
 	Timer BubbleTime;
+	b2Vec2 bubblePos;
 
 	GameState game_state = GameState::START_MENU;
 
