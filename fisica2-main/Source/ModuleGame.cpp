@@ -805,6 +805,8 @@ bool ModuleGame::Start()
 	cora1=LoadTexture("Assets/MapComponents/cora1.png");
 	cora2 = LoadTexture("Assets/MapComponents/cora2.png");
 	cora3 = LoadTexture("Assets/MapComponents/cora3.png");
+	menu= LoadTexture("Assets/MapComponents/menu1.png");
+	game_over_menu= LoadTexture("Assets/MapComponents/gameovermenu.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_DOWNER));
@@ -947,7 +949,7 @@ update_status ModuleGame::Update()
 	{
 		//Draw start menu
 
-		DrawText(TextFormat("Press Enter to Start"), 80, (SCREEN_HEIGHT/3)*2, 40, DARKBLUE);
+		DrawTexture(menu, 0, 0, WHITE);
 	}
 
 	if (game_state == GameState::PAUSED)
@@ -960,9 +962,8 @@ update_status ModuleGame::Update()
 	if (game_state == GameState::GAME_OVER)
 	{
 		//Draw game over menu
-		DrawText("Game Over", 175, 450, 75, WHITE);
-		DrawText("Press Enter to restart", 10, 30, 20, WHITE);
-		DrawText("Press Escape to go to start menu", 10, 50, 20, WHITE);
+		DrawTexture(game_over_menu, 0, 0, WHITE);
+		
 	}
 
 	if (game_state == GameState::RESTART)
@@ -1199,6 +1200,7 @@ void ModuleGame::ManageInputs()
 		{
 			game_state = GameState::PLAYING;
 			vidas=3;
+			score = 0;
 		}
 		if (IsKeyPressed(KEY_ESCAPE))
 		{
@@ -1214,6 +1216,7 @@ void ModuleGame::ManageInputs()
 		vidas--;
 
 	}
+
 
 }
 //github no va

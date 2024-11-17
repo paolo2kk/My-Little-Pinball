@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleRender.h"
 #include "ModulePhysics.h"
-
+#include "ModuleGame.h"
 #include "p2Point.h"
 
 #include <math.h>
@@ -228,8 +228,15 @@ void ModulePhysics::Flippers()
 	flipperLJointDefa.upperAngle = 30 * DEGTORAD;
 	b2RevoluteJoint* leftFlipperJointa = (b2RevoluteJoint*)world->CreateJoint(&flipperLJointDefa);
 }
+
 void ModulePhysics::RenderFlippers()
 {
+
+	
+
+
+
+	
 	int xL, yL;
 	flipperL->GetPhysicPosition(xL, yL);
 	DrawTexturePro(
@@ -262,6 +269,8 @@ void ModulePhysics::RenderFlippers()
 		flipperLa->GetRotation() * RAD2DEG,
 		WHITE
 	);
+
+	
 }
 PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, ColliderType type_,int size)
 {
@@ -418,6 +427,8 @@ PhysBody* ModulePhysics::CreateBumper(const int* points, int pointCount, int x, 
 //}
 update_status ModulePhysics::PostUpdate()
 {
+
+	
 	RenderFlippers();
 
 	if(IsKeyPressed(KEY_F1))

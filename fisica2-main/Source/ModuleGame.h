@@ -80,6 +80,8 @@ public:
 	Texture2D cora1;
 	Texture2D cora2;
 	Texture2D cora3;
+	Texture2D menu;
+	Texture2D game_over_menu;
 
 	Texture2D fruit1;
 	Texture2D fruit2;

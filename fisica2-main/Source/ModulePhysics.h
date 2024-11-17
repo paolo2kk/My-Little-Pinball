@@ -62,6 +62,7 @@ public:
 	update_status PreUpdate();
 	update_status PostUpdate();
 	bool CleanUp();
+	
 
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreateCircleSensor(int x, int y, int radius);
@@ -108,7 +109,8 @@ public:
 	float restitution = 0.4f;
 	Texture2D flipperLTexture;
 	Texture2D flipperRTexture;
-	
+	bool canRenderFlipper = false;
+
 private:
 
 	bool debug;
