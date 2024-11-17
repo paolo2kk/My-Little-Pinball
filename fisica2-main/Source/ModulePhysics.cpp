@@ -352,7 +352,7 @@ PhysBody* ModulePhysics::CreateBumper(const int* points, int pointCount, int x, 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &bumperShape;
 	fixtureDef.density = 1.0f;
-	fixtureDef.restitution = 2;  
+	fixtureDef.restitution = 1;  
 	bumperBody->CreateFixture(&fixtureDef);
 
 	PhysBody* pBumper = new PhysBody();

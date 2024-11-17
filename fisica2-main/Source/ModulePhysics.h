@@ -25,7 +25,7 @@ enum ColliderType
 	WALL,
 	BUMPER_BALLS,
 	BUMPER_STIKS,
-	BOOSTER
+	BOOSTER,
 
 };
 
