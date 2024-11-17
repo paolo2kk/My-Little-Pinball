@@ -814,7 +814,7 @@ bool ModuleGame::Start()
 
 	// Load FX
 	bonus_fx = LoadSound("Assets/sfxandsong/bonus.wav");
-	flipper_fx = App->audio->LoadFx("Assets/sfxandsong/Flipper 1.wav");
+	flipper_fx = LoadSound("Assets/sfxandsong/Flipper 1.wav");
 	bumper_fx = LoadSound("Assets/sfxandsong/Bumper9.wav");
 	plunger_fx = LoadSound("Assets/sfxandsong/Ball release.wav");
 	game_over_fx = LoadSound("Assets/sfxandsong/game_over.wav");
@@ -1131,7 +1131,7 @@ void ModuleGame::ManageInputs()
 			PlaySound(plunger_fx);
 		}
 		if (IsKeyPressed(KEY_A)) {
-			App->audio->PlayFx(flipper_fx);
+			PlaySound(flipper_fx);
 			// Increase the force gradually, but don't exceed maxForce
 			leftFlipperForce += forceIncrement;
 			if (leftFlipperForce > maxForce) leftFlipperForce = maxForce;
@@ -1148,7 +1148,7 @@ void ModuleGame::ManageInputs()
 
 		// Check if the D key is held down for the right flipper
 		if (IsKeyPressed(KEY_D)) {
-			App->audio->PlayFx(flipper_fx);
+			PlaySound(flipper_fx);
 			// Increase the force gradually, but don't exceed maxForce
 			rightFlipperForce += forceIncrement;
 			if (rightFlipperForce > maxForce) rightFlipperForce = maxForce;

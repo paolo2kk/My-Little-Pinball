@@ -39,6 +39,12 @@
     <ClInclude Include="Source/p2Point.h">
       <Filter>Headers\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Text.h">
+      <Filter>Headers\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Timer.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
     <ClInclude Include="Source/Application.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -51,6 +57,9 @@
     <ClInclude Include="Source/ModuleAudio.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ModuleGame.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
     <ClInclude Include="Source/ModulePhysics.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -60,17 +69,8 @@
     <ClInclude Include="Source/ModuleWindow.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Timer.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModuleGame.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Object.h">
       <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Text.h">
-      <Filter>Headers\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

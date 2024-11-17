@@ -135,7 +135,7 @@ public:
 	Texture2D boosterR;
 
 	Sound bonus_fx;
-	uint32 flipper_fx;
+	Sound flipper_fx;
 	Sound game_over_fx;
 	Sound start_fx;
 	Music background_music;
