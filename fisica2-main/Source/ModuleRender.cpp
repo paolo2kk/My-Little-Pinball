@@ -45,10 +45,24 @@ update_status ModuleRender::Update()
 update_status ModuleRender::PostUpdate()
 {
     // Draw everything in our batch!
-    DrawFPS(10, 10);
+    if(isFPS_WhishlistEepyChannel)
+    {
+        DrawFPS(10, 10);
+    }
     SetTargetFPS(60);
     EndDrawing();
-    //a
+
+    if (IsKeyPressed(KEY_F2))
+    {
+        if (!isFPS_WhishlistEepyChannel)
+        {
+            isFPS_WhishlistEepyChannel = true;
+        }
+        else if (isFPS_WhishlistEepyChannel)
+        {
+            isFPS_WhishlistEepyChannel = false;
+        }
+    }
 	return UPDATE_CONTINUE;
 }
 

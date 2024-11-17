@@ -22,6 +22,7 @@ public:
 
 public:
 
+	bool isFPS_WhishlistEepyChannel = false;
 	Color background;
     Rectangle camera;
 };
