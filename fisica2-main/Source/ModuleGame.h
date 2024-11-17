@@ -46,8 +46,8 @@ class ScoreMultiplyer
 private:
 	//Score Multiplier
 	Timer factor; //to see if the player meets the condition
-	int numOfCollisionsForCondition = 5;
-	int timeForCondition = 1.5;
+	int numOfCollisionsForCondition = 4;
+	int timeForCondition = 2;
 	int pointMultiplyer = 1;
 public:
 	ScoreMultiplyer()
@@ -124,6 +124,7 @@ public:
 	Texture2D cora3;
 	Texture2D menu;
 	Texture2D game_over_menu;
+	Texture2D game_over_menu_new;
 
 	Texture2D fruit1;
 	Texture2D fruit2;
@@ -172,6 +173,8 @@ public:
 	PhysBody* ball;
 
 	ScoreMultiplyer Multiplier;
+
+	int HighScore = 0;
 };
 
 

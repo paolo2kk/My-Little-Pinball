@@ -779,6 +779,7 @@ bool ModuleGame::Start()
 	cora3 = LoadTexture("Assets/MapComponents/cora3.png");
 	menu= LoadTexture("Assets/MapComponents/menu1.png");
 	game_over_menu= LoadTexture("Assets/MapComponents/gameovermenu.png");
+	game_over_menu_new = LoadTexture("Assets/MapComponents/gameovermenu-new.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_DOWNER));
@@ -869,6 +870,8 @@ update_status ModuleGame::Update()
 	
 	//Score Managing
 	SCORE.Draw(220, 3, std::to_string(score), WHITE);
+	//Draw Multy
+	SCORE.Draw(576, 580, std::to_string(Multiplier.getMultiplier()), WHITE);
 
 	//Score Multiplier
 	Multiplier.UpdateMultyplier();
@@ -932,7 +935,17 @@ update_status ModuleGame::Update()
 	if (game_state == GameState::GAME_OVER)
 	{
 		//Draw game over menu
-		DrawTexture(game_over_menu, 0, 0, WHITE);
+
+		if (HighScore <= score)
+		{
+			HighScore = score;
+			DrawTexture(game_over_menu_new, 0, 0, WHITE);
+		}
+		else if (HighScore > score)
+		{
+			DrawTexture(game_over_menu, 0, 0, WHITE);
+		}
+		SCORE.Draw(250, 656, std::to_string(HighScore), WHITE);
 		
 	}
 
