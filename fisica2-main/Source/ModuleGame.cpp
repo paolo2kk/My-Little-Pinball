@@ -226,6 +226,7 @@ public:
 	Texture2D texture;
 	bool flag;
 };
+
 class Box : public PhysicEntity
 {
 public:
@@ -345,6 +346,25 @@ class MapColl : public PhysicEntity
 {
 public:
 	// Pivot 0, 0
+	static constexpr int Plunger[32] = {
+	533, 64,
+	533, 14,
+	579, 14,
+	605, 27,
+	627, 53,
+	638, 80,
+	643, 110,
+	645, 141,
+	647, 165,
+	648, 660,
+	607, 660,
+	608, 119,
+	600, 99,
+	589, 83,
+	573, 72,
+	555, 66
+	};
+
 	static constexpr int LeftDawner[16] = {
 	123, 706,
 	124, 773,
@@ -491,52 +511,9 @@ public:
 		523, 187
 	};
 
-	static constexpr int BallLeft[20] = {
-	227, 211,
-	237, 213,
-	243, 220,
-	243, 232,
-	239, 240,
-	230, 244,
-	219, 243,
-	211, 235,
-	211, 223,
-	217, 215
-	};
 
-	static constexpr int BallMiddle[22] = {
-	315, 103,
-	323, 104,
-	327, 110,
-	329, 117,
-	327, 126,
-	320, 132,
-	309, 132,
-	302, 125,
-	300, 116,
-	303, 108,
-	308, 104
-	};
-
-	static constexpr int BallRight[26] = {
-	400, 210,
-	410, 212,
-	416, 219,
-	417, 228,
-	416, 234,
-	412, 241,
-	402, 244,
-	393, 243,
-	388, 238,
-	384, 231,
-	384, 224,
-	387, 216,
-	393, 212
-	};
-
-
-	static constexpr int MainMap[110] = {
-	489, 862,
+	static constexpr int MainMap[120] = {
+	488, 863,
 	558, 818,
 	558, 654,
 	537, 633,
@@ -565,13 +542,13 @@ public:
 	647, 140,
 	644, 98,
 	639, 71,
-	628, 48,
-	611, 33,
-	595, 20,
-	580, 14,
-	160, 15,
-	137, 19,
-	106, 39,
+	616, 38,
+	585, 17,
+	484, 17,
+	437, 58,
+	219, 60,
+	167, 12,
+	113, 32,
 	82, 69,
 	66, 108,
 	56, 157,
@@ -590,7 +567,12 @@ public:
 	0, 0,
 	647, 0,
 	647, 863,
-	490, 863
+	490, 863,
+	489, 863,
+	492, 864,
+	489, 863,
+	495, 869,
+	490, 864
 	};
 
 	MapColl(ModulePhysics* physics, int _x, int _y, Module* _listener, COLLISIONS type):
@@ -598,7 +580,7 @@ public:
 	{
 		if (type_ == ColliderType::BUMPER || type_ == ColliderType::BUMPER_STIKS)
 		{
-			body->body->GetFixtureList()->SetRestitution(1);
+			body->body->GetFixtureList()->SetRestitution(0.8);
 		}
 	}
 
@@ -662,25 +644,15 @@ public:
 			type_ = ColliderType::WALL;
 			return 30;
 			break;
-		case COLLISIONS::LEFT_BALL:
-			collision = BallLeft;
-			type_ = ColliderType::BUMPER_BALLS;
-			return 20;
-			break;
-		case COLLISIONS::MIDLE_BALL:
-			collision = BallMiddle;
-			type_ = ColliderType::BUMPER_BALLS;
-			return 22;
-			break;
-		case COLLISIONS::RIGHT_BALL:
-			collision = BallRight;
-			type_ = ColliderType::BUMPER_BALLS;
-			return 26;
-			break;
 		case COLLISIONS::MAIN_MAP:
 			collision = MainMap;
 			type_ = ColliderType::WALL;
-			return 110;
+			return 120;
+			break;
+		case COLLISIONS::PLUNGER:
+			collision = Plunger;
+			type_ = ColliderType::WALL;
+			return 32;
 			break;
 		default:
 			break;
@@ -819,10 +791,8 @@ bool ModuleGame::Start()
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_WING));
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_OBSTACLE));
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_OBSTACLE));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::LEFT_BALL));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::MIDLE_BALL));
-	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::RIGHT_BALL));
 	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::MAIN_MAP));
+	entities.emplace_back(new MapColl(App->physics, SCREEN_WIDTH / 2, SCREEN_HEIGHT, this, COLLISIONS::PLUNGER));
 	//entities.emplace_back(new Booster(App->physics, 80,485 , this,boosterL,ColliderType::BOOSTER,true));
 	//entities.emplace_back(new Booster(App->physics, 550 , 485, this,boosterR, ColliderType::BOOSTER,false));
 	
@@ -877,8 +847,6 @@ bool ModuleGame::Start()
 	
 	//Crear launcher
 
-
-
 	return ret;
 
 
@@ -900,8 +868,10 @@ update_status ModuleGame::Update()
 	DrawTexture(BG, 0, 0, WHITE);
 	
 	//Score Managing
-	DrawTexture(PointBoard, (SCREEN_WIDTH / 2) - (PointBoard.width / 2), 0, WHITE);
-	SCORE.Draw(200, 3, std::to_string(score), WHITE);
+	SCORE.Draw(220, 3, std::to_string(score), WHITE);
+
+	//Score Multiplier
+	Multiplier.UpdateMultyplier();
 
 	if (vidas == 3) {
 
@@ -1057,10 +1027,11 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		if (bodyA->type == ColliderType::BUMPER && bodyB->type == ColliderType::BALL)
 		{
+			Multiplier.numOfCollisions += 1;
 			if (showBubble == false)
 			{
 				bubblePos = bodyB->body->GetPosition();
-				points = 100;
+				points = 100 *Multiplier.getMultiplier();
 				score += points;
 				BubbleTime.Start();
 				PlaySound(BellRing);
@@ -1069,10 +1040,11 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 		if (bodyA->type == ColliderType::BUMPER_STIKS && bodyB->type == ColliderType::BALL)
 		{
+			Multiplier.numOfCollisions += 1;
 			if (showBubble == false)
 			{
 				bubblePos = bodyB->body->GetPosition();
-				points = 50;
+				points = 50 * Multiplier.getMultiplier();
 				score += points;
 				BubbleTime.Start();
 				PlaySound(BellRing);
@@ -1081,10 +1053,11 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 		if (bodyA->type == ColliderType::BUMPER_BALLS && bodyB->type == ColliderType::BALL)
 		{
+			Multiplier.numOfCollisions += 1;
 			if (showBubble == false)
 			{
 				bubblePos = bodyB->body->GetPosition();
-				points = 80;
+				points = 80 * Multiplier.getMultiplier();
 				score += points;
 				BubbleTime.Start();
 				PlaySound(BellRing);

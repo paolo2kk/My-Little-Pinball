@@ -38,12 +38,54 @@ enum class COLLISIONS
 	LEFT_WING,
 	LEFT_OBSTACLE,
 	RIGHT_OBSTACLE,
-	LEFT_BALL,
-	MIDLE_BALL,
-	RIGHT_BALL,
-	MAIN_MAP
+	MAIN_MAP,
+	PLUNGER
 };
+class ScoreMultiplyer
+{
+private:
+	//Score Multiplier
+	Timer factor; //to see if the player meets the condition
+	int numOfCollisionsForCondition = 5;
+	int timeForCondition = 1.5;
+	int pointMultiplyer = 1;
+public:
+	ScoreMultiplyer()
+	{
+		factor.Start();
+	};
+	~ScoreMultiplyer() {};
 
+	//Public beacouse we need to updatet a lot of times
+	int numOfCollisions = 0;
+
+	void UpdateMultyplier()
+	{
+		if (factor.ReadSec() < timeForCondition)
+		{
+			if (numOfCollisions > numOfCollisionsForCondition)
+			{
+				pointMultiplyer += 1;
+				factor.Start();
+				numOfCollisions = 0;
+			}
+		}
+		else
+		{
+			if (pointMultiplyer > 1)
+			{
+				pointMultiplyer -= 1;
+			}
+			factor.Start();
+			numOfCollisions = 0;
+		}
+	}
+
+	int getMultiplier()
+	{
+		return pointMultiplyer;
+	}
+};
 class ModuleGame : public Module
 {
 public:
@@ -107,6 +149,8 @@ public:
 	PhysBody* death_trigger;
 
 	ColliderType type;
+
+	//Score thinguis
 	Text SCORE;
 	bool showBubble = false;
 	int points;
@@ -126,6 +170,8 @@ public:
 	float initialForce = 100.0f; 
 
 	PhysBody* ball;
+
+	ScoreMultiplyer Multiplier;
 };
 
 
