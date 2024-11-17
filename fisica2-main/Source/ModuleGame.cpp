@@ -837,7 +837,7 @@ bool ModuleGame::Start()
 	entities.emplace_back(new Flipper(App->physics, PIXEL_TO_METERS(315), PIXEL_TO_METERS(765), false, this, flipperTexture));*/
 
 	// Load music
-	background_music= LoadMusicStream("Assets/sfxandsong/32 Nightmaren.ogg");
+	background_music= LoadMusicStream("Assets/sfxandsong/themesong.ogg");
 	SetMusicVolume(background_music, 0.5);
 	PlayMusicStream(background_music);
 
