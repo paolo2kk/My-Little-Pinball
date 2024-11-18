@@ -2,6 +2,8 @@
 ## Presentation 
 This project is a tribute to the game **_My Little Pony Pinball_**.
 
+Link to GitHub Page - https://github.com/paolo2kk/pinball
+
 **GROUP MEMBERS:**
 
 Marc Amo Mateu - Link to GitHub: https://github.com/mxarc
