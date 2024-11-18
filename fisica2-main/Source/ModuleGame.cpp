@@ -1038,7 +1038,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (ballsInGame == true && bodyB != nullptr && bodyA != nullptr)
 	{
 
-		if (bodyA->type == ColliderType::BUMPER && bodyB->type == ColliderType::BALL)
+		if ((bodyA->type == ColliderType::BUMPER && bodyB->type == ColliderType::BALL) || (bodyB->type == ColliderType::BUMPER && bodyA->type == ColliderType::BALL))
 		{
 			Multiplier.numOfCollisions += 1;
 			if (showBubble == false)
@@ -1051,7 +1051,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			}
 			showBubble = true;
 		}
-		if (bodyA->type == ColliderType::BUMPER_STIKS && bodyB->type == ColliderType::BALL)
+		if ((bodyA->type == ColliderType::BUMPER_STIKS && bodyB->type == ColliderType::BALL)||(bodyB->type == ColliderType::BUMPER_STIKS && bodyA->type == ColliderType::BALL))
 		{
 			Multiplier.numOfCollisions += 1;
 			if (showBubble == false)

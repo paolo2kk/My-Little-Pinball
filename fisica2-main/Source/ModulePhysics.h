@@ -45,7 +45,7 @@ public:
 public:
 	int width, height;
 	b2Body* body;
-	ColliderType type;
+	ColliderType type = ColliderType::BALL;
 	Module* listener;
 	bool isBall;
 	bool isFrutica;
