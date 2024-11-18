@@ -50,6 +50,8 @@ public:
 		isInsideTheGame = true;
 		hasBeenEjected = false;
 		posblock = true;
+		this->body->body->SetBullet(true);
+		gravityIsBeingChanged = false;
 	}
 
 	void Launch()
@@ -129,7 +131,23 @@ public:
 		{
 			Die();
 		}
-
+		if(IsKeyPressed(KEY_G))
+		{ 
+			if (!gravityIsBeingChanged)
+			{
+				gravityIsBeingChanged = true;
+			}
+			else {
+				gravityIsBeingChanged = false;
+			}
+		}
+		
+		if (gravityIsBeingChanged) {
+			this->body->body->SetGravityScale(-1);
+		}
+		else this->body->body->SetGravityScale(1);
+		
+		
 		if (posblock)
 		{
 			b2Vec2 initialPos = { (float)PIXEL_TO_METERS(625), (float)PIXEL_TO_METERS(630) };
@@ -147,6 +165,7 @@ public:
 	bool isInsideTheGame;
 	bool posblock;
 	ModuleGame* module_game=dynamic_cast<ModuleGame*>(listener);
+	bool gravityIsBeingChanged;
 };
 
 class Frutica : public PhysicEntity
