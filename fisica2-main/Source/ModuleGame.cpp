@@ -609,11 +609,26 @@ public:
 		body->GetPhysicPosition(x, y);
 		if (IsKeyPressed(KEY_F3))
 		{
-			if (type_ == ColliderType::BUMPER || type_ == ColliderType::BUMPER_STIKS)
+			if (!restituionChanged)
 			{
-				body->body->GetFixtureList()->SetRestitution(3);
+				restituionChanged = true;
+			}
+			else {
+				restituionChanged = false;
 			}
 		}
+
+		if (restituionChanged) {
+			if (type_ == ColliderType::BUMPER || type_ == ColliderType::BUMPER_STIKS)
+			{
+				body->body->GetFixtureList()->SetRestitution(4);
+			}
+		}
+		else if (type_ == ColliderType::BUMPER || type_ == ColliderType::BUMPER_STIKS)
+		{
+			body->body->GetFixtureList()->SetRestitution(0.8);
+		}
+
 	}
 
 	int GetCollider_andSize(COLLISIONS ty) {
@@ -688,6 +703,7 @@ public:
 private:
 	const int* collision;
 	ColliderType type_;
+	bool restituionChanged = false;
 };
 
 class Plunger : public PhysicEntity {
