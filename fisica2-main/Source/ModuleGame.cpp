@@ -606,7 +606,14 @@ public:
 	void Update() override
 	{
 		int x, y;
-		body->GetPhysicPosition(x, y);;
+		body->GetPhysicPosition(x, y);
+		if (IsKeyPressed(KEY_F3))
+		{
+			if (type_ == ColliderType::BUMPER || type_ == ColliderType::BUMPER_STIKS)
+			{
+				body->body->GetFixtureList()->SetRestitution(3);
+			}
+		}
 	}
 
 	int GetCollider_andSize(COLLISIONS ty) {
