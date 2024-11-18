@@ -894,7 +894,7 @@ update_status ModuleGame::Update()
 
 		if (vidas == 1) {
 
-			vidas == 2;
+			vidas == 2; 
 		}
 
 	}
