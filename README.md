@@ -34,4 +34,7 @@ This is a pinball game where players control the flippers. The objective is simp
 ## Debug Tools
     * F1 -> Check hitboxes
     * F2 -> Show FPS
+    * F3 -> Change Restitution
     * F -> Vida-- 
+    * G -> Invert Gravity 
+    * Mouse Click -> Manipulate ball
