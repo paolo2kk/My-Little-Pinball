@@ -28,6 +28,7 @@ This is a pinball game where players control the flippers. The objective is simp
 ### Player 1 (Keyboard)
     * A -> Move left flipper
     * D -> Move right flipper
+    * SPACE -> Plunger
 ## Debug Tools
     * F1 -> Check hitboxes
     * F2 -> Show FPS
