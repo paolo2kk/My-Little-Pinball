@@ -16,7 +16,7 @@ Ton Casals Gil - Link to GitHub: https://github.com/Tontito05
 
 ## Description
 
-This is a pinball game where players control the flippers. The objective is simple, players control the flippers, driving the ball in order to score points. We added an unique gameplay mechanic ( multiplier) , but it shares similarities with classic pinball games.
+This is a pinball game where players control the flippers. The objective is simple, players control the flippers, driving the ball in order to score points. We added an unique gameplay mechanic (multiplier) , but it shares similarities with classic pinball games.
 
 ## Installation
 
