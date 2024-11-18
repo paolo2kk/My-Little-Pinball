@@ -118,6 +118,18 @@ public:
 		Vector2 origin = { (float)texture.width / 2.0f, (float)texture.height / 2.0f };
 		float rotation = body->GetRotation() * RAD2DEG;
 		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
+
+		if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+		{
+			Vector2 mousePosition = GetMousePosition();
+
+			b2Vec2 newPosition = b2Vec2(PIXEL_TO_METERS(mousePosition.x), PIXEL_TO_METERS(mousePosition.y));
+			this->body->body->SetTransform(newPosition, this->body->body->GetAngle());
+
+			this->body->body->SetLinearVelocity(b2Vec2{ 0, 0 });
+			this->body->body->SetAngularVelocity(0);
+		}
+
 		if (this->body->body->GetPosition().x >= PIXEL_TO_METERS(603))
 		{
 			hasBeenEjected = false;
@@ -125,29 +137,26 @@ public:
 		else {
 			hasBeenEjected = true;
 		}
+
 		if (!hasBeenEjected) Launch();
 		EnsureImInside();
 		if (!isInsideTheGame)
 		{
 			Die();
 		}
-		if(IsKeyPressed(KEY_G))
-		{ 
-			if (!gravityIsBeingChanged)
-			{
-				gravityIsBeingChanged = true;
-			}
-			else {
-				gravityIsBeingChanged = false;
-			}
+
+		if (IsKeyPressed(KEY_G))
+		{
+			gravityIsBeingChanged = !gravityIsBeingChanged;
 		}
-		
+
 		if (gravityIsBeingChanged) {
 			this->body->body->SetGravityScale(-1);
 		}
-		else this->body->body->SetGravityScale(1);
-		
-		
+		else {
+			this->body->body->SetGravityScale(1);
+		}
+
 		if (posblock)
 		{
 			b2Vec2 initialPos = { (float)PIXEL_TO_METERS(625), (float)PIXEL_TO_METERS(630) };
